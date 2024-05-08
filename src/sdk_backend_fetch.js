@@ -1,4 +1,5 @@
-const baseURL = "http://localhost:3000";
+const baseURL =
+  "https://backenddummy-rodalschulz-rodschulzs-projects.vercel.app";
 const version = "v1";
 
 export const getUsernameData = async () => {
