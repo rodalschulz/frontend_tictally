@@ -1,7 +1,6 @@
-const baseURL =
-  // "https://backenddummy2-rodschulzs-projects.vercel.app";
-  // "https://backenddummy-rodalschulz-rodschulzs-projects.vercel.app";
-  "http://localhost:3000";
+const baseURL = "https://backenddummy2-rodschulzs-projects.vercel.app";
+// "https://backenddummy-rodalschulz-rodschulzs-projects.vercel.app";
+// "http://localhost:3000";
 const version = "v1";
 const apiKey = process.env.REACT_APP_API_KEY;
 console.log(apiKey);
