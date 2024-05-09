@@ -36,13 +36,15 @@ const Home = () => {
       <table>
         <thead>
           <tr>
-            <th>Registered Users</th>
+            <th>Usernames</th>
+            <th>Role</th>
           </tr>
         </thead>
         <tbody>
           {usernameData.map((user, index) => (
             <tr key={index}>
               <td>{user.username}</td>
+              <td>{user.role ?? null}</td>
             </tr>
           ))}
         </tbody>
