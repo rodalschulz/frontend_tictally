@@ -1,20 +1,29 @@
-const baseURL = "https://backenddummy2-rodschulzs-projects.vercel.app";
-// "https://backenddummy-rodalschulz-rodschulzs-projects.vercel.app";
-// "http://localhost:3000";
+const baseURL =
+  // "https://backenddummy2-rodschulzs-projects.vercel.app";
+  // "https://backenddummy-rodalschulz-rodschulzs-projects.vercel.app";
+  "http://localhost:3000";
 const version = "v1";
+const apiKey = process.env.REACT_APP_API_KEY;
+console.log(apiKey);
 
 export const getUsernameData = async () => {
-  const response = await fetch(`${baseURL}/`);
+  const response = await fetch(`${baseURL}/`, {
+    method: "GET",
+    headers: {
+      "x-api-key": apiKey,
+    },
+  });
   const json = await response.json();
   return json.usernames;
 };
 
 export const getMembersData = async () => {
   try {
-    const token = localStorage.getItem("token"); // Retrieve the JWT token from localStorage
+    const token = localStorage.getItem("token");
     const headers = {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json", // Optionally, set other headers
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
     };
 
     const response = await fetch(`${baseURL}/${version}/members`, {
@@ -38,6 +47,7 @@ export const registerUser = async (email, username, password) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "x-api-key": apiKey,
     },
     body: JSON.stringify({ email, username, password }),
   });
@@ -50,6 +60,7 @@ export const loginUser = async (username, password) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "x-api-key": apiKey,
     },
     body: JSON.stringify({ username, password }),
   });
