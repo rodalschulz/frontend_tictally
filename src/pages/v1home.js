@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
   // GETTING ALL USERS USERNAME DATA
+  const [loading, setLoading] = useState(true);
   const [usernameData, setUsernameData] = useState([]);
   const fetchUsernameData = useCallback(async () => {
     try {
@@ -13,6 +14,8 @@ const Home = () => {
       setUsernameData(usernameData);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   }, [setUsernameData]);
   useEffect(() => {
@@ -32,23 +35,26 @@ const Home = () => {
       </button>
       <h1>Home</h1>
       <p>Welcome to the home page!</p>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Usernames</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usernameData.map((user, index) => (
-            <tr key={index}>
-              <td>{user.username}</td>
-              <td>{user.role ?? null}</td>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Usernames</th>
+              <th>Role</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {usernameData.map((user, index) => (
+              <tr key={index}>
+                <td>{user.username}</td>
+                <td>{user.role ?? null}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
