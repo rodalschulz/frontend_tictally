@@ -23,12 +23,12 @@ function App() {
       }
     };
 
-    checkIsAuthenticated();
+    if (window.location.pathname === "/members") {
+      checkIsAuthenticated();
+    } else {
+      setLoading(false);
+    }
   }, []);
-
-  if (loading) {
-    return null;
-  }
 
   return (
     <BrowserRouter>
@@ -38,7 +38,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route
           path="/members"
-          element={isAuthenticated ? <Members /> : <Navigate to="/" />}
+          element={
+            loading ? null : isAuthenticated ? <Members /> : <Navigate to="/" />
+          }
         />
       </Routes>
     </BrowserRouter>

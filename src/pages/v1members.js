@@ -1,7 +1,6 @@
 import * as SDK from "../sdk_backend_fetch.js";
 
 import { useEffect, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
 
 const Members = () => {
   // GETTING ALL MEMBERS USERNAMES AND EMAILS
