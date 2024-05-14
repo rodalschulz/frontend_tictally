@@ -1,18 +1,27 @@
-const baseURL = "https://backenddummy2-rodschulzs-projects.vercel.app";
-// "http://localhost:3000";
+let baseURL = "https://backenddummy2-rodschulzs-projects.vercel.app";
+if (process.env.NODE_ENV === "development") {
+  baseURL = "http://localhost:3001";
+}
 const version = "v1";
 const apiKey = process.env.REACT_APP_API_KEY;
-console.log(apiKey);
 
-export const getUsernameData = async () => {
-  const response = await fetch(`${baseURL}/`, {
-    method: "GET",
-    headers: {
+export const isAuthenticated = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
       "x-api-key": apiKey,
-    },
-  });
-  const json = await response.json();
-  return json.usernames;
+    };
+    const response = await fetch(`${baseURL}/${version}/auth`, {
+      headers: headers,
+    });
+    const json = await response.json();
+    return json.response === true;
+  } catch (error) {
+    console.error("Error checking authentication:", error);
+    throw error;
+  }
 };
 
 export const getMembersData = async () => {
@@ -63,15 +72,5 @@ export const loginUser = async (username, password) => {
     body: JSON.stringify({ username, password }),
   });
   const json = await response.json();
-  console.log(json);
   return json;
 };
-
-// const dt = await getUsernameData();
-// console.log(dt);
-
-// const userRegister = await registerUser(
-//   "fromsdktest2@test.com",
-//   "sdktest2",
-//   "sdktest2"
-// );

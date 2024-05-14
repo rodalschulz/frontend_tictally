@@ -10,38 +10,37 @@ const Members = () => {
     try {
       const membersData = await SDK.getMembersData();
       setMembersData(membersData.members);
-      console.log(membersData.members);
     } catch (error) {
       console.error(error);
     }
   }, [setMembersData]);
+
   useEffect(() => {
     fetchMembersData();
   }, [fetchMembersData]);
 
   return (
     <div>
-      <button>
-        <Link to="/">Home</Link>
-      </button>
-      <h1>Members Area</h1>
-      <p>Welcome to the members page!</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Usernames</th>
-            <th>Emails</th>
-          </tr>
-        </thead>
-        <tbody>
-          {membersData.map((member, index) => (
-            <tr key={index}>
-              <td>{member.username}</td>
-              <td>{member.email}</td>
+      <div>
+        <h1>Members Area</h1>
+        <p>Welcome to the members page!</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Usernames</th>
+              <th>Emails</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {membersData.map((member, index) => (
+              <tr key={index}>
+                <td>{member.username}</td>
+                <td>{member.email}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
