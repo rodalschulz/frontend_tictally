@@ -27,7 +27,7 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // You can replace this with a loading spinner or component
+    return null;
   }
 
   return (
