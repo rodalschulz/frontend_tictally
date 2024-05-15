@@ -1,12 +1,15 @@
 import * as SDK from "../sdk_backend_fetch.js";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [input, setInput] = useState({
     username: "",
     password: "",
   });
+  const navigate = useNavigate();
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setInput({
@@ -23,9 +26,10 @@ const Login = () => {
         username: "",
         password: "",
       });
-      if (user) {
+      if (user.token) {
         localStorage.setItem("token", user.token);
-        window.location.href = "/members";
+        onLogin(user.id);
+        navigate(`/members/${user.id}`);
       } else {
         console.log("Something went wrong!");
       }

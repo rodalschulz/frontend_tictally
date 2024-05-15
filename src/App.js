@@ -1,21 +1,27 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/v1home.js";
 import Register from "./pages/v1register.js";
 import Login from "./pages/v1login.js";
 import Members from "./pages/v1members.js";
 import * as SDK from "./sdk_backend_fetch.js";
-import { useEffect, useState } from "react";
 import "./index.css";
+
+import { useEffect, useState } from "react";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [, setUserId] = useState(null);
 
   useEffect(() => {
     const checkIsAuthenticated = async () => {
       try {
         const authenticated = await SDK.isAuthenticated();
         setIsAuthenticated(authenticated);
+        if (authenticated) {
+          const userId = authenticated.id;
+          setUserId(userId);
+        }
       } catch (error) {
         console.error(error);
       } finally {
@@ -23,27 +29,35 @@ function App() {
       }
     };
 
-    if (window.location.pathname === "/members") {
+    if (loading) {
       checkIsAuthenticated();
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [loading]);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/members"
-          element={
-            loading ? null : isAuthenticated ? <Members /> : <Navigate to="/" />
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/register" element={<Register />} />
+      <Route
+        path="/login"
+        element={
+          <Login
+            onLogin={async (userId) => {
+              setUserId(userId);
+              setIsAuthenticated(true);
+            }}
+          />
+        }
+      />
+      <Route
+        path="/members/:userId"
+        element={
+          loading ? null : isAuthenticated ? <Members /> : <Navigate to="/" />
+        }
+      />
+    </Routes>
   );
 }
 
