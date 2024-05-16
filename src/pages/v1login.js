@@ -26,11 +26,13 @@ const Login = ({ onLogin }) => {
         username: "",
         password: "",
       });
+
       if (user.token) {
         localStorage.setItem("token", user.token);
         onLogin(user.id);
         navigate(`/members/${user.id}`);
       } else {
+        alert("Wrong username or password!");
         console.log("Something went wrong!");
       }
     } catch (error) {

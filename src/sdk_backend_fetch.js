@@ -16,7 +16,7 @@ export const registerUser = async (email, username, password) => {
     body: JSON.stringify({ email, username, password }),
   });
   const json = await response.json();
-  return json.user;
+  return json;
 };
 
 export const loginUser = async (username, password) => {

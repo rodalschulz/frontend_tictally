@@ -1,9 +1,11 @@
 import * as SDK from "../sdk_backend_fetch.js";
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const [input, setInput] = useState({
     email: "",
     username: "",
@@ -20,12 +22,18 @@ const Register = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
-      await SDK.registerUser(input.email, input.username, input.password);
+      const response = await SDK.registerUser(
+        input.email,
+        input.username,
+        input.password
+      );
       setInput({
         email: "",
         username: "",
         password: "",
       });
+      alert(response.response);
+      navigate("/login");
     } catch (error) {
       console.error(error);
     }
