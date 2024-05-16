@@ -1,11 +1,29 @@
 import "../styles/v1members.css";
 
 import * as SDK from "../sdk_backend_fetch.js";
+import { useParams } from "react-router-dom";
 import { useEffect, useState, useCallback, useRef } from "react";
 
 const Members = () => {
   const dateInputRef = useRef(null);
   const categoryInputRef = useRef(null);
+
+  // GETTING DATA
+  const { userId } = useParams();
+  const [userActivityData, setUserActivityData] = useState([]);
+  const fetchData = useCallback(async () => {
+    try {
+      const data = await SDK.getUserActivityData(userId);
+      setUserActivityData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [setUserActivityData, userId]);
+  useEffect(() => {
+    fetchData(); // Fetch data every 20 seconds
+    const intervalId = setInterval(fetchData, 20000);
+    return () => clearInterval(intervalId);
+  }, [fetchData]);
 
   const [inData, setInData] = useState({
     day: "MON",
@@ -125,23 +143,21 @@ const Members = () => {
         <div>
           <table id="data">
             <tbody>
-              <tr>
-                <td>MON</td>
-                <td>01/01/2023</td>
-                <td>
-                  Meeting with team because bla bla and this is a long text that
-                  i need to input to test the user interface and this text could
-                  be even longer
-                </td>
-                <td>GENERAL</td>
-                <td>SMOKEBLOCK</td>
-                <td>09:00</td>
-                <td>10:00</td>
-                <td>None</td>
-                <td>00:00</td>
-                <td>00:00  12/31/2022</td>
-                <td>00:00  12/31/2022</td>
-              </tr>
+              {userActivityData.map((activity) => (
+                <tr key={activity.id}>
+                  <td>{activity.day}</td>
+                  <td>{activity.date}</td>
+                  <td>{activity.description}</td>
+                  <td>{activity.category}</td>
+                  <td>{activity.subcategory}</td>
+                  <td>{activity.startTime}</td>
+                  <td>{activity.endTime}</td>
+                  <td>{activity.adjustment}</td>
+                  <td>{activity.time}</td>
+                  <td>{activity.createdAt}</td>
+                  <td>{activity.updatedAt}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
