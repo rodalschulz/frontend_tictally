@@ -1,52 +1,68 @@
 import "../styles/v1members.css";
-
 import * as SDK from "../sdk_backend_fetch.js";
+
+import { useState, useRef } from "react";
+import activityData from "../functions/activityDataFnc.js";
+import inputFnc from "../functions/userInputFnc.js";
 import { useParams } from "react-router-dom";
-import { useEffect, useState, useCallback, useRef } from "react";
+import datetimeFnc from "../functions/datetimeFnc.js";
 
 const Members = () => {
-  const dateInputRef = useRef(null);
-  const categoryInputRef = useRef(null);
-
-  // GETTING DATA
   const { userId } = useParams();
-  const [userActivityData, setUserActivityData] = useState([]);
-  const fetchData = useCallback(async () => {
-    try {
-      const data = await SDK.getUserActivityData(userId);
-      setUserActivityData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [setUserActivityData, userId]);
-  useEffect(() => {
-    fetchData(); // Fetch data every 20 seconds
-    const intervalId = setInterval(fetchData, 20000);
-    return () => clearInterval(intervalId);
-  }, [fetchData]);
+  // USER ACTIVITY DATA
+  let userActivityData = activityData.useUserActivityData();
 
-  const [inData, setInData] = useState({
-    day: "MON",
+  const [input, setInput] = useState({
     date: null,
-    category: "",
+    description: null,
+    category: null,
+    subcategory: null,
+    startTime: null,
+    endTime: null,
+    adjustment: null,
   });
+
+  const formRef = useRef(null);
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setInData({
-      ...inData,
+    setInput({
+      ...input,
       [name]: value,
     });
   };
+
   const submit = async (event) => {
     event.preventDefault();
-    console.log(inData);
-    setInData({
-      day: "MON",
+    try {
+      const updatedInput = {
+        ...input,
+        date: new Date(input.date), // Convert the date string to a Date object
+        adjustment: parseInt(input.adjustment),
+        timezone: datetimeFnc.getUTCoffset(),
+      };
+      const response = await SDK.postUserActivityData(userId, updatedInput);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+    setInput({
       date: null,
-      category: "",
+      description: null,
+      category: null,
+      subcategory: null,
+      startTime: null,
+      endTime: null,
+      adjustment: null,
     });
-    dateInputRef.current.value = null;
-    categoryInputRef.current.value = "";
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+  };
+
+  const logOut = async () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
   };
 
   return (
@@ -62,8 +78,11 @@ const Members = () => {
         <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
           Collabs
         </button>
-        <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
-          Profile
+        <button
+          className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600"
+          onClick={logOut}
+        >
+          Log Out
         </button>
       </nav>
 
@@ -74,7 +93,7 @@ const Members = () => {
         {/* Sticky Table with headers and input row */}
         <div>
           <section id="input-header">
-            <form>
+            <form ref={formRef} onSubmit={submit}>
               <table>
                 <thead>
                   <tr>
@@ -87,8 +106,9 @@ const Members = () => {
                     <th>END</th>
                     <th>ADJ</th>
                     <th>TIME</th>
-                    <th>CREATED</th>
-                    <th>UPDATED</th>
+                    <th>UTC</th>
+                    <th>CREATED UTC</th>
+                    <th>UPDATED UTC</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -96,41 +116,66 @@ const Members = () => {
                     <td></td>
                     <td>
                       <input
+                        name="date"
                         type="date"
                         className="data-input"
                         onChange={handleInputChange}
-                        name="date"
-                        ref={dateInputRef}
                       />
-                    </td>
-                    <td>
-                      <input type="text" className="data-input" />
                     </td>
                     <td>
                       <input
+                        name="description"
                         type="text"
                         className="data-input"
                         onChange={handleInputChange}
-                        name="category"
-                        ref={categoryInputRef}
                       />
                     </td>
                     <td>
-                      <input type="text" className="data-input" />
+                      <input
+                        name="category"
+                        type="text"
+                        className="data-input"
+                        onChange={handleInputChange}
+                      />
                     </td>
                     <td>
-                      <input type="time" className="data-input" />
+                      <input
+                        name="subcategory"
+                        type="text"
+                        className="data-input"
+                        onChange={handleInputChange}
+                      />
                     </td>
                     <td>
-                      <input type="time" className="data-input" />
+                      <input
+                        name="startTime"
+                        type="time"
+                        className="data-input"
+                        onChange={handleInputChange}
+                      />
                     </td>
                     <td>
-                      <input type="" className="data-input" placeholder="" />
+                      <input
+                        name="endTime"
+                        type="time"
+                        className="data-input"
+                        onChange={handleInputChange}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        name="adjustment"
+                        type="text"
+                        className="data-input"
+                        onChange={handleInputChange}
+                        placeholder="mins"
+                      />
                     </td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td>
-                      <button id="submit-btn" onClick={submit}>
+                      <button id="submit-btn" type="submit">
                         Submit
                       </button>
                     </td>
@@ -145,8 +190,8 @@ const Members = () => {
             <tbody>
               {userActivityData.map((activity) => (
                 <tr key={activity.id}>
-                  <td>{activity.day}</td>
-                  <td>{activity.date}</td>
+                  <td>{datetimeFnc.getWeekDay(activity.date)}</td>
+                  <td>{datetimeFnc.getDDMMYYYY(activity.date.slice(0, 10))}</td>
                   <td>{activity.description}</td>
                   <td>{activity.category}</td>
                   <td>{activity.subcategory}</td>
@@ -154,8 +199,19 @@ const Members = () => {
                   <td>{activity.endTime}</td>
                   <td>{activity.adjustment}</td>
                   <td>{activity.time}</td>
-                  <td>{activity.createdAt}</td>
-                  <td>{activity.updatedAt}</td>
+                  <td>{activity.timezone}</td>
+                  <td>
+                    {`${activity.createdAt.slice(
+                      11,
+                      16
+                    )} | ${activity.createdAt.slice(0, 10)}`}
+                  </td>
+                  <td>
+                    {`${activity.updatedAt.slice(
+                      11,
+                      16
+                    )} | ${activity.updatedAt.slice(0, 10)}`}
+                  </td>
                 </tr>
               ))}
             </tbody>

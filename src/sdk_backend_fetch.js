@@ -5,6 +5,7 @@ if (process.env.NODE_ENV === "development") {
 const version = "v1";
 const apiKey = process.env.REACT_APP_API_KEY;
 
+// AUTHENTICATION
 export const registerUser = async (email, username, password) => {
   const response = await fetch(`${baseURL}/${version}/register`, {
     method: "POST",
@@ -50,6 +51,7 @@ export const isAuthenticated = async () => {
   }
 };
 
+// USER ACTIVITY DATA
 export const getUserActivityData = async (userId) => {
   try {
     const token = localStorage.getItem("token");
@@ -74,6 +76,33 @@ export const getUserActivityData = async (userId) => {
     return json.userActivityData;
   } catch (error) {
     console.error("Error fetching members data:", error);
+    throw error;
+  }
+};
+
+export const postUserActivityData = async (userId, data) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/activity-data`,
+      {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(data),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to post user activity data");
+    }
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error posting user activity data:", error);
     throw error;
   }
 };

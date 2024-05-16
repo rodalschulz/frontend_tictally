@@ -44,15 +44,17 @@ th {
 
 th:nth-child(1) {width: 4% !important; text-align: center; border-top-left-radius: 5px}
 th:nth-child(2) {width: 7% !important; text-align: center}
-th:nth-child(3) {width: 40% !important; text-align: center}
+th:nth-child(3) {width: 38% !important; text-align: center}
 th:nth-child(4) {width: 6% !important; text-align: center}
-th:nth-child(5) {width: 9% !important; text-align: center}
+th:nth-child(5) {width: 8% !important; text-align: center}
 th:nth-child(6) {width: 5% !important; text-align: center}
 th:nth-child(7) {width: 5% !important; text-align: center}
 th:nth-child(8) {width: 3% !important; text-align: center}
 th:nth-child(9) {width: 4% !important; text-align: center}
-th:nth-child(10) {width: 8.5% !important; text-align: center}
-th:nth-child(11) {width: 8.5% !important; text-align: center; border-top-right-radius: 5px}
+th:nth-child(10) {width: 3% !important; text-align: center}
+th:nth-child(11) {width: 8.5% !important; text-align: center}
+th:nth-child(12) {width: 8.5% !important; text-align: center; border-top-right-radius: 5px}
+
 
 #data {
     margin-top: 10px;
@@ -60,15 +62,16 @@ th:nth-child(11) {width: 8.5% !important; text-align: center; border-top-right-r
 
 td:nth-child(1) {width: 4% !important; text-align: center}
 td:nth-child(2) {width: 7% !important; text-align: center}
-td:nth-child(3) {width: 40% !important; text-align: left; font-size: 11px}
+td:nth-child(3) {width: 38% !important; text-align: left; font-size: 11px}
 td:nth-child(4) {width: 6% !important; text-align: center}
-td:nth-child(5) {width: 9% !important; text-align: center}
+td:nth-child(5) {width: 8% !important; text-align: center}
 td:nth-child(6) {width: 5% !important; text-align: center}
 td:nth-child(7) {width: 5% !important; text-align: center}
 td:nth-child(8) {width: 3% !important; text-align: center}
 td:nth-child(9) {width: 4% !important; text-align: center}
-td:nth-child(10) {width: 8.5% !important; text-align: center; color: grey}
+td:nth-child(10) {width: 3% !important; text-align: center; color: grey}
 td:nth-child(11) {width: 8.5% !important; text-align: center; color: grey}
+td:nth-child(12) {width: 8.5% !important; text-align: center; color: grey}
 
 #input-header {
     position: sticky;

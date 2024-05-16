@@ -8,7 +8,7 @@ const Home = () => {
       <div className="max-w-2xl mx-auto text-center">
         <h1 className="text-5xl font-bold text-gray-800 mb-6">TicTally</h1>
         <p className="text-lg text-gray-600 mb-8">
-          Track your daily activities. Stay productive.
+          Track your activities. Stay productive.
         </p>
         <Link to="/login">
           <button className="px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
