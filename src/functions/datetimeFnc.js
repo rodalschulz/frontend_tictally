@@ -7,9 +7,22 @@ const getUTCoffset = () => {
   return `${sign}${absOffsetHours}`;
 };
 
+const currentLocalDate = () => {
+  const utcDate = new Date();
+  const timezoneOffsetMinutes = utcDate.getTimezoneOffset();
+  const localDate = new Date(utcDate.getTime() - timezoneOffsetMinutes * 60000);
+  return localDate;
+};
+
 const getDDMMYYYY = (date) => {
   const [year, month, day] = date.split("-");
   return `${day}-${month}-${year}`;
+};
+
+const getDDMMYY = (date) => {
+  const [year, month, day] = date.split("-");
+  const yearShort = year.slice(2);
+  return `${day}-${month}-${yearShort}`;
 };
 
 const getWeekDay = (date) => {
@@ -18,4 +31,10 @@ const getWeekDay = (date) => {
   return days[day];
 };
 
-export default { getUTCoffset, getDDMMYYYY, getWeekDay };
+export default {
+  getUTCoffset,
+  getDDMMYYYY,
+  getDDMMYY,
+  getWeekDay,
+  currentLocalDate,
+};

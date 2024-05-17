@@ -1,7 +1,7 @@
 import "../styles/v1members.css";
 import * as SDK from "../sdk_backend_fetch.js";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import activityData from "../functions/activityDataFnc.js";
 import inputFnc from "../functions/userInputFnc.js";
 import { useParams } from "react-router-dom";
@@ -9,8 +9,22 @@ import datetimeFnc from "../functions/datetimeFnc.js";
 
 const Members = () => {
   const { userId } = useParams();
+  const [showUTC, setShowUTC] = useState(false);
   // USER ACTIVITY DATA
-  let userActivityData = activityData.useUserActivityData();
+  const [userActivityData, setUserActivityData] = useState([]);
+
+  const fetchUserActivityData = async () => {
+    try {
+      const data = await SDK.getUserActivityData(userId);
+      setUserActivityData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserActivityData();
+  }, [userId]); // Fetch data only when userId changes
 
   const [input, setInput] = useState({
     date: null,
@@ -35,14 +49,14 @@ const Members = () => {
   const submit = async (event) => {
     event.preventDefault();
     try {
-      const updatedInput = {
-        ...input,
-        date: new Date(input.date), // Convert the date string to a Date object
-        adjustment: parseInt(input.adjustment),
-        timezone: datetimeFnc.getUTCoffset(),
-      };
+      const updatedInput = activityData.activityEntryValidation(input);
+      if (!input.category) {
+        alert("Mandatory field: Category");
+        return;
+      }
       const response = await SDK.postUserActivityData(userId, updatedInput);
       console.log(response);
+      fetchUserActivityData();
     } catch (error) {
       console.error(error);
     }
@@ -80,6 +94,12 @@ const Members = () => {
         </button>
         <button
           className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600"
+          onClick={() => setShowUTC(!showUTC)}
+        >
+          Show UTC
+        </button>
+        <button
+          className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600"
           onClick={logOut}
         >
           Log Out
@@ -106,9 +126,13 @@ const Members = () => {
                     <th>END</th>
                     <th>ADJ</th>
                     <th>TIME</th>
-                    <th>UTC</th>
-                    <th>CREATED UTC</th>
-                    <th>UPDATED UTC</th>
+                    {showUTC && (
+                      <>
+                        <th>UTC</th>
+                        <th>CREATED UTC</th>
+                        <th>UPDATED UTC</th>
+                      </>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -131,12 +155,19 @@ const Members = () => {
                       />
                     </td>
                     <td>
-                      <input
+                      <select
                         name="category"
-                        type="text"
                         className="data-input"
                         onChange={handleInputChange}
-                      />
+                      >
+                        <option value="">Select</option>
+                        <option value="GENERAL">GENERAL</option>
+                        <option value="WORK">WORK</option>
+                        <option value="CORE">CORE</option>
+                        <option value="LEARN">LEARN</option>
+                        <option value="BUILD">BUILD</option>
+                        <option value="RECOVERY">RECOVERY</option>
+                      </select>
                     </td>
                     <td>
                       <input
@@ -171,14 +202,18 @@ const Members = () => {
                         placeholder="mins"
                       />
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td>
                       <button id="submit-btn" type="submit">
                         Submit
                       </button>
                     </td>
+                    {showUTC && (
+                      <>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </>
+                    )}
                   </tr>
                 </tbody>
               </table>
@@ -199,19 +234,27 @@ const Members = () => {
                   <td>{activity.endTime}</td>
                   <td>{activity.adjustment}</td>
                   <td>{activity.time}</td>
-                  <td>{activity.timezone}</td>
-                  <td>
-                    {`${activity.createdAt.slice(
-                      11,
-                      16
-                    )} | ${activity.createdAt.slice(0, 10)}`}
-                  </td>
-                  <td>
-                    {`${activity.updatedAt.slice(
-                      11,
-                      16
-                    )} | ${activity.updatedAt.slice(0, 10)}`}
-                  </td>
+                  {showUTC && (
+                    <>
+                      <td>{activity.timezone}</td>
+                      <td>
+                        {`${activity.createdAt.slice(
+                          11,
+                          16
+                        )} ${datetimeFnc.getDDMMYY(
+                          activity.createdAt.slice(0, 10)
+                        )}`}
+                      </td>
+                      <td>
+                        {`${activity.updatedAt.slice(
+                          11,
+                          16
+                        )} ${datetimeFnc.getDDMMYY(
+                          activity.updatedAt.slice(0, 10)
+                        )}`}
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>

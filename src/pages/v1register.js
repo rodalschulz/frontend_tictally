@@ -35,6 +35,9 @@ const Register = () => {
       alert(response.response);
       navigate("/login");
     } catch (error) {
+      alert(
+        "Something went wrong! It could be that the email or username are already taken."
+      );
       console.error(error);
     }
   };
