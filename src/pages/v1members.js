@@ -28,6 +28,19 @@ const Members = () => {
     fetchUserActivityData();
   }, [userId]); // Fetch data only when userId changes
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const [input, setInput] = useState({
     date: null,
     description: null,
