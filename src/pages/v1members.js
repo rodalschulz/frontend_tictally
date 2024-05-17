@@ -147,12 +147,8 @@ const Members = () => {
   };
 
   return (
-    <div className={`flex h-screen ${isMobile ? "flex-col" : ""}`}>
-      <nav
-        className={`bg-gray-800 text-white p-4 ${
-          isMobile ? "w-full flex space-x-4" : "w-36 flex-col space-y-4"
-        }`}
-      >
+    <div className="flex h-screen">
+      <nav className="w-36 bg-gray-800 text-white p-4 flex flex-col space-y-4">
         <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
           Dashboard
         </button>
