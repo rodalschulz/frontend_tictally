@@ -52,7 +52,7 @@ function App() {
         }
       />
       <Route
-        path="/members/:userId"
+        path="/members/:userId/tally"
         element={
           loading ? null : isAuthenticated ? <Members /> : <Navigate to="/" />
         }
