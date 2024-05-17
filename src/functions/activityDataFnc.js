@@ -42,6 +42,10 @@ const activityEntryValidation = (input) => {
   if (input.subcategory) {
     input.subcategory = input.subcategory.toUpperCase();
   }
+  if (!input.startTime) {
+    input.startTime = datetimeFnc.currentLocalTimeHHMM();
+  }
+
   const updatedInput = {
     ...input,
     date: input.date,

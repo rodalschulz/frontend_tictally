@@ -125,16 +125,20 @@ td:nth-child(12) {width: 8.5% !important; text-align: center; color: grey}
         margin-left: 0px;
     }
     th:nth-child(1) {width: 25% !important; text-align: center}
-    th:nth-child(2) {width: 25% !important; text-align: center}
-    th:nth-child(3) {width: 25% !important; text-align: center}
-    th:nth-child(4) {width: 25% !important; text-align: center}
-    th:nth-child(5) {width: 25% !important; text-align: center}
+    th:nth-child(2) {width: 33% !important; text-align: center}
+    th:nth-child(3) {width: 14% !important; text-align: center}
+    th:nth-child(4) {width: 14% !important; text-align: center}
+    th:nth-child(5) {width: 14% !important; text-align: center}
+
+    td {
+        font-size: 12px;
+    }
 
     td:nth-child(1) {width: 25% !important; text-align: center}
-    td:nth-child(2) {width: 25% !important; text-align: center}
-    td:nth-child(3) {width: 25% !important; text-align: center}
-    td:nth-child(4) {width: 25% !important; text-align: center}
-    td:nth-child(5) {width: 25% !important; text-align: center}
+    td:nth-child(2) {width: 33% !important; text-align: center}
+    td:nth-child(3) {width: 14% !important; text-align: center}
+    td:nth-child(4) {width: 14% !important; text-align: center;}
+    td:nth-child(5) {width: 14% !important; text-align: center}
 }
 
 

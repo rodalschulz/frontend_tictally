@@ -14,6 +14,12 @@ const currentLocalDate = () => {
   return localDate;
 };
 
+const currentLocalTimeHHMM = () => {
+  const utcDate = new Date();
+  const timeHHMM = utcDate.toTimeString().slice(0, 5);
+  return timeHHMM;
+};
+
 const getDDMMYYYY = (date) => {
   const [year, month, day] = date.split("-");
   return `${day}-${month}-${year}`;
@@ -37,4 +43,5 @@ export default {
   getDDMMYY,
   getWeekDay,
   currentLocalDate,
+  currentLocalTimeHHMM,
 };

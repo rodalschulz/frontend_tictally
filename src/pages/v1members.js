@@ -198,10 +198,9 @@ const Members = () => {
       )}
       <button
         onClick={toggleSidebar}
-        className="absolute top-0 right-0 mt-2 mr-2 text-white"
+        className="absolute top-0 right-0 mt-2 mr-4 text-white bg-gray-800 px-2 py-1 text-sm rounded hover:bg-gray-700 focus:outline-none focus:ring-1 focus:ring-gray-500 focus:ring-offset-1"
       >
-        {/* This button toggles the sidebar */}
-        {showSidebar ? "Hide Sidebar" : "Show Sidebar"}
+        {showSidebar ? ">" : "<"}
       </button>
 
       <main className="flex-1 p-4">
