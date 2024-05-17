@@ -1,7 +1,7 @@
 import "../styles/v1members.css";
 import * as SDK from "../sdk_backend_fetch.js";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import activityData from "../functions/activityDataFnc.js";
 import inputFnc from "../functions/userInputFnc.js";
 import { useParams } from "react-router-dom";
@@ -9,7 +9,7 @@ import datetimeFnc from "../functions/datetimeFnc.js";
 
 const Members = () => {
   const { userId } = useParams();
-  const [showUTC, setShowUTC] = useState(false);
+  const [showUTC, setShowUTC] = useState(true);
   // USER ACTIVITY DATA
   const [userActivityData, setUserActivityData] = useState([]);
 
@@ -74,6 +74,71 @@ const Members = () => {
     }
   };
 
+  // SELECTING ROWS AND NAVIGATING WITH ARROW KEYS
+  const [selectedRow, setSelectedRow] = useState(null);
+  const handleRowClick = (id) => {
+    if (selectedRow === id) {
+      setSelectedRow(null);
+      return;
+    } else {
+      setSelectedRow(id);
+      console.log(id);
+    }
+  };
+  useEffect(() => {
+    // Add event listener for arrow keys
+    const handleArrowKeyPress = (e) => {
+      // Handle Up and Down arrow keys
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        e.preventDefault();
+        const currentIndex = userActivityData.findIndex(
+          (item) => item.id === selectedRow
+        );
+        if (currentIndex !== -1) {
+          const nextIndex =
+            e.key === "ArrowUp" ? currentIndex - 1 : currentIndex + 1;
+          if (nextIndex >= 0 && nextIndex < userActivityData.length) {
+            setSelectedRow(userActivityData[nextIndex].id);
+          }
+        } else if (userActivityData && userActivityData.length > 0) {
+          setSelectedRow(userActivityData[0].id);
+        }
+      }
+    };
+    window.addEventListener("keydown", handleArrowKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleArrowKeyPress);
+    };
+  }, [userActivityData, selectedRow]);
+
+  // DELETING CURRENTLY SELECTED ROW WITH DEL PRESS
+  const deleteSelected = useCallback(async () => {
+    const idToDelete = selectedRow;
+    try {
+      if (selectedRow) {
+        await SDK.deleteUserActivityData(userId, idToDelete);
+        fetchUserActivityData();
+        setSelectedRow(null);
+      } else {
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [selectedRow, fetchUserActivityData]);
+  const handleDelPress = useCallback(
+    (e) => {
+      if (e.key === "Delete") {
+        deleteSelected();
+      }
+    },
+    [deleteSelected]
+  );
+  useEffect(() => {
+    window.addEventListener("keydown", handleDelPress);
+    return () => window.removeEventListener("keydown", handleDelPress);
+  }, [handleDelPress]);
+
   const logOut = async () => {
     localStorage.removeItem("token");
     window.location.href = "/";
@@ -83,6 +148,9 @@ const Members = () => {
     <div className="flex h-screen">
       {/* Vertical Navigation Bar */}
       <nav className="w-36 bg-gray-800 text-white p-4 flex flex-col space-y-4">
+        <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
+          Dashboard
+        </button>
         <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
           My Tally
         </button>
@@ -96,7 +164,7 @@ const Members = () => {
           className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600"
           onClick={() => setShowUTC(!showUTC)}
         >
-          Show UTC
+          UTC
         </button>
         <button
           className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600"
@@ -224,7 +292,16 @@ const Members = () => {
           <table id="data">
             <tbody>
               {userActivityData.map((activity) => (
-                <tr key={activity.id}>
+                <tr
+                  key={activity.id}
+                  onClick={() => handleRowClick(activity.id)}
+                  style={{
+                    backgroundColor:
+                      selectedRow === activity.id
+                        ? "rgb(37,45,80)"
+                        : "transparent",
+                  }}
+                >
                   <td>{datetimeFnc.getWeekDay(activity.date)}</td>
                   <td>{datetimeFnc.getDDMMYYYY(activity.date.slice(0, 10))}</td>
                   <td>{activity.description}</td>

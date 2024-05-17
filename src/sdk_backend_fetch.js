@@ -106,3 +106,30 @@ export const postUserActivityData = async (userId, data) => {
     throw error;
   }
 };
+
+export const deleteUserActivityData = async (userId, entryId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/activity-data`,
+      {
+        method: "DELETE",
+        headers: headers,
+        body: JSON.stringify({ entryId: entryId }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to post user activity data");
+    }
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error deleting user activity data:", error);
+    throw error;
+  }
+};
