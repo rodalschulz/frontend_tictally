@@ -11,6 +11,11 @@ const Members = () => {
   const { userId } = useParams();
   const [showUTC, setShowUTC] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true); // State variable to manage sidebar visibility
+
+  const toggleSidebar = () => {
+    setShowSidebar(!showSidebar);
+  };
 
   // USER ACTIVITY DATA
   const [userActivityData, setUserActivityData] = useState([]);
@@ -30,7 +35,7 @@ const Members = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 500);
     };
 
     handleResize(); // Initial check
@@ -161,32 +166,43 @@ const Members = () => {
 
   return (
     <div className="flex h-screen">
-      <nav className="w-36 bg-gray-800 text-white p-4 flex flex-col space-y-4">
-        <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
-          Dashboard
-        </button>
-        <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
-          My Tally
-        </button>
-        <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
-          Pending
-        </button>
-        <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
-          Collabs
-        </button>
-        <button
-          className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600"
-          onClick={() => setShowUTC(!showUTC)}
-        >
-          UTC
-        </button>
-        <button
-          className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600"
-          onClick={logOut}
-        >
-          Log Out
-        </button>
-      </nav>
+      {/* Sidebar with toggle button */}
+      {showSidebar && (
+        <nav className="w-36 bg-gray-800 text-white p-4 flex flex-col space-y-4">
+          {/* Your sidebar content */}
+          <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
+            Dashboard
+          </button>
+          <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
+            My Tally
+          </button>
+          <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
+            Pending
+          </button>
+          <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
+            Collabs
+          </button>
+          <button
+            className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600"
+            onClick={() => setShowUTC(!showUTC)}
+          >
+            UTC
+          </button>
+          <button
+            className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600"
+            onClick={logOut}
+          >
+            Log Out
+          </button>
+        </nav>
+      )}
+      <button
+        onClick={toggleSidebar}
+        className="absolute top-0 right-0 mt-2 mr-2 text-white"
+      >
+        {/* This button toggles the sidebar */}
+        {showSidebar ? "Hide Sidebar" : "Show Sidebar"}
+      </button>
 
       <main className="flex-1 p-4">
         <h1 className="text-2xl">Personal Tally</h1>
@@ -197,18 +213,14 @@ const Members = () => {
               <table className="min-w-full">
                 <thead>
                   <tr>
-                    <th>DAY</th>
-                    <th>DATE</th>
+                    {!isMobile && <th>DAY</th>}
+                    {!isMobile && <th>DATE</th>}
                     {!isMobile && <th>DESCRIPTION</th>}
                     <th>CATEG</th>
                     <th>SUBCAT</th>
-                    {!isMobile && (
-                      <>
-                        <th>START</th>
-                        <th>END</th>
-                        <th>ADJ</th>
-                      </>
-                    )}
+                    <th>START</th>
+                    <th>END</th>
+                    {!isMobile && <th>ADJ</th>}
                     <th>TIME</th>
                     {showUTC && !isMobile && (
                       <>
@@ -221,15 +233,17 @@ const Members = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td></td>
-                    <td>
-                      <input
-                        name="date"
-                        type="date"
-                        className="data-input"
-                        onChange={handleInputChange}
-                      />
-                    </td>
+                    {!isMobile && <td></td>}
+                    {!isMobile && (
+                      <td>
+                        <input
+                          name="date"
+                          type="date"
+                          className="data-input"
+                          onChange={handleInputChange}
+                        />
+                      </td>
+                    )}
                     {!isMobile && (
                       <td>
                         <input
@@ -263,34 +277,33 @@ const Members = () => {
                         onChange={handleInputChange}
                       />
                     </td>
+                    <td>
+                      <input
+                        name="startTime"
+                        type="time"
+                        className="data-input"
+                        onChange={handleInputChange}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        name="endTime"
+                        type="time"
+                        className="data-input"
+                        onChange={handleInputChange}
+                      />
+                    </td>
+
                     {!isMobile && (
-                      <>
-                        <td>
-                          <input
-                            name="startTime"
-                            type="time"
-                            className="data-input"
-                            onChange={handleInputChange}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            name="endTime"
-                            type="time"
-                            className="data-input"
-                            onChange={handleInputChange}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            name="adjustment"
-                            type="text"
-                            className="data-input"
-                            onChange={handleInputChange}
-                            placeholder="mins"
-                          />
-                        </td>
-                      </>
+                      <td>
+                        <input
+                          name="adjustment"
+                          type="text"
+                          className="data-input"
+                          onChange={handleInputChange}
+                          placeholder="mins"
+                        />
+                      </td>
                     )}
                     <td>
                       <button id="submit-btn" type="submit">
@@ -328,17 +341,17 @@ const Members = () => {
                   {!isMobile && (
                     <td>{datetimeFnc.getWeekDay(activity.date)}</td>
                   )}
-                  <td>{datetimeFnc.getDDMMYYYY(activity.date.slice(0, 10))}</td>
+                  {!isMobile && (
+                    <td>
+                      {datetimeFnc.getDDMMYYYY(activity.date.slice(0, 10))}
+                    </td>
+                  )}
                   {!isMobile && <td>{activity.description}</td>}
                   <td>{activity.category}</td>
                   <td>{activity.subcategory}</td>
-                  {!isMobile && (
-                    <>
-                      <td>{activity.startTime}</td>
-                      <td>{activity.endTime}</td>
-                      <td>{activity.adjustment}</td>
-                    </>
-                  )}
+                  <td>{activity.startTime}</td>
+                  <td>{activity.endTime}</td>
+                  {!isMobile && <td>{activity.adjustment}</td>}
                   <td>{activity.time}</td>
                   {showUTC && !isMobile && (
                     <>
