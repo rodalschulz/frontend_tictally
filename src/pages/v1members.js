@@ -325,7 +325,9 @@ const Members = () => {
                         : "transparent",
                   }}
                 >
-                  <td>{datetimeFnc.getWeekDay(activity.date)}</td>
+                  {!isMobile && (
+                    <td>{datetimeFnc.getWeekDay(activity.date)}</td>
+                  )}
                   <td>{datetimeFnc.getDDMMYYYY(activity.date.slice(0, 10))}</td>
                   {!isMobile && <td>{activity.description}</td>}
                   <td>{activity.category}</td>
