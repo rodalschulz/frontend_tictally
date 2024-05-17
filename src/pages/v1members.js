@@ -1,5 +1,6 @@
 import "../styles/v1members.css";
 import * as SDK from "../sdk_backend_fetch.js";
+
 import { useState, useRef, useEffect, useCallback } from "react";
 import activityData from "../functions/activityDataFnc.js";
 import inputFnc from "../functions/userInputFnc.js";
@@ -9,8 +10,10 @@ import datetimeFnc from "../functions/datetimeFnc.js";
 const Members = () => {
   const { userId } = useParams();
   const [showUTC, setShowUTC] = useState(true);
-  const [userActivityData, setUserActivityData] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
+
+  // USER ACTIVITY DATA
+  const [userActivityData, setUserActivityData] = useState([]);
 
   const fetchUserActivityData = async () => {
     try {
@@ -23,20 +26,7 @@ const Members = () => {
 
   useEffect(() => {
     fetchUserActivityData();
-  }, [userId]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  }, [userId]); // Fetch data only when userId changes
 
   const [input, setInput] = useState({
     date: null,
@@ -86,6 +76,7 @@ const Members = () => {
     }
   };
 
+  // SELECTING ROWS AND NAVIGATING WITH ARROW KEYS
   const [selectedRow, setSelectedRow] = useState(null);
   const handleRowClick = (id) => {
     if (selectedRow === id) {
@@ -96,9 +87,10 @@ const Members = () => {
       console.log(id);
     }
   };
-
   useEffect(() => {
+    // Add event listener for arrow keys
     const handleArrowKeyPress = (e) => {
+      // Handle Up and Down arrow keys
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         e.preventDefault();
         const currentIndex = userActivityData.findIndex(
@@ -121,6 +113,7 @@ const Members = () => {
     };
   }, [userActivityData, selectedRow]);
 
+  // DELETING CURRENTLY SELECTED ROW WITH DEL PRESS
   const deleteSelected = useCallback(async () => {
     const idToDelete = selectedRow;
     try {
@@ -135,7 +128,6 @@ const Members = () => {
       console.error(error);
     }
   }, [selectedRow, fetchUserActivityData]);
-
   const handleDelPress = useCallback(
     (e) => {
       if (e.key === "Delete") {
@@ -144,7 +136,6 @@ const Members = () => {
     },
     [deleteSelected]
   );
-
   useEffect(() => {
     window.addEventListener("keydown", handleDelPress);
     return () => window.removeEventListener("keydown", handleDelPress);
@@ -156,8 +147,12 @@ const Members = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      <nav className="w-36 bg-gray-800 text-white p-4 flex flex-col space-y-4">
+    <div className={`flex h-screen ${isMobile ? "flex-col" : ""}`}>
+      <nav
+        className={`bg-gray-800 text-white p-4 ${
+          isMobile ? "w-full flex space-x-4" : "w-36 flex-col space-y-4"
+        }`}
+      >
         <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
           Dashboard
         </button>
