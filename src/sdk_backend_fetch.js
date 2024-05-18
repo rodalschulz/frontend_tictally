@@ -133,3 +133,30 @@ export const deleteUserActivityData = async (userId, entryId) => {
     throw error;
   }
 };
+
+export const patchUserActivityData = async (userId, entryId, data) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/activity-data`,
+      {
+        method: "PATCH",
+        headers: headers,
+        body: JSON.stringify({ entryId: entryId, data: data }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to patch user activity data");
+    }
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error patching user activity data:", error);
+    throw error;
+  }
+};

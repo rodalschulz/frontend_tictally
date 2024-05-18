@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import * as SDK from "../sdk_backend_fetch.js";
 import { useParams } from "react-router-dom";
 import datetimeFnc from "../functions/datetimeFnc.js";
@@ -57,7 +57,22 @@ const activityEntryValidation = (input) => {
   return updatedInput;
 };
 
+const activityPatchValidation = (input) => {
+  const updatedInput = { ...input };
+  for (const key in updatedInput) {
+    if (
+      updatedInput[key] === null ||
+      updatedInput[key] === undefined ||
+      updatedInput[key] === ""
+    ) {
+      delete updatedInput[key];
+    }
+  }
+  return updatedInput;
+};
+
 export default {
   useUserActivityData,
   activityEntryValidation,
+  activityPatchValidation,
 };

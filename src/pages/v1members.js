@@ -68,29 +68,56 @@ const Members = () => {
 
   const submit = async (event) => {
     event.preventDefault();
-    try {
-      const updatedInput = activityData.activityEntryValidation(input);
-      if (!input.category) {
-        alert("Mandatory field: Category");
-        return;
+    if (selectedRow) {
+      try {
+        const idToPatch = selectedRow;
+        const updatedInput = activityData.activityPatchValidation(input);
+        const response = await SDK.patchUserActivityData(
+          userId,
+          idToPatch,
+          updatedInput
+        );
+        fetchUserActivityData();
+      } catch (error) {
+        console.error(error);
       }
-      const response = await SDK.postUserActivityData(userId, updatedInput);
-      console.log(response);
-      fetchUserActivityData();
-    } catch (error) {
-      console.error(error);
-    }
-    setInput({
-      date: null,
-      description: null,
-      category: null,
-      subcategory: null,
-      startTime: null,
-      endTime: null,
-      adjustment: null,
-    });
-    if (formRef.current) {
-      formRef.current.reset();
+      setInput({
+        date: null,
+        description: null,
+        category: null,
+        subcategory: null,
+        startTime: null,
+        endTime: null,
+        adjustment: null,
+      });
+      if (formRef.current) {
+        formRef.current.reset();
+      }
+    } else {
+      try {
+        const updatedInput = activityData.activityEntryValidation(input);
+        if (!input.category) {
+          alert("Mandatory field: Category");
+          return;
+        }
+        const response = await SDK.postUserActivityData(userId, updatedInput);
+        console.log(response);
+        fetchUserActivityData();
+      } catch (error) {
+        console.error(error);
+      }
+      setInput({
+        date: null,
+        description: null,
+        category: null,
+        subcategory: null,
+        startTime: null,
+        endTime: null,
+        adjustment: null,
+      });
+      if (formRef.current) {
+        formRef.current.reset();
+      }
     }
   };
 
