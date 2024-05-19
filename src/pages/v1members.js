@@ -195,30 +195,19 @@ const Members = () => {
     <div className="flex h-screen">
       {/* Sidebar with toggle button */}
       {showSidebar && (
-        <nav className="w-36 bg-gray-800 text-white p-4 flex flex-col space-y-4">
+        <nav className="w-36 bg-custom-grey text-white p-4 flex flex-col space-y-4">
           {/* Your sidebar content */}
-          <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
-            Dashboard
-          </button>
-          <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
-            My Tally
-          </button>
-          <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
-            Pending
-          </button>
-          <button className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600">
-            Collabs
-          </button>
+          <button className="btn btn-primary mt-20">Dashboard</button>
+          <button className="btn btn-primary">My Tally</button>
+          <button className="btn btn-primary">Pending</button>
+          <button className="btn btn-primary">Collabs</button>
           <button
-            className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600"
+            className="btn btn-primary"
             onClick={() => setShowUTC(!showUTC)}
           >
             UTC
           </button>
-          <button
-            className="py-2 px-4 bg-gray-700 rounded hover:bg-gray-600"
-            onClick={logOut}
-          >
+          <button className="btn btn-primary" onClick={logOut}>
             Log Out
           </button>
         </nav>
@@ -231,12 +220,14 @@ const Members = () => {
       </button>
 
       <main className="flex-1 p-4">
-        <h1 className="text-2xl">Personal Tally</h1>
+        <h1 className="text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg">
+          Personal Tally
+        </h1>
 
         <div>
           <section id="input-header">
             <form ref={formRef} onSubmit={submit}>
-              <table className="min-w-full">
+              <table id="input-table" className="min-w-full">
                 <thead>
                   <tr>
                     {!isMobile && <th>DAY</th>}
@@ -261,7 +252,7 @@ const Members = () => {
                   <tr>
                     {!isMobile && <td></td>}
                     {!isMobile && (
-                      <td>
+                      <td className="input-name">
                         <input
                           name="date"
                           type="date"
@@ -332,8 +323,8 @@ const Members = () => {
                       </td>
                     )}
                     <td>
-                      <button id="submit-btn" type="submit">
-                        Submit
+                      <button id="submit-btn" type="submit" className="pr-2">
+                        Enter
                       </button>
                     </td>
                     {showUTC && !isMobile && (
@@ -360,7 +351,7 @@ const Members = () => {
                   style={{
                     backgroundColor:
                       selectedRow === activity.id
-                        ? "rgb(37,45,80)"
+                        ? "rgb(25, 45, 51)"
                         : "transparent",
                   }}
                 >
