@@ -11,7 +11,7 @@ const Members = () => {
   const { userId } = useParams();
   const [showUTC, setShowUTC] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(true); // State variable to manage sidebar visibility
+  const [showSidebar, setShowSidebar] = useState(false); // State variable to manage sidebar visibility
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
