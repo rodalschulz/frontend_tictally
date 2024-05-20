@@ -1,27 +1,10 @@
-body {
-    background-color:rgb(202, 202, 202);
-}
-
-h1 {
-    font-weight: 700;
-    margin-left: 5px;
-    margin-bottom: 15px;
-    color: rgb(255, 255, 255);
-    background-color: rgb(25, 45, 51);
-    padding-left: 10px;
-}
-
-table {
-    width: 1400px;
-    table-layout: fixed; 
-    border-collapse: collapse; 
-    background-color: rgb(128, 128, 128);
-    margin-left: 5px;
-    margin-right: 5px;
-    border-radius: 7px;
-    font-size: small;
-    color:white;
-}
+#input-table th {
+    background-color: rgb(38, 70, 83);
+    font-weight: 500;
+    font-size: 12px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+} 
 
 #input-table td {
     overflow: hidden; 
@@ -29,14 +12,9 @@ table {
     text-overflow: ellipsis;
     padding-left: 5px;
     padding-right: 5px;
-    background-color:rgb(25, 45, 51);
-    border-radius: 7px;
     font-size: 15px;
 }
 
-#input-table {
-    background-color:rgb(25, 45, 51) ;
-}
 
 #data td {
     overflow: hidden; 
@@ -44,53 +22,44 @@ table {
     text-overflow: ellipsis;
     padding-left: 5px;
     padding-right: 5px;
-    border: 1px solid rgb(202, 202, 202);
-    border-radius: 7px;
+    border: 1px solid rgb(200,200,200);
 }
 
-th {
-    font-weight: 500;
-    font-size: 12px;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    background-color: rgb(38, 70, 83);
-}
 
-th:nth-child(1) {width: 4% !important; text-align: center; border-top-left-radius: 5px}
-th:nth-child(2) {width: 7.5% !important; text-align: center}
-th:nth-child(3) {width: 38.5% !important; text-align: center}
-th:nth-child(4) {width: 7% !important; text-align: center}
-th:nth-child(5) {width: 8% !important; text-align: center}
-th:nth-child(6) {width: 5% !important; text-align: center}
-th:nth-child(7) {width: 5% !important; text-align: center}
-th:nth-child(8) {width: 3% !important; text-align: center}
-th:nth-child(9) {width: 4% !important; text-align: center}
-th:nth-child(10) {width: 3% !important; text-align: center}
-th:nth-child(11) {width: 8.5% !important; text-align: center}
-th:nth-child(12) {width: 8.5% !important; text-align: center; border-top-right-radius: 5px}
+th:first-child {border-top-left-radius: 7px}
+th:nth-child(1) {width: 4%; text-align: center}
+th:nth-child(2) {width: 7.5% ; text-align: center}
+th:nth-child(3) {width: 38.5% ; text-align: center}
+th:nth-child(4) {width: 7% ; text-align: center}
+th:nth-child(5) {width: 8% ; text-align: center}
+th:nth-child(6) {width: 5% ; text-align: center}
+th:nth-child(7) {width: 5% ; text-align: center}
+th:nth-child(8) {width: 3% ; text-align: center}
+th:nth-child(9) {width: 4% ; text-align: center}
+th:nth-child(10) {width: 3% ; text-align: center}
+th:nth-child(11) {width: 8.5% ; text-align: center}
+th:nth-child(12) {width: 8.5% ; text-align: center}
+th:last-child {border-top-right-radius: 7px}
 
 
-#data {
-    margin-top: 10px;
-}
 
-td:nth-child(1) {width: 4% !important; text-align: center}
-td:nth-child(2) {width: 7.5% !important; text-align: center}
-td:nth-child(3) {width: 38.5% !important; text-align: left; font-size: 11px}
-td:nth-child(4) {width: 7% !important; text-align: center}
-td:nth-child(5) {width: 8% !important; text-align: center}
-td:nth-child(6) {width: 5% !important; text-align: center}
-td:nth-child(7) {width: 5% !important; text-align: center}
-td:nth-child(8) {width: 3% !important; text-align: center}
-td:nth-child(9) {width: 4% !important; text-align: center}
-td:nth-child(10) {width: 3% !important; text-align: center; color: rgb(22, 22, 22)}
-td:nth-child(11) {width: 8.5% !important; text-align: center; color: rgb(22, 22, 22)}
-td:nth-child(12) {width: 8.5% !important; text-align: center; color: rgb(22, 22, 22)}
+td:nth-child(1) {width: 4% ; text-align: center}
+td:nth-child(2) {width: 7.5% ; text-align: center}
+td:nth-child(3) {width: 38.5% ; text-align: left}
+td:nth-child(4) {width: 7% ; text-align: center}
+td:nth-child(5) {width: 8% ; text-align: center}
+td:nth-child(6) {width: 5% ; text-align: center}
+td:nth-child(7) {width: 5% ; text-align: center}
+td:nth-child(8) {width: 3% ; text-align: center}
+td:nth-child(9) {width: 4% ; text-align: center}
+td:nth-child(10) {width: 3% ; text-align: center; color: rgb(165, 165, 165)}
+td:nth-child(11) {width: 8.5% ; text-align: center; color: rgb(165, 165, 165)}
+td:nth-child(12) {width: 8.5% ; text-align: center; color: rgb(165, 165, 165)}
 
-#input-header {
+/* #input-header {
     position: sticky;
     top: 0%;
-}
+} */
 
 .data-input {
     width: 100%;
@@ -134,25 +103,17 @@ td:nth-child(12) {width: 8.5% !important; text-align: center; color: rgb(22, 22,
 }
 
 @media (max-width: 500px) {
-    table {
-        width: 100%;
-        margin-left: 0px;
-    }
-    th:nth-child(1) {width: 25% !important; text-align: center}
-    th:nth-child(2) {width: 33% !important; text-align: center}
-    th:nth-child(3) {width: 14% !important; text-align: center}
-    th:nth-child(4) {width: 14% !important; text-align: center}
-    th:nth-child(5) {width: 14% !important; text-align: center}
+    th:nth-child(1) {width: 25% ; text-align: center}
+    th:nth-child(2) {width: 33% ; text-align: center}
+    th:nth-child(3) {width: 14% ; text-align: center}
+    th:nth-child(4) {width: 14% ; text-align: center}
+    th:nth-child(5) {width: 14% ; text-align: center}
 
-    td {
-        font-size: 12px;
-    }
-
-    td:nth-child(1) {width: 25% !important; text-align: center}
-    td:nth-child(2) {width: 33% !important; text-align: center}
-    td:nth-child(3) {width: 14% !important; text-align: center}
-    td:nth-child(4) {width: 14% !important; text-align: center;}
-    td:nth-child(5) {width: 14% !important; text-align: center}
+    td:nth-child(1) {width: 25% ; text-align: center}
+    td:nth-child(2) {width: 33% ; text-align: center}
+    td:nth-child(3) {width: 14% ; text-align: center}
+    td:nth-child(4) {width: 14% ; text-align: center;}
+    td:nth-child(5) {width: 14% ; text-align: center}
 }
 
 
@@ -171,7 +132,7 @@ tr {
     height: 25px; 
 }
 
-#th1 {width: 3% !important; text-align: center}
+#th1 {width: 3% ; text-align: center}
 #th2 {width: 6% !important; text-align: center}
 #th3 {width: 49% !important; text-align: center}
 #th4 {width: 6% !important; text-align: center}

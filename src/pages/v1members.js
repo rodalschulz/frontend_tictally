@@ -19,7 +19,6 @@ const Members = () => {
 
   // USER ACTIVITY DATA
   const [userActivityData, setUserActivityData] = useState([]);
-
   const fetchUserActivityData = async () => {
     try {
       const data = await SDK.getUserActivityData(userId);
@@ -55,7 +54,6 @@ const Members = () => {
     endTime: null,
     adjustment: null,
   });
-
   const formRef = useRef(null);
 
   const handleInputChange = (event) => {
@@ -192,11 +190,9 @@ const Members = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      {/* Sidebar with toggle button */}
+    <div className="flex h-screen bg-gray-300 overflow-x-auto">
       {showSidebar && (
-        <nav className="w-36 bg-custom-grey text-white p-4 flex flex-col space-y-4">
-          {/* Your sidebar content */}
+        <nav className="xs:absolute sm:relative xs:h-screen w-36 bg-custom-grey text-white p-4 flex flex-col space-y-4">
           <button className="btn btn-primary mt-20">Dashboard</button>
           <button className="btn btn-primary">My Tally</button>
           <button className="btn btn-primary">Pending</button>
@@ -214,20 +210,23 @@ const Members = () => {
       )}
       <button
         onClick={toggleSidebar}
-        className="absolute top-0 right-0 mt-2 mr-4 text-white bg-gray-800 px-2 py-1 text-sm rounded hover:bg-gray-700 focus:outline-none focus:ring-1 focus:ring-gray-500 focus:ring-offset-1"
+        className="bg-gray-800 text-white text-sm px-1 py-2 h-10 rounded-none mt-4 rounded-tr-md rounded-br-md z-50"
       >
         {showSidebar ? ">" : "<"}
       </button>
 
-      <main className="flex-1 p-4">
-        <h1 className="text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg">
+      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2">
+        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold mb-4 text-white mr-5">
           Personal Tally
         </h1>
 
         <div>
           <section id="input-header">
             <form ref={formRef} onSubmit={submit}>
-              <table id="input-table" className="min-w-full">
+              <table
+                id="input-table"
+                className="sm:min-w-[1400px] w-full text-white text-sm mr-5 rounded-[7px] bg-gray-800"
+              >
                 <thead>
                   <tr>
                     {!isMobile && <th>DAY</th>}
@@ -342,7 +341,10 @@ const Members = () => {
         </div>
 
         <div>
-          <table id="data" className="min-w-full">
+          <table
+            id="data"
+            className="sm:min-w-[1400px] w-full text-white text-[12px] rounded-[7px] bg-gray-500 mr-5 mt-3"
+          >
             <tbody>
               {userActivityData.map((activity) => (
                 <tr
@@ -350,9 +352,7 @@ const Members = () => {
                   onClick={() => handleRowClick(activity.id)}
                   style={{
                     backgroundColor:
-                      selectedRow === activity.id
-                        ? "rgb(25, 45, 51)"
-                        : "transparent",
+                      selectedRow === activity.id ? "#264653" : "transparent",
                   }}
                 >
                   {!isMobile && (
