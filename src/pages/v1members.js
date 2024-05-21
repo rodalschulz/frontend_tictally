@@ -3,7 +3,6 @@ import * as SDK from "../sdk_backend_fetch.js";
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import activityData from "../functions/activityDataFnc.js";
-import inputFnc from "../functions/userInputFnc.js";
 import { useParams } from "react-router-dom";
 import datetimeFnc from "../functions/datetimeFnc.js";
 
@@ -11,27 +10,11 @@ const Members = () => {
   const { userId } = useParams();
   const [showUTC, setShowUTC] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(false); // State variable to manage sidebar visibility
-
+  const [showSidebar, setShowSidebar] = useState(false);
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
-
-  // USER ACTIVITY DATA
-  const [userActivityData, setUserActivityData] = useState([]);
-  const fetchUserActivityData = async () => {
-    try {
-      const data = await SDK.getUserActivityData(userId);
-      setUserActivityData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserActivityData();
-  }, [userId]); // Fetch data only when userId changes
-
+  // Handle window resize
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 500);
@@ -44,6 +27,20 @@ const Members = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  // USER ACTIVITY DATA
+  const [userActivityData, setUserActivityData] = useState([]);
+  const fetchUserActivityData = async () => {
+    try {
+      const data = await SDK.getUserActivityData(userId);
+      setUserActivityData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchUserActivityData();
+  }, [userId]);
 
   const [input, setInput] = useState({
     date: null,
@@ -64,20 +61,39 @@ const Members = () => {
     });
   };
 
+  // POST ACTIVITY DATA
   const submit = async (event) => {
     event.preventDefault();
     if (selectedRow) {
       try {
         const idToPatch = selectedRow;
-        const updatedInput = activityData.activityPatchValidation(input);
+        const { date, startTime, endTime } = selectedRowDateTime;
+        const updatedInput = activityData.activityPatchValidation(
+          input,
+          date,
+          startTime,
+          endTime
+        );
         const response = await SDK.patchUserActivityData(
           userId,
           idToPatch,
           updatedInput
         );
+        setSelectedRow(null);
+        setSelectedRowDateTime({
+          date: null,
+          startTime: null,
+          endTime: null,
+        });
         fetchUserActivityData();
       } catch (error) {
         console.error(error);
+        setSelectedRow(null);
+        setSelectedRowDateTime({
+          date: null,
+          startTime: null,
+          endTime: null,
+        });
       }
       setInput({
         date: null,
@@ -96,13 +112,36 @@ const Members = () => {
         const updatedInput = activityData.activityEntryValidation(input);
         if (!input.category) {
           alert("Mandatory field: Category");
+          setInput({
+            date: null,
+            description: null,
+            category: null,
+            subcategory: null,
+            startTime: null,
+            endTime: null,
+            adjustment: null,
+          });
+          if (formRef.current) {
+            formRef.current.reset();
+          }
           return;
         }
         const response = await SDK.postUserActivityData(userId, updatedInput);
-        console.log(response);
         fetchUserActivityData();
       } catch (error) {
         console.error(error);
+        setInput({
+          date: null,
+          description: null,
+          category: null,
+          subcategory: null,
+          startTime: null,
+          endTime: null,
+          adjustment: null,
+        });
+        if (formRef.current) {
+          formRef.current.reset();
+        }
       }
       setInput({
         date: null,
@@ -121,19 +160,33 @@ const Members = () => {
 
   // SELECTING ROWS AND NAVIGATING WITH ARROW KEYS
   const [selectedRow, setSelectedRow] = useState(null);
-  const handleRowClick = (id) => {
+  const [selectedRowDateTime, setSelectedRowDateTime] = useState({
+    date: null,
+    startTime: null,
+    endTime: null,
+  });
+  const handleRowClick = (id, date, startTime, endTime) => {
     if (selectedRow === id) {
       setSelectedRow(null);
+      setSelectedRowDateTime({
+        date: null,
+        startTime: null,
+        endTime: null,
+      });
       return;
     } else {
       setSelectedRow(id);
-      console.log(id);
+      setSelectedRowDateTime({
+        date: date,
+        startTime: startTime,
+        endTime: endTime,
+      });
     }
   };
+
+  // Add event listener for arrow keys to navigate rows
   useEffect(() => {
-    // Add event listener for arrow keys
     const handleArrowKeyPress = (e) => {
-      // Handle Up and Down arrow keys
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         e.preventDefault();
         const currentIndex = userActivityData.findIndex(
@@ -154,14 +207,13 @@ const Members = () => {
     return () => {
       window.removeEventListener("keydown", handleArrowKeyPress);
     };
-  }, [userActivityData, selectedRow]);
+  }, [selectedRow]); // userActivityData
 
   // DELETING CURRENTLY SELECTED ROW WITH DEL PRESS
   const deleteSelected = useCallback(async () => {
-    const idToDelete = selectedRow;
     try {
       if (selectedRow) {
-        await SDK.deleteUserActivityData(userId, idToDelete);
+        await SDK.deleteUserActivityData(userId, selectedRow);
         fetchUserActivityData();
         setSelectedRow(null);
       } else {
@@ -349,7 +401,14 @@ const Members = () => {
               {userActivityData.map((activity) => (
                 <tr
                   key={activity.id}
-                  onClick={() => handleRowClick(activity.id)}
+                  onClick={() =>
+                    handleRowClick(
+                      activity.id,
+                      activity.date,
+                      activity.startTime,
+                      activity.endTime
+                    )
+                  }
                   style={{
                     backgroundColor:
                       selectedRow === activity.id ? "#264653" : "transparent",
@@ -366,10 +425,12 @@ const Members = () => {
                   {!isMobile && <td>{activity.description}</td>}
                   <td>{activity.category}</td>
                   <td>{activity.subcategory}</td>
-                  <td>{activity.startTime}</td>
-                  <td>{activity.endTime}</td>
+                  <td>{datetimeFnc.getTimeHHMM(activity.startTime)}</td>
+                  <td>{datetimeFnc.getTimeHHMM(activity.endTime)}</td>
                   {!isMobile && <td>{activity.adjustment}</td>}
-                  <td>{activity.time}</td>
+                  <td>
+                    {datetimeFnc.convertMinutesToHHMM(activity.totalTimeMin)}
+                  </td>
                   {showUTC && !isMobile && (
                     <>
                       <td>{activity.timezone}</td>
