@@ -1,14 +1,27 @@
 const calculateTotalTimeMin = (endTimeStr, startTimeStr) => {
-  console.log(`calculateTotalTimeMin: ${endTimeStr} ${startTimeStr}`);
-  const startTime = new Date(startTimeStr);
-  const endTime = new Date(endTimeStr);
-  const diffMs = endTime - startTime;
-  const diffMinutes = diffMs / (1000 * 60);
-  if (diffMinutes < 0) {
-    alert("Error: Negative time difference");
-    return "Error: Negative time difference";
+  if (!endTimeStr || !startTimeStr) {
+    return null;
   }
-  return diffMinutes;
+  const startHours = parseInt(startTimeStr.slice(0, 2));
+  const startMinutes = parseInt(startTimeStr.slice(3, 5));
+  const endHours = parseInt(endTimeStr.slice(0, 2));
+  const endMinutes = parseInt(endTimeStr.slice(3, 5));
+  if (startHours * 60 + startMinutes > endHours * 60 + endMinutes) {
+    alert("End time can't be lower than start time.");
+    throw new Error("End time can't be lower than start time.");
+  }
+  const totalTimeMin =
+    (endHours - startHours) * 60 + (endMinutes - startMinutes);
+  return totalTimeMin;
+};
+
+const currentLocalTime = () => {
+  const utcDate = new Date();
+  const timezoneOffsetMinutes = utcDate.getTimezoneOffset();
+  const localDate = new Date(utcDate.getTime() - timezoneOffsetMinutes * 60000);
+  localDate.setSeconds(0, 0);
+  const localTimeStr = localDate.toISOString().slice(11, 16);
+  return localTimeStr;
 };
 
 const getUTCoffset = () => {
@@ -28,27 +41,6 @@ const currentLocalDate = () => {
   ).toISOString();
   const localDateZero = localDate.slice(0, 11) + "00:00:00.000Z";
   return localDateZero;
-};
-
-const currentLocalTime = () => {
-  const utcDate = new Date();
-  const timezoneOffsetMinutes = utcDate.getTimezoneOffset();
-  const localDateTime = new Date(
-    utcDate.getTime() - timezoneOffsetMinutes * 60000
-  ).toISOString();
-  return localDateTime;
-};
-
-const getTimeHHMM = (date) => {
-  if (!date) {
-    return "";
-  }
-  const dateTime = new Date(date);
-  const hours = dateTime.getUTCHours();
-  const minutes = dateTime.getUTCMinutes();
-  return `${hours.toString().padStart(2, "0")}:${minutes
-    .toString()
-    .padStart(2, "0")}`;
 };
 
 const timeDateTimeToInputDateTime = (dateTime, inputDate) => {
@@ -123,7 +115,6 @@ export default {
   getDDMMYY,
   getWeekDay,
   currentLocalDate,
-  getTimeHHMM,
   timeStrToInputDateTime,
   timeStrToLocalDateTime,
   currentLocalTime,

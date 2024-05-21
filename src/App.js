@@ -3,6 +3,8 @@ import Home from "./pages/v1home.js";
 import Register from "./pages/v1register.js";
 import Login from "./pages/v1login.js";
 import Members from "./pages/v1members.js";
+import Dashboard from "./pages/v1dashboard.js";
+import UploadCSV from "./pages/v1uploadCSV.js";
 import * as SDK from "./sdk_backend_fetch.js";
 import "./index.css";
 
@@ -55,6 +57,18 @@ function App() {
         path="/members/:userId/tally"
         element={
           loading ? null : isAuthenticated ? <Members /> : <Navigate to="/" />
+        }
+      />
+      <Route
+        path="/members/:userId/dashboard"
+        element={
+          loading ? null : isAuthenticated ? <Dashboard /> : <Navigate to="/" />
+        }
+      />
+      <Route
+        path="/members/:userId/upload-csv"
+        element={
+          loading ? null : isAuthenticated ? <UploadCSV /> : <Navigate to="/" />
         }
       />
     </Routes>

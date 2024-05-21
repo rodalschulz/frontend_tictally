@@ -10,6 +10,7 @@ module.exports = {
         custom: {
           "18938A": "rgb(74, 194, 188)",
           grey: "rgb(38, 70, 83)",
+          databg: "rgb(98, 121, 136)",
         },
       },
     },

@@ -36,7 +36,7 @@ const Register = () => {
       navigate("/login");
     } catch (error) {
       alert(
-        "Something went wrong! It could be that the email or username are already taken."
+        "Something went wrong! The email or username could be already taken."
       );
       console.error(error);
     }
@@ -48,7 +48,9 @@ const Register = () => {
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold text-gray-800">Sign Up</h1>
           <Link to="/">
-            <button className="px-4 py-2 text-sm font-medium">Home</button>
+            <button className="px-4 py-2 text-sm font-medium text-gray-800">
+              Home
+            </button>
           </Link>
         </div>
         <form onSubmit={submitHandler} className="space-y-6">
@@ -106,7 +108,7 @@ const Register = () => {
           <div>
             <button
               type="submit"
-              className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 text-white btn btn-primary rounded-md hover:bg-blue-700 focus:ring-blue-500 focus:border-blue-500"
             >
               Sign Up
             </button>

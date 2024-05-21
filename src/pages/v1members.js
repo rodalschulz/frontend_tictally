@@ -3,7 +3,7 @@ import * as SDK from "../sdk_backend_fetch.js";
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import activityData from "../functions/activityDataFnc.js";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import datetimeFnc from "../functions/datetimeFnc.js";
 
 const Members = () => {
@@ -67,12 +67,12 @@ const Members = () => {
     if (selectedRow) {
       try {
         const idToPatch = selectedRow;
-        const { date, startTime, endTime } = selectedRowDateTime;
+        const { startTime, endTime, adjustment } = selectedRowTimeValues;
         const updatedInput = activityData.activityPatchValidation(
           input,
-          date,
           startTime,
-          endTime
+          endTime,
+          adjustment
         );
         const response = await SDK.patchUserActivityData(
           userId,
@@ -80,19 +80,19 @@ const Members = () => {
           updatedInput
         );
         setSelectedRow(null);
-        setSelectedRowDateTime({
-          date: null,
-          startTime: null,
-          endTime: null,
+        setSelectedRowTimeValues({
+          startTime: "",
+          endTime: "",
+          adjustment: 0,
         });
         fetchUserActivityData();
       } catch (error) {
         console.error(error);
         setSelectedRow(null);
-        setSelectedRowDateTime({
-          date: null,
+        setSelectedRowTimeValues({
           startTime: null,
           endTime: null,
+          adjustment: 0,
         });
       }
       setInput({
@@ -160,31 +160,32 @@ const Members = () => {
 
   // SELECTING ROWS AND NAVIGATING WITH ARROW KEYS
   const [selectedRow, setSelectedRow] = useState(null);
-  const [selectedRowDateTime, setSelectedRowDateTime] = useState({
-    date: null,
-    startTime: null,
-    endTime: null,
+  const [selectedRowTimeValues, setSelectedRowTimeValues] = useState({
+    startTime: "",
+    endTime: "",
+    adjustment: 0,
   });
-  const handleRowClick = (id, date, startTime, endTime) => {
+  const handleRowClick = (id, startTime, endTime, adjustment) => {
     if (selectedRow === id) {
       setSelectedRow(null);
-      setSelectedRowDateTime({
-        date: null,
-        startTime: null,
-        endTime: null,
+      setSelectedRowTimeValues({
+        startTime: "",
+        endTime: "",
+        adjustment: 0,
       });
       return;
     } else {
       setSelectedRow(id);
-      setSelectedRowDateTime({
-        date: date,
+      setSelectedRowTimeValues({
         startTime: startTime,
         endTime: endTime,
+        adjustment: adjustment,
       });
+      console.log(selectedRowTimeValues);
     }
   };
 
-  // Add event listener for arrow keys to navigate rows
+  // EVENT LISTENER TO NAVIGATE ROWS WITH ARROW KEYS
   useEffect(() => {
     const handleArrowKeyPress = (e) => {
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
@@ -197,9 +198,19 @@ const Members = () => {
             e.key === "ArrowUp" ? currentIndex - 1 : currentIndex + 1;
           if (nextIndex >= 0 && nextIndex < userActivityData.length) {
             setSelectedRow(userActivityData[nextIndex].id);
+            setSelectedRowTimeValues({
+              startTime: userActivityData[nextIndex].startTime,
+              endTime: userActivityData[nextIndex].endTime,
+              adjustment: userActivityData[nextIndex].adjustment,
+            });
           }
         } else if (userActivityData && userActivityData.length > 0) {
           setSelectedRow(userActivityData[0].id);
+          setSelectedRowTimeValues({
+            date: userActivityData[0].date,
+            startTime: userActivityData[0].startTime,
+            endTime: userActivityData[0].endTime,
+          });
         }
       }
     };
@@ -208,6 +219,24 @@ const Members = () => {
       window.removeEventListener("keydown", handleArrowKeyPress);
     };
   }, [selectedRow]); // userActivityData
+
+  // EVENT LISTENER TO UNSELECT ROW WITH ESCAPE KEY
+  useEffect(() => {
+    const handleEscapePress = (e) => {
+      if (e.key === "Escape") {
+        setSelectedRow(null);
+        setSelectedRowTimeValues({
+          date: null,
+          startTime: null,
+          endTime: null,
+        });
+      }
+    };
+    window.addEventListener("keydown", handleEscapePress);
+    return () => {
+      window.removeEventListener("keydown", handleEscapePress);
+    };
+  }, []);
 
   // DELETING CURRENTLY SELECTED ROW WITH DEL PRESS
   const deleteSelected = useCallback(async () => {
@@ -222,10 +251,18 @@ const Members = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [selectedRow, fetchUserActivityData]);
+  }, [selectedRow, fetchUserActivityData, userId, setSelectedRow]);
   const handleDelPress = useCallback(
     (e) => {
       if (e.key === "Delete") {
+        const activeElement = document.activeElement;
+        if (
+          activeElement &&
+          (activeElement.tagName === "INPUT" ||
+            activeElement.tagName === "TEXTAREA")
+        ) {
+          return; // Do not delete if an input field or textarea is focused
+        }
         deleteSelected();
       }
     },
@@ -241,11 +278,17 @@ const Members = () => {
     window.location.href = "/";
   };
 
+  const navigateDashboard = () => {
+    window.location.href = `/members/${userId}/dashboard`;
+  };
+
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       {showSidebar && (
         <nav className="xs:absolute sm:relative xs:h-screen w-36 bg-custom-grey text-white p-4 flex flex-col space-y-4">
-          <button className="btn btn-primary mt-20">Dashboard</button>
+          <button className="btn btn-primary mt-20" onClick={navigateDashboard}>
+            Dashboard
+          </button>
           <button className="btn btn-primary">My Tally</button>
           <button className="btn btn-primary">Pending</button>
           <button className="btn btn-primary">Collabs</button>
@@ -395,7 +438,7 @@ const Members = () => {
         <div>
           <table
             id="data"
-            className="sm:min-w-[1400px] w-full text-white text-[12px] rounded-[7px] bg-gray-500 mr-5 mt-3"
+            className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px] mr-5 mt-3"
           >
             <tbody>
               {userActivityData.map((activity) => (
@@ -404,9 +447,9 @@ const Members = () => {
                   onClick={() =>
                     handleRowClick(
                       activity.id,
-                      activity.date,
                       activity.startTime,
-                      activity.endTime
+                      activity.endTime,
+                      activity.adjustment
                     )
                   }
                   style={{
@@ -425,9 +468,13 @@ const Members = () => {
                   {!isMobile && <td>{activity.description}</td>}
                   <td>{activity.category}</td>
                   <td>{activity.subcategory}</td>
-                  <td>{datetimeFnc.getTimeHHMM(activity.startTime)}</td>
-                  <td>{datetimeFnc.getTimeHHMM(activity.endTime)}</td>
-                  {!isMobile && <td>{activity.adjustment}</td>}
+                  <td>{activity.startTime}</td>
+                  <td>{activity.endTime}</td>
+                  {!isMobile && (
+                    <td>
+                      {activity.adjustment === 0 ? "-" : activity.adjustment}
+                    </td>
+                  )}
                   <td>
                     {datetimeFnc.convertMinutesToHHMM(activity.totalTimeMin)}
                   </td>
