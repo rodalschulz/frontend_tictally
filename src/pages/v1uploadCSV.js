@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import * as SDK from "../sdk_backend_fetch.js";
+import { useParams } from "react-router-dom";
 
 const UploadCSV = () => {
+  const { userId } = useParams();
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
 
@@ -12,17 +15,14 @@ const UploadCSV = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("file", file);
-
     try {
-      const response = await fetch("/upload-csv", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      setMessage(data.message);
+      const response = await SDK.uploadCSV(userId, formData);
+      setMessage(response.message);
     } catch (error) {
-      console.error("Error uploading file:", error);
-      setMessage("Error uploading file");
+      console.error(error);
+      setMessage("Something went wrong!");
+    } finally {
+      setFile(null);
     }
   };
 

@@ -160,3 +160,29 @@ export const patchUserActivityData = async (userId, entryId, data) => {
     throw error;
   }
 };
+
+export const uploadCSV = async (userId, formData) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "x-api-key": apiKey,
+    };
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/upload-csv`,
+      {
+        method: "POST",
+        headers: headers,
+        body: formData,
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to upload CSV");
+    }
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error uploading CSV:", error);
+    throw error;
+  }
+};
