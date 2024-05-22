@@ -466,12 +466,28 @@ const Members = () => {
                       </select>
                     </td>
                     <td>
-                      <input
-                        name="subcategory"
-                        type="text"
-                        className="data-input"
-                        onChange={handleInputChange}
-                      />
+                      {input.category === "CORE" ? (
+                        <select
+                          name="subcategory"
+                          className="data-input"
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select</option>
+                          <option value="SLEEP">SLEEP</option>
+                          <option value="EAT">EAT</option>
+                          <option value="GROOM">GROOM</option>
+                          <option value="FITNESS">FITNESS</option>
+                          <option value="RELIEF">RELIEF</option>
+                          <option value="INFORM">INFORM</option>
+                        </select>
+                      ) : (
+                        <input
+                          name="subcategory"
+                          type="text"
+                          className="data-input"
+                          onChange={handleInputChange}
+                        />
+                      )}
                     </td>
                     <td>
                       <input
