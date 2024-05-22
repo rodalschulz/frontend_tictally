@@ -6,6 +6,8 @@ import activityData from "../functions/activityDataFnc.js";
 import { Link, useParams } from "react-router-dom";
 import datetimeFnc from "../functions/datetimeFnc.js";
 
+import DownloadCSV from "../components/downloadCSVbtn.js";
+
 const Members = () => {
   const { userId } = useParams();
   const [showUTC, setShowUTC] = useState(true);
@@ -301,6 +303,7 @@ const Members = () => {
           <button className="btn btn-primary" onClick={logOut}>
             Log Out
           </button>
+          <DownloadCSV DownloadCSV userId={userId} />
         </nav>
       )}
       <button

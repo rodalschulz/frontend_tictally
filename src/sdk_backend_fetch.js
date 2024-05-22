@@ -1,3 +1,5 @@
+import { saveAs } from "file-saver";
+
 let baseURL = "https://backenddummy2-rodschulzs-projects.vercel.app";
 if (process.env.NODE_ENV === "development") {
   baseURL = "http://localhost:3001";
@@ -183,6 +185,31 @@ export const uploadCSV = async (userId, formData) => {
     return json;
   } catch (error) {
     console.error("Error uploading CSV:", error);
+    throw error;
+  }
+};
+
+export const downloadCSV = async (userId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/download-activity`,
+      {
+        headers: headers,
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to download CSV");
+    }
+    const blob = await response.blob();
+    saveAs(blob, "activity-data.csv");
+  } catch (error) {
+    console.error("Error downloading CSV:", error);
     throw error;
   }
 };
