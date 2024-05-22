@@ -3,20 +3,25 @@ import * as SDK from "../sdk_backend_fetch.js";
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import activityData from "../functions/activityDataFnc.js";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import datetimeFnc from "../functions/datetimeFnc.js";
 
 import DownloadCSV from "../components/downloadCSVbtn.js";
+import UploadCSVbtn from "../components/uploadCSVbtn.js";
+import EntrySearchToggleButton from "../components/entrySearchModebtn.js";
 
 const Members = () => {
   const { userId } = useParams();
   const [showUTC, setShowUTC] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [queryTimeSum, setQueryTimeSum] = useState(0);
+  const [isSearchMode, setIsSearchMode] = useState(false);
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
-  // Handle window resize
+
+  // HANDLE WINDOW SIZE
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 500);
@@ -32,17 +37,22 @@ const Members = () => {
 
   // USER ACTIVITY DATA
   const [userActivityData, setUserActivityData] = useState([]);
-  const fetchUserActivityData = async () => {
+  const fetchUserActivityData = useCallback(async () => {
     try {
       const data = await SDK.getUserActivityData(userId);
       setUserActivityData(data);
     } catch (error) {
       console.error(error);
     }
-  };
-  useEffect(() => {
-    fetchUserActivityData();
   }, [userId]);
+  // useEffect(() => {
+  //   fetchUserActivityData();
+  // }, [userId]);
+  useEffect(() => {
+    if (!isSearchMode) {
+      fetchUserActivityData();
+    }
+  }, [fetchUserActivityData, isSearchMode]);
 
   const [input, setInput] = useState({
     date: null,
@@ -63,10 +73,43 @@ const Members = () => {
     });
   };
 
+  // SEARCH MODE
+
+  const handleToggleClick = () => {
+    setIsSearchMode((prevMode) => !prevMode);
+  };
+
   // POST ACTIVITY DATA
   const submit = async (event) => {
     event.preventDefault();
-    if (selectedRow) {
+    if (isSearchMode) {
+      const queryParams = new URLSearchParams();
+      if (input.description)
+        queryParams.append("description", input.description);
+      if (input.category) queryParams.append("category", input.category);
+      if (input.subcategory)
+        queryParams.append("subcategory", input.subcategory);
+      if (input.date) queryParams.append("date", input.date);
+      setInput({
+        date: null,
+        description: null,
+        category: null,
+        subcategory: null,
+        startTime: null,
+        endTime: null,
+        adjustment: null,
+      });
+      if (formRef.current) {
+        formRef.current.reset();
+      }
+      try {
+        const data = await SDK.queryUserActivityData(userId, queryParams);
+        setUserActivityData(data.userActivityData);
+        setQueryTimeSum(data.totalSum);
+      } catch (error) {
+        console.error("Error fetching activity data:", error);
+      }
+    } else if (selectedRow && !isSearchMode) {
       try {
         const idToPatch = selectedRow;
         const { startTime, endTime, adjustment } = selectedRowTimeValues;
@@ -76,11 +119,7 @@ const Members = () => {
           endTime,
           adjustment
         );
-        const response = await SDK.patchUserActivityData(
-          userId,
-          idToPatch,
-          updatedInput
-        );
+        await SDK.patchUserActivityData(userId, idToPatch, updatedInput);
         setSelectedRow(null);
         setSelectedRowTimeValues({
           startTime: "",
@@ -128,7 +167,7 @@ const Members = () => {
           }
           return;
         }
-        const response = await SDK.postUserActivityData(userId, updatedInput);
+        await SDK.postUserActivityData(userId, updatedInput);
         fetchUserActivityData();
       } catch (error) {
         console.error(error);
@@ -220,7 +259,7 @@ const Members = () => {
     return () => {
       window.removeEventListener("keydown", handleArrowKeyPress);
     };
-  }, [selectedRow]); // userActivityData
+  }, [selectedRow, userActivityData]); // userActivityData
 
   // EVENT LISTENER TO UNSELECT ROW WITH ESCAPE KEY
   useEffect(() => {
@@ -284,26 +323,51 @@ const Members = () => {
     window.location.href = `/members/${userId}/dashboard`;
   };
 
+  const handleFormSubmit = useCallback(
+    async (e) => {
+      if (e) e.preventDefault(); // Prevent default form submission if event exists
+      submit(e);
+    },
+    [submit]
+  );
+
+  const handleEnterPress = useCallback(
+    async (e) => {
+      if (e.key === "Enter") {
+        handleFormSubmit(e);
+      }
+    },
+    [handleFormSubmit]
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleEnterPress);
+    return () => window.removeEventListener("keydown", handleEnterPress);
+  }, [handleEnterPress]);
+
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       {showSidebar && (
         <nav className="xs:absolute sm:relative xs:h-screen w-36 bg-custom-grey text-white p-4 flex flex-col space-y-4">
-          <button className="btn btn-primary mt-20" onClick={navigateDashboard}>
+          <button className="btn btn-primary" onClick={navigateDashboard}>
             Dashboard
           </button>
           <button className="btn btn-primary">My Tally</button>
           <button className="btn btn-primary">Pending</button>
           <button className="btn btn-primary">Collabs</button>
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowUTC(!showUTC)}
-          >
-            UTC
-          </button>
           <button className="btn btn-primary" onClick={logOut}>
             Log Out
           </button>
-          <DownloadCSV DownloadCSV userId={userId} />
+          {isMobile ? (
+            <button onClick={handleFormSubmit} className="btn btn-primary">
+              Enter
+            </button>
+          ) : null}
+          {isMobile ? (
+            <button onClick={deleteSelected} className="btn btn-primary">
+              Delete
+            </button>
+          ) : null}
         </nav>
       )}
       <button
@@ -314,8 +378,18 @@ const Members = () => {
       </button>
 
       <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2">
-        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold mb-4 text-white mr-5">
+        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold mb-4 text-white mr-5 flex justify-between items-center">
           Personal Tally
+          <span className="text-sm flex">
+            <button
+              className="btn bg-custom-databg btn-sm mr-2 w-10 border-gray-800 hover:bg-primary"
+              onClick={() => setShowUTC(!showUTC)}
+            >
+              UTC
+            </button>
+            <UploadCSVbtn />
+            <DownloadCSV DownloadCSV userId={userId} />
+          </span>
         </h1>
 
         <div>
@@ -347,7 +421,15 @@ const Members = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    {!isMobile && <td></td>}
+                    {!isMobile && (
+                      <td>
+                        {" "}
+                        <EntrySearchToggleButton
+                          isSearchMode={isSearchMode}
+                          handleClick={handleToggleClick}
+                        />
+                      </td>
+                    )}
                     {!isMobile && (
                       <td className="input-name">
                         <input
@@ -419,10 +501,10 @@ const Members = () => {
                         />
                       </td>
                     )}
-                    <td>
-                      <button id="submit-btn" type="submit" className="pr-2">
-                        Enter
-                      </button>
+                    <td className="text-[13px]">
+                      {isSearchMode
+                        ? datetimeFnc.convertMinutesToHHMM(queryTimeSum)
+                        : "-"}
                     </td>
                     {showUTC && !isMobile && (
                       <>

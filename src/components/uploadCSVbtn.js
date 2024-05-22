@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import * as SDK from "../sdk_backend_fetch.js";
 import { useParams } from "react-router-dom";
 
-const UploadCSV = () => {
+const UploadCSVbtn = () => {
   const { userId } = useParams();
   const [file, setFile] = useState(null);
-  const [message, setMessage] = useState("");
+  const [, setMessage] = useState("");
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -29,7 +29,7 @@ const UploadCSV = () => {
   return (
     <div>
       <form onSubmit={handleFileUpload}>
-        <div className="flex">
+        <div className="flex items-center">
           <input
             id="file-upload"
             type="file"
@@ -39,22 +39,25 @@ const UploadCSV = () => {
           />
           <label
             htmlFor="file-upload"
-            className="btn bg-custom-databg btn-sm mr-2 w-10 border-gray-800 hover:bg-primary text-white"
+            className={`btn btn-sm w-8 border-gray-800 text-white ${
+              file
+                ? "bg-primary text-white font-bold border-white text-[20px]"
+                : "bg-custom-databg"
+            } hover:bg-primary rounded-r-none`}
           >
-            File
+            F
           </label>
-
+          <div className="h-full w-0.5 bg-gray-800"></div>
           <button
             type="submit"
-            className="btn bg-custom-databg btn-sm w-20 border-gray-800 hover:bg-primary text-white"
+            className="btn bg-custom-databg btn-sm w-20 border-gray-800 hover:bg-primary text-white rounded-l-none mr-2"
           >
             Upload
           </button>
         </div>
       </form>
-      {message && <p>{message}</p>}
     </div>
   );
 };
 
-export default UploadCSV;
+export default UploadCSVbtn;

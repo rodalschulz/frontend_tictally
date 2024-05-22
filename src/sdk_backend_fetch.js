@@ -213,3 +213,31 @@ export const downloadCSV = async (userId) => {
     throw error;
   }
 };
+
+export const queryUserActivityData = async (userId, queryParams) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/query-activity-data?${queryParams.toString()}`,
+      {
+        headers: headers,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch members data");
+    }
+
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error fetching members data:", error);
+    throw error;
+  }
+};

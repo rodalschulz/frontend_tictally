@@ -4,7 +4,7 @@ import * as SDK from "../sdk_backend_fetch.js";
 const DownloadCSV = ({ userId }) => {
   const downloadCSV = async () => {
     try {
-      const response = await SDK.downloadCSV(userId);
+      await SDK.downloadCSV(userId);
       //   const url = window.URL.createObjectURL(new Blob([response]));
       //   const link = document.createElement("a");
       //   link.href = url;
@@ -18,8 +18,11 @@ const DownloadCSV = ({ userId }) => {
   };
 
   return (
-    <button onClick={downloadCSV} className="btn btn-primary">
-      Download CSV
+    <button
+      onClick={downloadCSV}
+      className="btn bg-custom-databg btn-sm mr-5 w-20 border-gray-800 hover:bg-primary"
+    >
+      Download
     </button>
   );
 };
