@@ -45,14 +45,13 @@ const Members = () => {
       console.error(error);
     }
   }, [userId]);
-  // useEffect(() => {
-  //   fetchUserActivityData();
-  // }, [userId]);
   useEffect(() => {
-    if (!isSearchMode) {
-      fetchUserActivityData();
-    }
-  }, [fetchUserActivityData, isSearchMode]);
+    fetchUserActivityData();
+  }, [userId]);
+  // useEffect(() => {
+  //   if (!isSearchMode) {
+  //   }
+  // }, [isSearchMode]);
 
   const [input, setInput] = useState({
     date: null,
@@ -74,7 +73,6 @@ const Members = () => {
   };
 
   // SEARCH MODE
-
   const handleToggleClick = () => {
     setIsSearchMode((prevMode) => !prevMode);
   };
@@ -106,11 +104,13 @@ const Members = () => {
         const data = await SDK.queryUserActivityData(userId, queryParams);
         setUserActivityData(data.userActivityData);
         setQueryTimeSum(data.totalSum);
+        console.log("Query finished");
       } catch (error) {
         console.error("Error fetching activity data:", error);
       }
     } else if (selectedRow && !isSearchMode) {
       try {
+        console.log("Patching data...");
         const idToPatch = selectedRow;
         const { startTime, endTime, adjustment } = selectedRowTimeValues;
         const updatedInput = activityData.activityPatchValidation(
@@ -216,13 +216,16 @@ const Members = () => {
       });
       return;
     } else {
+      if (isSearchMode) {
+        setIsSearchMode(false);
+      }
       setSelectedRow(id);
       setSelectedRowTimeValues({
         startTime: startTime,
         endTime: endTime,
         adjustment: adjustment,
       });
-      console.log(selectedRowTimeValues);
+      console.log("Selected row:", id);
     }
   };
 
@@ -314,15 +317,6 @@ const Members = () => {
     return () => window.removeEventListener("keydown", handleDelPress);
   }, [handleDelPress]);
 
-  const logOut = async () => {
-    localStorage.removeItem("token");
-    window.location.href = "/";
-  };
-
-  const navigateDashboard = () => {
-    window.location.href = `/members/${userId}/dashboard`;
-  };
-
   const handleFormSubmit = useCallback(
     async (e) => {
       if (e) e.preventDefault(); // Prevent default form submission if event exists
@@ -345,6 +339,19 @@ const Members = () => {
     return () => window.removeEventListener("keydown", handleEnterPress);
   }, [handleEnterPress]);
 
+  const logOut = async () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  };
+
+  // NAVIGATION
+  const navigateDashboard = () => {
+    window.location.href = `/members/${userId}/dashboard`;
+  };
+  const navigateCategories = () => {
+    window.location.href = `/members/${userId}/categories`;
+  };
+
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       {showSidebar && (
@@ -354,6 +361,9 @@ const Members = () => {
           </button>
           <button className="btn btn-primary">My Tally</button>
           <button className="btn btn-primary">Pending</button>
+          <button className="btn btn-primary" onClick={navigateCategories}>
+            Categories
+          </button>
           <button className="btn btn-primary">Collabs</button>
           <button className="btn btn-primary" onClick={logOut}>
             Log Out
@@ -445,8 +455,17 @@ const Members = () => {
                         <input
                           name="description"
                           type="text"
-                          className="data-input"
+                          className={`data-input description-input ${
+                            selectedRow ? "description-editMode" : ""
+                          } ${isSearchMode ? "description-searchMode" : ""}`}
                           onChange={handleInputChange}
+                          placeholder={
+                            selectedRow
+                              ? "Edit Mode"
+                              : isSearchMode
+                              ? "Search Mode"
+                              : "Entry Mode"
+                          }
                         />
                       </td>
                     )}

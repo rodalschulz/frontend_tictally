@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
+import annotationPlugin from "chartjs-plugin-annotation";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+
 import { useParams } from "react-router-dom";
 import * as SDK from "../sdk_backend_fetch.js";
 
@@ -18,17 +20,38 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  annotationPlugin
 );
 
+// Custom plugin to draw text on the chart
+const textPlugin = {
+  id: "textPlugin",
+  afterDraw: (chart) => {
+    const ctx = chart.ctx;
+    ctx.save();
+    ctx.font = "12px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText(
+      "10 hours",
+      chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2,
+      chart.scales.y.getPixelForValue(598)
+    );
+    ctx.restore();
+  },
+};
+
+ChartJS.register(textPlugin);
+
 const categoryColors = {
-  WORK: "rgba(54, 162, 235, 0.6)",
-  LEARN: "rgba(153, 102, 255, 0.6)",
-  BUILD: "rgba(255, 159, 64, 0.6)",
-  GENERAL: "rgba(75, 192, 192, 0.6)",
-  RECOVERY: "rgba(255, 99, 132, 0.6)",
-  CORE: "rgba(255, 206, 86, 0.6)",
-  WASTE: "rgba(201, 203, 207, 0.6)",
+  WORK: "#1D6667",
+  LEARN: "#23BAAE",
+  BUILD: "#2980B9",
+  GENERAL: "#B7950B",
+  RECOVERY: "#748586",
+  CORE: "#D2D2D2",
+  WASTE: "#740000",
 };
 
 const categoryOrder = [
@@ -92,9 +115,7 @@ const StackedBarChart = () => {
           ? 1440 - (aggregatedData[date].total || 0)
           : aggregatedData[date][category] || 0
       ),
-      backgroundColor: categoryColors[category] || "rgba(201, 203, 207, 0.6)", // Default color if category not found
-      borderColor: categoryColors[category] || "rgba(201, 203, 207, 1)",
-      borderWidth: 1,
+      backgroundColor: categoryColors[category],
     };
   });
 
@@ -110,28 +131,83 @@ const StackedBarChart = () => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
     plugins: {
       legend: {
-        position: "top",
+        position: "bottom",
       },
       title: {
         display: true,
-        text: "Activity Time by Category per Day",
+        text: "Daily Activity Time by Category",
+      },
+      annotation: {
+        annotations: {
+          box1: {
+            type: "box",
+            yScaleID: "y",
+            yMin: 250,
+            yMax: 210,
+            backgroundColor: "rgba(29, 102, 103, 0.25)",
+            borderColor: "rgba(11, 83, 84, 0.25)",
+            borderWidth: 1,
+          },
+          box2: {
+            type: "box",
+            yScaleID: "y",
+            yMin: 440,
+            yMax: 400,
+            backgroundColor: "rgba(29, 102, 103, 0.25)",
+            borderColor: "rgba(11, 83, 84, 0.25)",
+            borderWidth: 1,
+          },
+          box3: {
+            type: "box",
+            yScaleID: "y",
+            yMin: 620,
+            yMax: 580,
+            backgroundColor: "rgba(29, 102, 103, 0.25)",
+            borderColor: "rgba(11, 83, 84, 0.25)",
+            borderWidth: 1,
+          },
+          box4: {
+            type: "box",
+            yScaleID: "y",
+            yMin: 810,
+            yMax: 770,
+            backgroundColor: "rgba(29, 102, 103, 0.25)",
+            borderColor: "rgba(11, 83, 84, 0.25)",
+            borderWidth: 1,
+          },
+        },
       },
     },
     scales: {
       x: {
         stacked: true,
+        ticks: {
+          maxRotation: 90,
+          minRotation: 90,
+          callback: function (value, index, values) {
+            return this.getLabelForValue(value).split("-").reverse().join("-");
+          },
+        },
       },
       y: {
         stacked: true,
+        beginAtZero: true,
+        min: 0,
+        max: 1440,
+        ticks: {
+          stepSize: 120,
+        },
       },
     },
   };
 
   return (
-    <div className="">
-      <div className="">
+    <div className="w-full h-full">
+      <div className="w-full h-full">
         <Bar data={chartData} options={options} />
       </div>
     </div>

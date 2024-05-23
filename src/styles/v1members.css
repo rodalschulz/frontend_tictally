@@ -14,6 +14,15 @@
     padding-right: 5px;
 }
 
+.description-searchMode::placeholder {
+    color: #dff046;
+    opacity: 1;
+}
+
+.description-editMode::placeholder {
+    color: #6bf5ff;
+    opacity: 1;
+}
 
 #data td {
     overflow: hidden; 
@@ -84,10 +93,10 @@ td:last-child {border-top-right-radius: 7px}
     font-size: 11px;
 }
 
-.data-input::placeholder {
+/* .data-input::placeholder {
     color: gray;
     opacity: 1;
-}
+} */
 
 #submit-btn {
     height: 20px;

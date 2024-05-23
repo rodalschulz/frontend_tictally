@@ -15,7 +15,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       {showSidebar && (
         <nav className="xs:absolute sm:relative xs:h-screen w-36 bg-custom-grey text-white p-4 flex flex-col space-y-4">
           <button className="btn btn-primary">Dashboard</button>
@@ -27,15 +27,16 @@ const Dashboard = () => {
           </button>
         </nav>
       )}
-      <button
-        onClick={toggleSidebar}
-        className="bg-gray-800 text-white text-sm px-1 py-2 h-10 rounded-none mt-4 rounded-tr-md rounded-br-md z-50"
-      >
-        {showSidebar ? ">" : "<"}
-      </button>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <div className="text-xl font-bold mb-4">Chart 1</div>
-        <div className="w-full max-w-3xl p-4 bg-white rounded-lg shadow-md">
+      <main className="sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2">
+        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold mb-4 text-white mr-5 flex justify-between items-center">
+          Dashboard
+        </h1>
+      </main>
+      <div className="sm:pl-6 items-center justify-center flex-grow bg-gray-100">
+        <div
+          className="w-full max-w-6xl p-4 bg-white rounded-lg shadow-md h-[75vh]"
+          style={{ minHeight: "500px" }}
+        >
           <StackedBarChart />
         </div>
       </div>

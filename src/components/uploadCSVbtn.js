@@ -17,9 +17,11 @@ const UploadCSVbtn = () => {
     formData.append("file", file);
     try {
       const response = await SDK.uploadCSV(userId, formData);
+      alert(response.message);
       setMessage(response.message);
     } catch (error) {
       console.error(error);
+      alert("Something went wrong!");
       setMessage("Something went wrong!");
     } finally {
       setFile(null);

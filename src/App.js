@@ -3,6 +3,7 @@ import Home from "./pages/v1home.js";
 import Register from "./pages/v1register.js";
 import Login from "./pages/v1login.js";
 import Members from "./pages/v1members.js";
+import Categories from "./pages/v1categories.js";
 import Dashboard from "./pages/v1dashboard.js";
 import * as SDK from "./sdk_backend_fetch.js";
 import "./index.css";
@@ -62,6 +63,16 @@ function App() {
         path="/members/:userId/dashboard"
         element={
           loading ? null : isAuthenticated ? <Dashboard /> : <Navigate to="/" />
+        }
+      />
+      <Route
+        path="/members/:userId/categories"
+        element={
+          loading ? null : isAuthenticated ? (
+            <Categories />
+          ) : (
+            <Navigate to="/" />
+          )
         }
       />
     </Routes>
