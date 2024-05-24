@@ -2,8 +2,8 @@ import "../styles/v1members.css";
 import * as SDK from "../sdk_backend_fetch.js";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import activityData from "../functions/activityDataFnc.js";
 import { useParams } from "react-router-dom";
+import activityData from "../functions/activityDataFnc.js";
 import datetimeFnc from "../functions/datetimeFnc.js";
 
 import DownloadCSV from "../components/downloadCSVbtn.js";
