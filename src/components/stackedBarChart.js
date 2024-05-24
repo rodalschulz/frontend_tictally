@@ -116,6 +116,7 @@ const StackedBarChart = () => {
           : aggregatedData[date][category] || 0
       ),
       backgroundColor: categoryColors[category],
+      maxBarThickness: 15,
     };
   });
 

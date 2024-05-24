@@ -34,36 +34,50 @@
 }
 
 
-th:first-child {border-top-left-radius: 7px}
-th:nth-child(1) {width: 4%; text-align: center}
-th:nth-child(2) {width: 7.5% ; text-align: center}
-th:nth-child(3) {width: 38.5% ; text-align: center}
-th:nth-child(4) {width: 7% ; text-align: center}
-th:nth-child(5) {width: 8% ; text-align: center}
-th:nth-child(6) {width: 5% ; text-align: center}
-th:nth-child(7) {width: 5% ; text-align: center}
-th:nth-child(8) {width: 3% ; text-align: center}
-th:nth-child(9) {width: 4% ; text-align: center}
-th:nth-child(10) {width: 3% ; text-align: center}
-th:nth-child(11) {width: 8.5% ; text-align: center}
-th:nth-child(12) {width: 8.5% ; text-align: center}
-th:last-child {border-top-right-radius: 7px}
+#input-table th:first-child {border-top-left-radius: 7px}
+#input-table th:nth-child(1) {width: 4%; text-align: center}
+#input-table th:nth-child(2) {width: 7.5% ; text-align: center}
+#input-table th:nth-child(3) {width: 38.5% ; text-align: center}
+#input-table th:nth-child(4) {width: 7% ; text-align: center}
+#input-table th:nth-child(5) {width: 8% ; text-align: center}
+#input-table th:nth-child(6) {width: 5% ; text-align: center}
+#input-table th:nth-child(7) {width: 5% ; text-align: center}
+#input-table th:nth-child(8) {width: 3% ; text-align: center}
+#input-table th:nth-child(9) {width: 4% ; text-align: center}
+#input-table th:nth-child(10) {width: 3% ; text-align: center}
+#input-table th:nth-child(11) {width: 8.5% ; text-align: center}
+#input-table th:nth-child(12) {width: 8.5% ; text-align: center}
+#input-table th:last-child {border-top-right-radius: 7px}
 
+#input-table td:first-child {border-top-left-radius: 7px}
+#input-table td:nth-child(1) {width: 4% ; text-align: center}
+#input-table td:nth-child(2) {width: 7.5% ; text-align: center}
+#input-table td:nth-child(3) {width: 38.5%; text-align: left; max-width: 500px}
+#input-table td:nth-child(4) {width: 7% ; text-align: center}
+#input-table td:nth-child(5) {width: 8% ; text-align: center; max-width: 50px}
+#input-table td:nth-child(6) {width: 5% ; text-align: center}
+#input-table td:nth-child(7) {width: 5% ; text-align: center}
+#input-table td:nth-child(8) {width: 3% ; text-align: center}
+#input-table td:nth-child(9) {width: 4% ; text-align: center}
+#input-table td:nth-child(10) {width: 3% ; text-align: center; color: rgb(165, 165, 165)}
+#input-table td:nth-child(11) {width: 8.5% ; text-align: center; color: rgb(165, 165, 165)}
+#input-table td:nth-child(12) {width: 8.5% ; text-align: center; color: rgb(165, 165, 165)}
+#input-table td:last-child {border-top-right-radius: 7px}
 
-td:first-child {border-top-left-radius: 7px}
-td:nth-child(1) {width: 4% ; text-align: center}
-td:nth-child(2) {width: 7.5% ; text-align: center}
-td:nth-child(3) {width: 38.5%; text-align: left; max-width: 500px}
-td:nth-child(4) {width: 7% ; text-align: center}
-td:nth-child(5) {width: 8% ; text-align: center; max-width: 50px}
-td:nth-child(6) {width: 5% ; text-align: center}
-td:nth-child(7) {width: 5% ; text-align: center}
-td:nth-child(8) {width: 3% ; text-align: center}
-td:nth-child(9) {width: 4% ; text-align: center}
-td:nth-child(10) {width: 3% ; text-align: center; color: rgb(165, 165, 165)}
-td:nth-child(11) {width: 8.5% ; text-align: center; color: rgb(165, 165, 165)}
-td:nth-child(12) {width: 8.5% ; text-align: center; color: rgb(165, 165, 165)}
-td:last-child {border-top-right-radius: 7px}
+#data td:first-child {border-top-left-radius: 7px}
+#data td:nth-child(1) {width: 4% ; text-align: center}
+#data td:nth-child(2) {width: 7.5% ; text-align: center}
+#data td:nth-child(3) {width: 38.5%; text-align: left; max-width: 500px}
+#data td:nth-child(4) {width: 7% ; text-align: center}
+#data td:nth-child(5) {width: 8% ; text-align: center; max-width: 50px}
+#data td:nth-child(6) {width: 5% ; text-align: center}
+#data td:nth-child(7) {width: 5% ; text-align: center}
+#data td:nth-child(8) {width: 3% ; text-align: center}
+#data td:nth-child(9) {width: 4% ; text-align: center}
+#data td:nth-child(10) {width: 3% ; text-align: center; color: rgb(165, 165, 165)}
+#data td:nth-child(11) {width: 8.5% ; text-align: center; color: rgb(165, 165, 165)}
+#data td:nth-child(12) {width: 8.5% ; text-align: center; color: rgb(165, 165, 165)}
+#data td:last-child {border-top-right-radius: 7px}
 
 #data td:nth-child(9) {width: 4% ; text-align: center; background-color: rgb(38, 70, 83)}
 
@@ -112,17 +126,23 @@ td:last-child {border-top-right-radius: 7px}
 }
 
 @media (max-width: 500px) {
-    th:nth-child(1) {width: 25% ; text-align: center}
-    th:nth-child(2) {width: 33% ; text-align: center}
-    th:nth-child(3) {width: 14% ; text-align: center}
-    th:nth-child(4) {width: 14% ; text-align: center}
-    th:nth-child(5) {width: 14% ; text-align: center}
+    #input-table th:nth-child(1) {width: 25% ; text-align: center}
+    #input-table th:nth-child(2) {width: 33% ; text-align: center}
+    #input-table th:nth-child(3) {width: 14% ; text-align: center}
+    #input-table th:nth-child(4) {width: 14% ; text-align: center}
+    #input-table th:nth-child(5) {width: 14% ; text-align: center}
 
-    td:nth-child(1) {width: 25% ; text-align: center}
-    td:nth-child(2) {width: 33% ; text-align: center}
-    td:nth-child(3) {width: 14% ; text-align: center}
-    td:nth-child(4) {width: 14% ; text-align: center;}
-    td:nth-child(5) {width: 14% ; text-align: center}
+    #input-table td:nth-child(1) {width: 25% ; text-align: center}
+    #input-table td:nth-child(2) {width: 33% ; text-align: center}
+    #input-table td:nth-child(3) {width: 14% ; text-align: center}
+    #input-table td:nth-child(4) {width: 14% ; text-align: center;}
+    #input-table td:nth-child(5) {width: 14% ; text-align: center}
+
+    #data td:nth-child(1) {width: 25% ; text-align: center}
+    #data td:nth-child(2) {width: 33% ; text-align: center}
+    #data td:nth-child(3) {width: 14% ; text-align: center}
+    #data td:nth-child(4) {width: 14% ; text-align: center;}
+    #data td:nth-child(5) {width: 14% ; text-align: center}
 }
 
 

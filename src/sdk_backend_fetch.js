@@ -214,6 +214,7 @@ export const downloadCSV = async (userId) => {
   }
 };
 
+// ACTIVITY DATA QUERY
 export const queryUserActivityData = async (userId, queryParams) => {
   try {
     const token = localStorage.getItem("token");
@@ -238,6 +239,62 @@ export const queryUserActivityData = async (userId, queryParams) => {
     return json;
   } catch (error) {
     console.error("Error fetching members data:", error);
+    throw error;
+  }
+};
+
+// USER CATEGORY CONFIG
+export const getUserCategoryConfig = async (userId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/category-config`,
+      {
+        headers: headers,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user category config");
+    }
+
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error fetching user category config:", error);
+    throw error;
+  }
+};
+
+export const updateUserCategoryConfig = async (userId, data) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/category-config`,
+      {
+        method: "PATCH",
+        headers: headers,
+        body: JSON.stringify({ data }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to update user category config");
+    }
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error updating user category config:", error);
     throw error;
   }
 };
