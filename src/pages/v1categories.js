@@ -118,8 +118,8 @@ const Categories = () => {
           <button className="btn btn-primary" onClick={navigateTally}>
             My Tally
           </button>
-          <button className="btn btn-primary">Pending</button>
           <button className="btn btn-primary">Categories</button>
+          <button className="btn btn-primary">Pending</button>
           <button className="btn btn-primary">Collabs</button>
           <button className="btn btn-primary" onClick={logOut}>
             Log Out
@@ -133,37 +133,38 @@ const Categories = () => {
         {showSidebar ? ">" : "<"}
       </button>
 
-      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2">
-        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 flex justify-between items-center">
+      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 text-white">
+        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold mr-5 flex justify-between items-center">
           Category Configuration
         </h1>
         <div className="w-40">
           <form className="flex">
-            <table className="min-w-full bg-white text-sm border border-gray-200 rounded-lg shadow-md mr-2">
-              <thead>
+            <table className="min-w-full rounded-lg bg-secondary shadow-md mr-2">
+              <thead className="">
                 <tr>
-                  <th className="px-7 py-2">CORE</th>
-                  <th className="px-7 py-2">LIMITS</th>
+                  <th className="px-7 py-2" colSpan={2}>
+                    CORE LIMITS
+                  </th>
                 </tr>
               </thead>
               <tbody className="text-[13px]">
                 {Object.keys(coreLimits).map((limit, index) => (
                   <tr key={index}>
-                    <td className="border px-4 py-2">{limit}</td>
-                    <td className="border px-4 py-2">
+                    <td className="px-4 py-2">{limit}</td>
+                    <td className="px-4 py-2">
                       <input
                         type="text"
                         name={limit}
                         value={coreLimits[limit]}
                         onChange={handleCoreLimitChange}
-                        className="w-full"
+                        className="w-full bg-inherit border border-primary rounded-lg pl-2"
                       />
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <table className="min-w-full bg-white text-sm border border-gray-200 rounded-lg shadow-md">
+            <table className="min-w-full rounded-lg bg-secondary shadow-md mr-2">
               <thead>
                 <tr>
                   <th className="px-7 py-2">GENERAL</th>
@@ -177,10 +178,10 @@ const Categories = () => {
                 {Array.from({ length: 10 }).map((_, rowIndex) => (
                   <tr key={rowIndex}>
                     {Object.keys(subcategories).map((category, columnIndex) => (
-                      <td key={category} className="border px-4 py-2">
+                      <td key={category} className="px-4 py-2">
                         <input
                           type="text"
-                          className="w-32"
+                          className="w-32 bg-inherit border border-primary rounded-lg pl-2"
                           value={subcategories[category][rowIndex] || ""}
                           onChange={(e) =>
                             handleInputChange(
@@ -199,7 +200,7 @@ const Categories = () => {
             </table>
           </form>
           <button
-            className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+            className="btn btn-wide btn-primary mt-2"
             onClick={submitForm}
           >
             Submit

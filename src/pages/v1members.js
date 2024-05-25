@@ -12,7 +12,7 @@ import EntrySearchToggleButton from "../components/entrySearchModebtn.js";
 
 const Members = () => {
   const { userId } = useParams();
-  const [showUTC, setShowUTC] = useState(true);
+  const [showUTC, setShowUTC] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [queryTimeSum, setQueryTimeSum] = useState(0);
@@ -384,10 +384,10 @@ const Members = () => {
             Dashboard
           </button>
           <button className="btn btn-primary">My Tally</button>
-          <button className="btn btn-primary">Pending</button>
           <button className="btn btn-primary" onClick={navigateCategories}>
             Categories
           </button>
+          <button className="btn btn-primary">Pending</button>
           <button className="btn btn-primary">Collabs</button>
           <button className="btn btn-primary" onClick={logOut}>
             Log Out
@@ -413,7 +413,7 @@ const Members = () => {
 
       <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2">
         <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 flex justify-between items-center">
-          Personal Tally
+          My Tally
           <span className="text-sm flex">
             <button
               className="btn bg-custom-databg btn-sm mr-2 w-10 border-gray-800 hover:bg-primary"

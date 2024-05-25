@@ -30,19 +30,54 @@ const textPlugin = {
   afterDraw: (chart) => {
     const ctx = chart.ctx;
     ctx.save();
-    ctx.font = "12px Arial";
+    ctx.font = "10px Arial";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
+
+    // Text 1
+    ctx.fillText(
+      "4 hours",
+      chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2,
+      chart.scales.y.getPixelForValue(227)
+    );
+
+    // Text 2
+    ctx.fillText(
+      "7 hours",
+      chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2,
+      chart.scales.y.getPixelForValue(417)
+    );
+
+    // Text 3
     ctx.fillText(
       "10 hours",
       chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2,
       chart.scales.y.getPixelForValue(598)
     );
+
+    // Text 4
+    ctx.fillText(
+      "13 hours",
+      chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2,
+      chart.scales.y.getPixelForValue(790)
+    );
+
     ctx.restore();
   },
 };
-
 ChartJS.register(textPlugin);
+
+const backgroundColorPlugin = {
+  id: "backgroundColorPlugin",
+  beforeDraw: (chart) => {
+    const ctx = chart.ctx;
+    ctx.save();
+    ctx.fillStyle = "rgba(217, 237, 249, 1)";
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  },
+};
+ChartJS.register(backgroundColorPlugin);
 
 const categoryColors = {
   WORK: "#1D6667",
@@ -64,41 +99,7 @@ const categoryOrder = [
   "WASTE",
 ];
 
-const StackedBarChart = () => {
-  const { userId } = useParams();
-  const [coreLimits, setCoreLimits] = useState({});
-
-  // USER ACTIVITY DATA
-  const [userActivityData, setUserActivityData] = useState([]);
-
-  const fetchUserActivityData = async () => {
-    try {
-      const data = await SDK.getUserActivityData(userId);
-      setUserActivityData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserActivityData();
-  }, [userId]);
-
-  // FETCH CATEGORY CONFIG
-  useEffect(() => {
-    const fetchCategoryConfig = async () => {
-      try {
-        const response = await SDK.getUserCategoryConfig(userId);
-        const coreLimits = response.user.categConfig.coreLimits;
-        setCoreLimits(coreLimits);
-      } catch (error) {
-        console.error("Error fetching user category config:", error);
-      }
-    };
-
-    fetchCategoryConfig();
-  }, [userId]);
-
+const StackedBarChart = ({ userActivityData, coreLimits }) => {
   // Aggregate data by date and category
   const aggregatedData = userActivityData.reduce((acc, item) => {
     const date = item.date.slice(0, 10);
@@ -172,6 +173,7 @@ const StackedBarChart = () => {
     responsive: true,
     maintainAspectRatio: false,
     animation: false,
+    backgroundColorPlugin: true,
     plugins: {
       legend: {
         position: "bottom",
@@ -187,36 +189,36 @@ const StackedBarChart = () => {
             yScaleID: "y",
             yMin: 250,
             yMax: 210,
-            backgroundColor: "rgba(29, 102, 103, 0.25)",
+            backgroundColor: "rgba(110, 179, 179, 0.5)",
             // borderColor: "rgba(11, 83, 84, 0.25)",
-            // borderWidth: 1,
+            borderWidth: 0,
           },
           box2: {
             type: "box",
             yScaleID: "y",
             yMin: 440,
             yMax: 400,
-            backgroundColor: "rgba(29, 102, 103, 0.25)",
+            backgroundColor: "rgba(110, 179, 179, 0.5)",
             // borderColor: "rgba(11, 83, 84, 0.25)",
-            // borderWidth: 1,
+            borderWidth: 0,
           },
           box3: {
             type: "box",
             yScaleID: "y",
             yMin: 620,
             yMax: 580,
-            backgroundColor: "rgba(29, 102, 103, 0.25)",
+            backgroundColor: "rgba(110, 179, 179, 0.5)",
             // borderColor: "rgba(11, 83, 84, 0.25)",
-            // borderWidth: 1,
+            borderWidth: 0,
           },
           box4: {
             type: "box",
             yScaleID: "y",
             yMin: 810,
             yMax: 770,
-            backgroundColor: "rgba(29, 102, 103, 0.25)",
+            backgroundColor: "rgba(110, 179, 179, 0.5)",
             // borderColor: "rgba(11, 83, 84, 0.25)",
-            // borderWidth: 1,
+            borderWidth: 0,
           },
         },
       },
