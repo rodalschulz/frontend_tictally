@@ -6,7 +6,13 @@ const Categories = () => {
   const { userId } = useParams();
   const [showSidebar, setShowSidebar] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [subcategories, setSubcategories] = useState([]);
+  const [subcategories, setSubcategories] = useState({
+    GENERAL: [],
+    WORK: [],
+    LEARN: [],
+    BUILD: [],
+    RECOVERY: [],
+  });
   const [coreLimits, setCoreLimits] = useState({
     SLEEP: "",
     EAT: "",
@@ -30,11 +36,11 @@ const Categories = () => {
     };
   }, []);
 
-  const handleInputChange = (event, rowIndex, columnIndex) => {
+  const handleInputChange = (event, rowIndex, columnIndex, category) => {
     const { value } = event.target;
     setSubcategories((prevSubcategories) => {
-      const newSubcategories = [...prevSubcategories];
-      newSubcategories[columnIndex][rowIndex] = value;
+      const newSubcategories = { ...prevSubcategories };
+      newSubcategories[category][rowIndex] = value;
       return newSubcategories;
     });
   };
@@ -61,10 +67,8 @@ const Categories = () => {
     const fetchCategoryConfig = async () => {
       try {
         const response = await SDK.getUserCategoryConfig(userId);
-        const subcategories = Object.values(
-          response.user.categConfig.subcategories
-        );
-        setSubcategories(subcategories);
+        setSubcategories(response.user.categConfig.subcategories);
+        setCoreLimits(response.user.categConfig.coreLimits);
       } catch (error) {
         console.error("Error fetching user category config:", error);
       }
@@ -83,15 +87,16 @@ const Categories = () => {
   };
 
   const submitForm = async () => {
+    const cleanSubcategories = Object.fromEntries(
+      Object.entries(subcategories).map(([key, value]) => [
+        key,
+        value.filter((subcat) => subcat !== ""),
+      ])
+    );
+
     const data = {
       coreLimits: { ...coreLimits },
-      subcategories: {
-        GENERAL: subcategories[0] || [],
-        WORK: subcategories[1] || [],
-        LEARN: subcategories[2] || [],
-        BUILD: subcategories[3] || [],
-        RECOVERY: subcategories[4] || [],
-      },
+      subcategories: cleanSubcategories,
     };
 
     try {
@@ -141,7 +146,7 @@ const Categories = () => {
                   <th className="px-7 py-2">LIMITS</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-[13px]">
                 {Object.keys(coreLimits).map((limit, index) => (
                   <tr key={index}>
                     <td className="border px-4 py-2">{limit}</td>
@@ -168,17 +173,22 @@ const Categories = () => {
                   <th className="px-7 py-2">RECOVERY</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-[13px]">
                 {Array.from({ length: 10 }).map((_, rowIndex) => (
                   <tr key={rowIndex}>
-                    {subcategories.map((column, columnIndex) => (
-                      <td key={columnIndex} className="border px-4 py-2">
+                    {Object.keys(subcategories).map((category, columnIndex) => (
+                      <td key={category} className="border px-4 py-2">
                         <input
                           type="text"
-                          className="w-full"
-                          value={column[rowIndex] || ""}
+                          className="w-32"
+                          value={subcategories[category][rowIndex] || ""}
                           onChange={(e) =>
-                            handleInputChange(e, rowIndex, columnIndex)
+                            handleInputChange(
+                              e,
+                              rowIndex,
+                              columnIndex,
+                              category
+                            )
                           }
                         />
                       </td>

@@ -17,6 +17,22 @@ const Members = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [queryTimeSum, setQueryTimeSum] = useState(0);
   const [isSearchMode, setIsSearchMode] = useState(false);
+  const [subcategories, setSubcategories] = useState({});
+
+  // FETCH CATEGORY CONFIG
+  useEffect(() => {
+    const fetchCategoryConfig = async () => {
+      try {
+        const response = await SDK.getUserCategoryConfig(userId);
+        setSubcategories(response.user.categConfig.subcategories);
+      } catch (error) {
+        console.error("Error fetching user category config:", error);
+      }
+    };
+
+    fetchCategoryConfig();
+  }, [userId]);
+
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
@@ -70,6 +86,14 @@ const Members = () => {
       ...input,
       [name]: value,
     });
+
+    // Clear subcategory when category changes
+    if (name === "category") {
+      setInput((prevInput) => ({
+        ...prevInput,
+        subcategory: "",
+      }));
+    }
   };
 
   // SEARCH MODE
@@ -319,7 +343,7 @@ const Members = () => {
 
   const handleFormSubmit = useCallback(
     async (e) => {
-      if (e) e.preventDefault(); // Prevent default form submission if event exists
+      if (e) e.preventDefault();
       submit(e);
     },
     [submit]
@@ -485,11 +509,19 @@ const Members = () => {
                       </select>
                     </td>
                     <td>
-                      {input.category === "CORE" ? (
+                      {isSearchMode ? (
+                        <input
+                          name="subcategory"
+                          type="text"
+                          className="data-input"
+                          onChange={handleInputChange}
+                        />
+                      ) : input.category === "CORE" ? (
                         <select
                           name="subcategory"
                           className="data-input"
                           onChange={handleInputChange}
+                          value={input.subcategory || ""}
                         >
                           <option value="">Select</option>
                           <option value="SLEEP">SLEEP</option>
@@ -500,12 +532,21 @@ const Members = () => {
                           <option value="INFORM">INFORM</option>
                         </select>
                       ) : (
-                        <input
+                        <select
                           name="subcategory"
-                          type="text"
                           className="data-input"
                           onChange={handleInputChange}
-                        />
+                          value={input.subcategory || ""}
+                        >
+                          <option value="">Select</option>
+                          {subcategories[input.category]?.map(
+                            (subcat, index) => (
+                              <option key={index} value={subcat}>
+                                {subcat}
+                              </option>
+                            )
+                          )}
+                        </select>
                       )}
                     </td>
                     <td>

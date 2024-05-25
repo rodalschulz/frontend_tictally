@@ -66,6 +66,7 @@ const categoryOrder = [
 
 const StackedBarChart = () => {
   const { userId } = useParams();
+  const [coreLimits, setCoreLimits] = useState({});
 
   // USER ACTIVITY DATA
   const [userActivityData, setUserActivityData] = useState([]);
@@ -83,24 +84,61 @@ const StackedBarChart = () => {
     fetchUserActivityData();
   }, [userId]);
 
+  // FETCH CATEGORY CONFIG
+  useEffect(() => {
+    const fetchCategoryConfig = async () => {
+      try {
+        const response = await SDK.getUserCategoryConfig(userId);
+        const coreLimits = response.user.categConfig.coreLimits;
+        setCoreLimits(coreLimits);
+      } catch (error) {
+        console.error("Error fetching user category config:", error);
+      }
+    };
+
+    fetchCategoryConfig();
+  }, [userId]);
+
   // Aggregate data by date and category
   const aggregatedData = userActivityData.reduce((acc, item) => {
     const date = item.date.slice(0, 10);
     if (!acc[date]) {
-      acc[date] = { total: 0 }; // Initialize total for the date
+      acc[date] = { total: 0, categories: {}, coreSubcategories: {} };
     }
-    if (!acc[date][item.category]) {
-      acc[date][item.category] = 0;
+    if (item.category === "CORE") {
+      const subcategory = item.subcategory;
+      const time = Math.min(
+        item.totalTimeMin,
+        coreLimits[subcategory] || item.totalTimeMin
+      );
+      if (!acc[date].coreSubcategories[subcategory]) {
+        acc[date].coreSubcategories[subcategory] = 0;
+      }
+      acc[date].coreSubcategories[subcategory] += time;
+    } else {
+      if (!acc[date].categories[item.category]) {
+        acc[date].categories[item.category] = 0;
+      }
+      acc[date].categories[item.category] += item.totalTimeMin;
     }
-    acc[date][item.category] += item.totalTimeMin;
-    acc[date].total += item.totalTimeMin; // Sum the total time for the date
     return acc;
   }, {});
+
+  // Calculate total time for CORE category and overall total
+  Object.keys(aggregatedData).forEach((date) => {
+    const coreTotal = Object.values(
+      aggregatedData[date].coreSubcategories
+    ).reduce((a, b) => a + b, 0);
+    aggregatedData[date].categories.CORE = coreTotal;
+    aggregatedData[date].total = Object.values(
+      aggregatedData[date].categories
+    ).reduce((a, b) => a + b, 0);
+  });
 
   // Extract dates and categories
   const dates = Object.keys(aggregatedData).sort();
   const categories = Array.from(
-    new Set(userActivityData.map((item) => item.category))
+    new Set(userActivityData.map((item) => item.category.replace(/-.*$/, "")))
   );
 
   // Add the implicit "waste" category
@@ -113,7 +151,7 @@ const StackedBarChart = () => {
       data: dates.map((date) =>
         category === "WASTE"
           ? 1440 - (aggregatedData[date].total || 0)
-          : aggregatedData[date][category] || 0
+          : aggregatedData[date].categories[category] || 0
       ),
       backgroundColor: categoryColors[category],
       maxBarThickness: 15,
@@ -150,8 +188,8 @@ const StackedBarChart = () => {
             yMin: 250,
             yMax: 210,
             backgroundColor: "rgba(29, 102, 103, 0.25)",
-            borderColor: "rgba(11, 83, 84, 0.25)",
-            borderWidth: 1,
+            // borderColor: "rgba(11, 83, 84, 0.25)",
+            // borderWidth: 1,
           },
           box2: {
             type: "box",
@@ -159,8 +197,8 @@ const StackedBarChart = () => {
             yMin: 440,
             yMax: 400,
             backgroundColor: "rgba(29, 102, 103, 0.25)",
-            borderColor: "rgba(11, 83, 84, 0.25)",
-            borderWidth: 1,
+            // borderColor: "rgba(11, 83, 84, 0.25)",
+            // borderWidth: 1,
           },
           box3: {
             type: "box",
@@ -168,8 +206,8 @@ const StackedBarChart = () => {
             yMin: 620,
             yMax: 580,
             backgroundColor: "rgba(29, 102, 103, 0.25)",
-            borderColor: "rgba(11, 83, 84, 0.25)",
-            borderWidth: 1,
+            // borderColor: "rgba(11, 83, 84, 0.25)",
+            // borderWidth: 1,
           },
           box4: {
             type: "box",
@@ -177,8 +215,8 @@ const StackedBarChart = () => {
             yMin: 810,
             yMax: 770,
             backgroundColor: "rgba(29, 102, 103, 0.25)",
-            borderColor: "rgba(11, 83, 84, 0.25)",
-            borderWidth: 1,
+            // borderColor: "rgba(11, 83, 84, 0.25)",
+            // borderWidth: 1,
           },
         },
       },
