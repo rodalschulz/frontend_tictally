@@ -54,8 +54,9 @@ const Members = () => {
   // USER ACTIVITY DATA
   const [userActivityData, setUserActivityData] = useState([]);
   const fetchUserActivityData = useCallback(async () => {
+    const totalEntries = 350;
     try {
-      const data = await SDK.getUserActivityData(userId);
+      const data = await SDK.getUserActivityData(userId, totalEntries);
       setUserActivityData(data);
     } catch (error) {
       console.error(error);
@@ -64,13 +65,10 @@ const Members = () => {
   useEffect(() => {
     fetchUserActivityData();
   }, [userId]);
-  // useEffect(() => {
-  //   if (!isSearchMode) {
-  //   }
-  // }, [isSearchMode]);
 
   const [input, setInput] = useState({
     date: null,
+    date2: null,
     description: null,
     category: null,
     subcategory: null,
@@ -99,6 +97,9 @@ const Members = () => {
   // SEARCH MODE
   const handleToggleClick = () => {
     setIsSearchMode((prevMode) => !prevMode);
+    if (isSearchMode) {
+      fetchUserActivityData();
+    }
   };
 
   // POST ACTIVITY DATA
@@ -112,8 +113,11 @@ const Members = () => {
       if (input.subcategory)
         queryParams.append("subcategory", input.subcategory);
       if (input.date) queryParams.append("date", input.date);
+      if (input.date2) queryParams.append("date2", input.date2);
+
       setInput({
         date: null,
+        date2: null,
         description: null,
         category: null,
         subcategory: null,
@@ -590,6 +594,19 @@ const Members = () => {
                       </>
                     )}
                   </tr>
+                  {isSearchMode && (
+                    <tr>
+                      <td></td>
+                      <td className="input-name">
+                        <input
+                          name="date2"
+                          type="date"
+                          className="data-input"
+                          onChange={handleInputChange}
+                        />
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </form>

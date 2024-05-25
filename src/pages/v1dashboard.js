@@ -32,8 +32,9 @@ const Dashboard = () => {
   };
 
   const fetchUserActivityData = async () => {
+    const totalEntries = 1500;
     try {
-      const data = await SDK.getUserActivityData(userId);
+      const data = await SDK.getUserActivityData(userId, totalEntries);
       setUserActivityData(data);
     } catch (error) {
       console.error(error);

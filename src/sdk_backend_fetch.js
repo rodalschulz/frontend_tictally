@@ -54,7 +54,7 @@ export const isAuthenticated = async () => {
 };
 
 // USER ACTIVITY DATA
-export const getUserActivityData = async (userId) => {
+export const getUserActivityData = async (userId, totalEntries) => {
   try {
     const token = localStorage.getItem("token");
     const headers = {
@@ -64,7 +64,7 @@ export const getUserActivityData = async (userId) => {
     };
 
     const response = await fetch(
-      `${baseURL}/${version}/users/${userId}/activity-data`,
+      `${baseURL}/${version}/users/${userId}/activity-data?totalEntries=${totalEntries}`,
       {
         headers: headers,
       }
