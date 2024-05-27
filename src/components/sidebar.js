@@ -21,14 +21,14 @@ const Sidebar = ({ userId }) => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-300">
-      <div className="sm:relative xs:h-screen bg-custom-grey text-white flex flex-col max-h-full">
+    <div className="flex h-screen bg-gray-300 absolute">
+      <div className="sm:relative bg-custom-grey text-white flex flex-col">
         <div className="flex-grow space-y-4 mt-4 p-2">
           <SidebarButton onClick={navigateDashboard} icon={<FaRegChartBar />} />
           <SidebarButton onClick={navigateTally} icon={<FaList />} />
           <SidebarButton onClick={navigateCategories} icon={<FaTags />} />
         </div>
-        <div className="space-y-4 mt-auto p-2">
+        <div className="space-y-4 mt-auto p-2 xs:mb-20 sm:mb-0">
           <SidebarButton onClick={logOut} icon={<FaSignOutAlt />} />
         </div>
       </div>

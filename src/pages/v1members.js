@@ -16,7 +16,6 @@ const Members = () => {
   const { userId } = useParams();
   const [showUTC, setShowUTC] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(false);
   const [queryTimeSum, setQueryTimeSum] = useState(0);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [subcategories, setSubcategories] = useState({});
@@ -368,7 +367,7 @@ const Members = () => {
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       <Sidebar userId={userId} />
-      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2">
+      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16">
         <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 flex justify-between items-center">
           My Tally
           <span className="text-sm flex">
