@@ -1,6 +1,5 @@
 import "../styles/v1members.css";
 import * as SDK from "../sdk_backend_fetch.js";
-import { FaRegChartBar, FaList, FaTags, FaSignOutAlt } from "react-icons/fa";
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
@@ -35,10 +34,6 @@ const Members = () => {
 
     fetchCategoryConfig();
   }, [userId]);
-
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar);
-  };
 
   // HANDLE WINDOW SIZE
   useEffect(() => {
@@ -373,7 +368,6 @@ const Members = () => {
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       <Sidebar userId={userId} />
-
       <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2">
         <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 flex justify-between items-center">
           My Tally
