@@ -366,19 +366,26 @@ const Members = () => {
 
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
-      <Sidebar userId={userId} />
-      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16">
+      <Sidebar
+        userId={userId}
+        isMobile={isMobile}
+        submit={handleFormSubmit}
+        remove={deleteSelected}
+      />
+      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16 xs:max-w-[300px] sm:max-w-[2000px]">
         <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 flex justify-between items-center">
           My Tally
           <span className="text-sm flex">
-            <button
-              className="btn bg-custom-databg btn-sm mr-2 w-10 border-gray-800 hover:bg-primary"
-              onClick={() => setShowUTC(!showUTC)}
-            >
-              UTC
-            </button>
-            <UploadCSVbtn />
-            <DownloadCSV DownloadCSV userId={userId} />
+            {!isMobile && (
+              <button
+                className="btn bg-custom-databg btn-sm mr-2 w-10 border-gray-800 hover:bg-primary"
+                onClick={() => setShowUTC(!showUTC)}
+              >
+                UTC
+              </button>
+            )}
+            {!isMobile && <UploadCSVbtn />}
+            {!isMobile && <DownloadCSV DownloadCSV userId={userId} />}
           </span>
         </h1>
 
