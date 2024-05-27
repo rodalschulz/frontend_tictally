@@ -25,6 +25,14 @@ module.exports = {
           databg: "rgb(98, 121, 136)",
         },
       },
+      transitionProperty: {
+        width: "width",
+      },
+    },
+  },
+  variants: {
+    extend: {
+      width: ["responsive", "hover", "focus"],
     },
   },
   plugins: [

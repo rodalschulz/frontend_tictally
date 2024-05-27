@@ -1,5 +1,6 @@
 import "../styles/v1members.css";
 import * as SDK from "../sdk_backend_fetch.js";
+import { FaRegChartBar, FaList, FaTags, FaSignOutAlt } from "react-icons/fa";
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
@@ -9,6 +10,8 @@ import datetimeFnc from "../functions/datetimeFnc.js";
 import DownloadCSV from "../components/downloadCSVbtn.js";
 import UploadCSVbtn from "../components/uploadCSVbtn.js";
 import EntrySearchToggleButton from "../components/entrySearchModebtn.js";
+
+import Sidebar from "../components/sidebar.js";
 
 const Members = () => {
   const { userId } = useParams();
@@ -367,53 +370,9 @@ const Members = () => {
     return () => window.removeEventListener("keydown", handleEnterPress);
   }, [handleEnterPress]);
 
-  const logOut = async () => {
-    localStorage.removeItem("token");
-    window.location.href = "/";
-  };
-
-  // NAVIGATION
-  const navigateDashboard = () => {
-    window.location.href = `/members/${userId}/dashboard`;
-  };
-  const navigateCategories = () => {
-    window.location.href = `/members/${userId}/categories`;
-  };
-
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
-      {showSidebar && (
-        <nav className="xs:absolute sm:relative xs:h-screen w-36 bg-custom-grey text-white p-4 flex flex-col space-y-4">
-          <button className="btn btn-primary" onClick={navigateDashboard}>
-            Dashboard
-          </button>
-          <button className="btn btn-primary">My Tally</button>
-          <button className="btn btn-primary" onClick={navigateCategories}>
-            Categories
-          </button>
-          <button className="btn btn-primary">Pending</button>
-          <button className="btn btn-primary">Collabs</button>
-          <button className="btn btn-primary" onClick={logOut}>
-            Log Out
-          </button>
-          {isMobile ? (
-            <button onClick={handleFormSubmit} className="btn btn-primary">
-              Enter
-            </button>
-          ) : null}
-          {isMobile ? (
-            <button onClick={deleteSelected} className="btn btn-primary">
-              Delete
-            </button>
-          ) : null}
-        </nav>
-      )}
-      <button
-        onClick={toggleSidebar}
-        className="bg-gray-800 text-white text-sm px-1 py-2 h-10 rounded-none mt-4 rounded-tr-md rounded-br-md z-50"
-      >
-        {showSidebar ? ">" : "<"}
-      </button>
+      <Sidebar userId={userId} />
 
       <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2">
         <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 flex justify-between items-center">
@@ -439,7 +398,7 @@ const Members = () => {
               >
                 <thead>
                   <tr>
-                    {!isMobile && <th>DAY</th>}
+                    {!isMobile && <th>Entry/Search</th>}
                     {!isMobile && <th>DATE</th>}
                     {!isMobile && <th>DESCRIPTION</th>}
                     <th>CATEG</th>
