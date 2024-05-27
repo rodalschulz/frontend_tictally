@@ -46,9 +46,9 @@ const Sidebar = ({ userId, isMobile, submit, remove }) => {
         <div className="flex-grow space-y-4 mt-4 p-2">
           {isMobile && (
             <>
-              <SidebarButton onClick={downloadCSV} icon={<FaFileDownload />} />
               <SidebarButton onClick={submit} icon={<MdOutlinePlaylistAdd />} />
               <SidebarButton onClick={remove} icon={<MdDeleteForever />} />
+              <SidebarButton onClick={downloadCSV} icon={<FaFileDownload />} />
             </>
           )}
         </div>

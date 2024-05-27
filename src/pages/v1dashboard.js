@@ -53,7 +53,7 @@ const Dashboard = () => {
 
         <div className="flex flex-grow">
           <div
-            className="w-full max-w-6xl p-2 bg-custom-grey rounded-lg shadow-md h-[75vh]"
+            className="w-full max-w-6xl p-2 bg-custom-grey rounded-lg shadow-md h-[75vh] xs:min-w-full sm:min-w-0"
             style={{ minHeight: "500px" }}
           >
             <StackedBarChart
@@ -61,29 +61,34 @@ const Dashboard = () => {
               coreLimits={coreLimits}
             />
           </div>
-          <div className="ml-2">
-            <TrailingDataCard
-              userActivityData={userActivityData}
-              coreLimits={coreLimits}
-              categories={["WORK", "LEARN", "BUILD"]}
-              timeframe={30}
-            />
-          </div>
-          <div className="ml-2">
-            <TrailingDataCard
-              userActivityData={userActivityData}
-              coreLimits={coreLimits}
-              categories={["WORK"]}
-              timeframe={30}
-            />
-          </div>
-          <div className="ml-2">
-            <TrailingDataCard
-              userActivityData={userActivityData}
-              coreLimits={coreLimits}
-              categories={["WORK", "LEARN", "BUILD"]}
-              timeframe={7}
-            />
+          <div>
+            <div className="bg-secondary rounded-lg ml-2 mb-2 text-white font-bold text-center">
+              <h2>TRAILING</h2>
+            </div>
+            <div className="ml-2 mb-2">
+              <TrailingDataCard
+                userActivityData={userActivityData}
+                coreLimits={coreLimits}
+                categories={["WORK", "LEARN", "BUILD"]}
+                timeframe={30}
+              />
+            </div>
+            <div className="ml-2 mb-2">
+              <TrailingDataCard
+                userActivityData={userActivityData}
+                coreLimits={coreLimits}
+                categories={["WORK"]}
+                timeframe={30}
+              />
+            </div>
+            <div className="ml-2 mb-2">
+              <TrailingDataCard
+                userActivityData={userActivityData}
+                coreLimits={coreLimits}
+                categories={["WORK", "LEARN", "BUILD"]}
+                timeframe={7}
+              />
+            </div>
           </div>
         </div>
       </main>

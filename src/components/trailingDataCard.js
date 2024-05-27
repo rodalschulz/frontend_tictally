@@ -64,8 +64,8 @@ const TrailingDataCard = ({
 
   return (
     <div className="p-4 bg-primary rounded-lg shadow-md">
-      <h2 className="text-xl font-bold text-gray-800 text-center">
-        Trailing {timeframe} Days
+      <h2 className="text-xl font-bold text-gray-800 text-center w-36 h-8">
+        {timeframe} Days
       </h2>
       <p className="text-gray-600 text-center">{categories}:</p>
       <p className="text-2xl font-bold text-gray-800 text-center">
