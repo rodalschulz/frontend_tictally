@@ -1,67 +1,38 @@
+import { useState, useRef } from "react";
+import { useParams } from "react-router-dom";
+
 import "../styles/v1members.css";
 import * as SDK from "../sdk_backend_fetch.js";
-
-import { useState, useRef, useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
 import activityData from "../functions/activityDataFnc.js";
 import datetimeFnc from "../functions/datetimeFnc.js";
 
 import DownloadCSV from "../components/downloadCSVbtn.js";
 import UploadCSVbtn from "../components/uploadCSVbtn.js";
 import EntrySearchToggleButton from "../components/entrySearchModebtn.js";
-
 import Sidebar from "../components/sidebar.js";
+import useFetchCategoryConfig from "../baseComponents/useFetchCategoryConfig.js";
+import useWindowSize from "../baseComponents/useWindowSize.js";
+import useUserActivityData from "../baseComponents/useUserActivityData.js";
+import useRowNavigation from "../baseComponents/useRowNavigation.js";
 
 const Members = () => {
   const { userId } = useParams();
+
   const [showUTC, setShowUTC] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [queryTimeSum, setQueryTimeSum] = useState(0);
   const [isSearchMode, setIsSearchMode] = useState(false);
-  const [subcategories, setSubcategories] = useState({});
+  const { subcategories } = useFetchCategoryConfig(userId);
+  const { userActivityData, setUserActivityData, fetchUserActivityData } =
+    useUserActivityData(userId, 350);
+  const isMobile = useWindowSize();
 
-  // FETCH CATEGORY CONFIG
-  useEffect(() => {
-    const fetchCategoryConfig = async () => {
-      try {
-        const response = await SDK.getUserCategoryConfig(userId);
-        setSubcategories(response.user.categConfig.subcategories);
-      } catch (error) {
-        console.error("Error fetching user category config:", error);
-      }
-    };
-
-    fetchCategoryConfig();
-  }, [userId]);
-
-  // HANDLE WINDOW SIZE
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 500);
-    };
-
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // USER ACTIVITY DATA
-  const [userActivityData, setUserActivityData] = useState([]);
-  const fetchUserActivityData = useCallback(async () => {
-    const totalEntries = 350;
-    try {
-      const data = await SDK.getUserActivityData(userId, totalEntries);
-      setUserActivityData(data);
-    } catch (error) {
-      console.error(error);
+  // SEARCH MODE
+  const handleToggleClick = () => {
+    setIsSearchMode((prevMode) => !prevMode);
+    if (isSearchMode) {
+      fetchUserActivityData();
     }
-  }, [userId]);
-  useEffect(() => {
-    fetchUserActivityData();
-  }, [userId]);
+  };
 
   const [input, setInput] = useState({
     date: null,
@@ -91,285 +62,111 @@ const Members = () => {
     }
   };
 
-  // SEARCH MODE
-  const handleToggleClick = () => {
-    setIsSearchMode((prevMode) => !prevMode);
-    if (isSearchMode) {
-      fetchUserActivityData();
+  const resetForm = () => {
+    setInput({
+      date: null,
+      date2: null,
+      description: null,
+      category: null,
+      subcategory: null,
+      startTime: null,
+      endTime: null,
+      adjustment: null,
+    });
+    if (formRef.current) {
+      formRef.current.reset();
     }
   };
 
-  // POST ACTIVITY DATA
-  const submit = async (event) => {
-    event.preventDefault();
-    if (isSearchMode) {
-      const queryParams = new URLSearchParams();
-      if (input.description)
-        queryParams.append("description", input.description);
-      if (input.category) queryParams.append("category", input.category);
-      if (input.subcategory)
-        queryParams.append("subcategory", input.subcategory);
-      if (input.date) queryParams.append("date", input.date);
-      if (input.date2) queryParams.append("date2", input.date2);
+  const submitSearch = async (event) => {
+    const queryParams = new URLSearchParams();
+    if (input.description) queryParams.append("description", input.description);
+    if (input.category) queryParams.append("category", input.category);
+    if (input.subcategory) queryParams.append("subcategory", input.subcategory);
+    if (input.date) queryParams.append("date", input.date);
+    if (input.date2) queryParams.append("date2", input.date2);
 
-      setInput({
-        date: null,
-        date2: null,
-        description: null,
-        category: null,
-        subcategory: null,
-        startTime: null,
-        endTime: null,
-        adjustment: null,
-      });
-      if (formRef.current) {
-        formRef.current.reset();
-      }
-      try {
-        const data = await SDK.queryUserActivityData(userId, queryParams);
-        setUserActivityData(data.userActivityData);
-        setQueryTimeSum(data.totalSum);
-        console.log("Query finished");
-      } catch (error) {
-        console.error("Error fetching activity data:", error);
-      }
-    } else if (selectedRow && !isSearchMode) {
-      try {
-        console.log("Patching data...");
-        const idToPatch = selectedRow;
-        const { startTime, endTime, adjustment } = selectedRowTimeValues;
-        const updatedInput = activityData.activityPatchValidation(
-          input,
-          startTime,
-          endTime,
-          adjustment
-        );
-        await SDK.patchUserActivityData(userId, idToPatch, updatedInput);
-        setSelectedRow(null);
-        setSelectedRowTimeValues({
-          startTime: "",
-          endTime: "",
-          adjustment: 0,
-        });
-        fetchUserActivityData();
-      } catch (error) {
-        console.error(error);
-        setSelectedRow(null);
-        setSelectedRowTimeValues({
-          startTime: null,
-          endTime: null,
-          adjustment: 0,
-        });
-      }
-      setInput({
-        date: null,
-        description: null,
-        category: null,
-        subcategory: null,
-        startTime: null,
-        endTime: null,
-        adjustment: null,
-      });
-      if (formRef.current) {
-        formRef.current.reset();
-      }
-    } else {
-      try {
-        const updatedInput = activityData.activityEntryValidation(input);
-        if (!input.category) {
-          alert("Mandatory field: Category");
-          setInput({
-            date: null,
-            description: null,
-            category: null,
-            subcategory: null,
-            startTime: null,
-            endTime: null,
-            adjustment: null,
-          });
-          if (formRef.current) {
-            formRef.current.reset();
-          }
-          return;
-        }
-        await SDK.postUserActivityData(userId, updatedInput);
-        fetchUserActivityData();
-      } catch (error) {
-        console.error(error);
-        setInput({
-          date: null,
-          description: null,
-          category: null,
-          subcategory: null,
-          startTime: null,
-          endTime: null,
-          adjustment: null,
-        });
-        if (formRef.current) {
-          formRef.current.reset();
-        }
-      }
-      setInput({
-        date: null,
-        description: null,
-        category: null,
-        subcategory: null,
-        startTime: null,
-        endTime: null,
-        adjustment: null,
-      });
-      if (formRef.current) {
-        formRef.current.reset();
-      }
+    resetForm();
+    try {
+      const data = await SDK.queryUserActivityData(userId, queryParams);
+      setUserActivityData(data.userActivityData);
+      setQueryTimeSum(data.totalSum);
+      console.log("Query finished");
+    } catch (error) {
+      console.error("Error fetching activity data:", error);
     }
   };
 
-  // SELECTING ROWS AND NAVIGATING WITH ARROW KEYS
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [selectedRowTimeValues, setSelectedRowTimeValues] = useState({
-    startTime: "",
-    endTime: "",
-    adjustment: 0,
-  });
-  const handleRowClick = (id, startTime, endTime, adjustment) => {
-    if (selectedRow === id) {
+  const submitPatch = async (event) => {
+    try {
+      console.log("Patching data...");
+      const idToPatch = selectedRow;
+      const { startTime, endTime, adjustment } = selectedRowTimeValues;
+      const updatedInput = activityData.activityPatchValidation(
+        input,
+        startTime,
+        endTime,
+        adjustment
+      );
+      await SDK.patchUserActivityData(userId, idToPatch, updatedInput);
       setSelectedRow(null);
       setSelectedRowTimeValues({
         startTime: "",
         endTime: "",
         adjustment: 0,
       });
-      return;
-    } else {
-      if (isSearchMode) {
-        setIsSearchMode(false);
-      }
-      setSelectedRow(id);
+      fetchUserActivityData();
+    } catch (error) {
+      console.error(error);
+      setSelectedRow(null);
       setSelectedRowTimeValues({
-        startTime: startTime,
-        endTime: endTime,
-        adjustment: adjustment,
+        startTime: null,
+        endTime: null,
+        adjustment: 0,
       });
-      console.log("Selected row:", id);
+    }
+    resetForm();
+  };
+
+  const submit = async (event) => {
+    event.preventDefault();
+    if (isSearchMode) {
+      submitSearch(event);
+    } else if (selectedRow && !isSearchMode) {
+      submitPatch(event);
+    } else {
+      try {
+        const updatedInput = activityData.activityEntryValidation(input);
+        if (!input.category) {
+          alert("Mandatory field: Category");
+          resetForm();
+          return;
+        }
+        await SDK.postUserActivityData(userId, updatedInput);
+        fetchUserActivityData();
+      } catch (error) {
+        console.error(error);
+        resetForm();
+      }
+      resetForm();
     }
   };
 
-  // EVENT LISTENER TO NAVIGATE ROWS WITH ARROW KEYS
-  useEffect(() => {
-    const handleArrowKeyPress = (e) => {
-      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-        e.preventDefault();
-        const currentIndex = userActivityData.findIndex(
-          (item) => item.id === selectedRow
-        );
-        if (currentIndex !== -1) {
-          const nextIndex =
-            e.key === "ArrowUp" ? currentIndex - 1 : currentIndex + 1;
-          if (nextIndex >= 0 && nextIndex < userActivityData.length) {
-            setSelectedRow(userActivityData[nextIndex].id);
-            setSelectedRowTimeValues({
-              startTime: userActivityData[nextIndex].startTime,
-              endTime: userActivityData[nextIndex].endTime,
-              adjustment: userActivityData[nextIndex].adjustment,
-            });
-          }
-        } else if (userActivityData && userActivityData.length > 0) {
-          setSelectedRow(userActivityData[0].id);
-          setSelectedRowTimeValues({
-            date: userActivityData[0].date,
-            startTime: userActivityData[0].startTime,
-            endTime: userActivityData[0].endTime,
-          });
-        }
-      }
-    };
-    window.addEventListener("keydown", handleArrowKeyPress);
-    return () => {
-      window.removeEventListener("keydown", handleArrowKeyPress);
-    };
-  }, [selectedRow, userActivityData]); // userActivityData
-
-  // EVENT LISTENER TO UNSELECT ROW WITH ESCAPE KEY
-  useEffect(() => {
-    const handleEscapePress = (e) => {
-      if (e.key === "Escape") {
-        setSelectedRow(null);
-        setSelectedRowTimeValues({
-          date: null,
-          startTime: null,
-          endTime: null,
-        });
-      }
-    };
-    window.addEventListener("keydown", handleEscapePress);
-    return () => {
-      window.removeEventListener("keydown", handleEscapePress);
-    };
-  }, []);
-
-  // DELETING CURRENTLY SELECTED ROW WITH DEL PRESS
-  const deleteSelected = useCallback(async () => {
-    try {
-      if (selectedRow) {
-        await SDK.deleteUserActivityData(userId, selectedRow);
-        fetchUserActivityData();
-        setSelectedRow(null);
-      } else {
-        return;
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [selectedRow, fetchUserActivityData, userId, setSelectedRow]);
-  const handleDelPress = useCallback(
-    (e) => {
-      if (e.key === "Delete") {
-        const activeElement = document.activeElement;
-        if (
-          activeElement &&
-          (activeElement.tagName === "INPUT" ||
-            activeElement.tagName === "TEXTAREA")
-        ) {
-          return; // Do not delete if an input field or textarea is focused
-        }
-        deleteSelected();
-      }
-    },
-    [deleteSelected]
-  );
-  useEffect(() => {
-    window.addEventListener("keydown", handleDelPress);
-    return () => window.removeEventListener("keydown", handleDelPress);
-  }, [handleDelPress]);
-
-  const handleFormSubmit = useCallback(
-    async (e) => {
-      if (e) e.preventDefault();
-      submit(e);
-    },
-    [submit]
-  );
-
-  const handleEnterPress = useCallback(
-    async (e) => {
-      if (e.key === "Enter") {
-        handleFormSubmit(e);
-      }
-    },
-    [handleFormSubmit]
-  );
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleEnterPress);
-    return () => window.removeEventListener("keydown", handleEnterPress);
-  }, [handleEnterPress]);
+  const {
+    selectedRow,
+    selectedRowTimeValues,
+    handleRowClick,
+    deleteSelected,
+    setSelectedRow,
+    setSelectedRowTimeValues,
+  } = useRowNavigation(userId, userActivityData, fetchUserActivityData, submit);
 
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       <Sidebar
         userId={userId}
         isMobile={isMobile}
-        submit={handleFormSubmit}
+        submit={submit}
         remove={deleteSelected}
       />
       <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16 xs:max-w-full sm:max-w-[2000px]">
