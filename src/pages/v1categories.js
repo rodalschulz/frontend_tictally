@@ -4,39 +4,14 @@ import { useParams } from "react-router-dom";
 
 import Sidebar from "../components/sidebar.js";
 
+import useFetchCategoryConfig from "../baseComponents/useFetchCategoryConfig.js";
+import useWindowSize from "../baseComponents/useWindowSize.js";
+
 const Categories = () => {
   const { userId } = useParams();
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [subcategories, setSubcategories] = useState({
-    GENERAL: [],
-    WORK: [],
-    LEARN: [],
-    BUILD: [],
-    RECOVERY: [],
-  });
-  const [coreLimits, setCoreLimits] = useState({
-    SLEEP: "",
-    EAT: "",
-    GROOM: "",
-    FITNESS: "",
-    RELIEF: "",
-    INFORM: "",
-  });
-
-  // HANDLE WINDOW SIZE
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 500);
-    };
-
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const { subcategories, coreLimits, setCoreLimits, setSubcategories } =
+    useFetchCategoryConfig(userId);
+  const isMobile = useWindowSize();
 
   const handleInputChange = (event, rowIndex, columnIndex, category) => {
     const { value } = event.target;
@@ -55,30 +30,6 @@ const Categories = () => {
     }));
   };
 
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar);
-  };
-
-  const logOut = async () => {
-    localStorage.removeItem("token");
-    window.location.href = "/";
-  };
-
-  // FETCH CATEGORY CONFIG
-  useEffect(() => {
-    const fetchCategoryConfig = async () => {
-      try {
-        const response = await SDK.getUserCategoryConfig(userId);
-        setSubcategories(response.user.categConfig.subcategories);
-        setCoreLimits(response.user.categConfig.coreLimits);
-      } catch (error) {
-        console.error("Error fetching user category config:", error);
-      }
-    };
-
-    fetchCategoryConfig();
-  }, [userId]);
-
   const submitForm = async () => {
     const cleanSubcategories = Object.fromEntries(
       Object.entries(subcategories).map(([key, value]) => [
@@ -87,9 +38,16 @@ const Categories = () => {
       ])
     );
 
+    const cleanSubcategoriesUpper = Object.fromEntries(
+      Object.entries(cleanSubcategories).map(([key, value]) => [
+        key,
+        value.map((subcat) => subcat.toUpperCase()),
+      ])
+    );
+
     const data = {
       coreLimits: { ...coreLimits },
-      subcategories: cleanSubcategories,
+      subcategories: cleanSubcategoriesUpper,
     };
 
     try {

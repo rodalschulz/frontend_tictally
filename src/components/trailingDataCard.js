@@ -1,75 +1,50 @@
 import React, { useEffect, useState } from "react";
 
 const TrailingDataCard = ({
-  userActivityData,
-  coreLimits,
-  categories,
-  timeframe,
+  periodTimes,
+  categories = [],
+  subcategories = [],
 }) => {
-  const [productiveTime, setProductiveTime] = useState(0);
+  const [chosenCatSum, setChosenCatSum] = useState(0);
+  const [chosenSubcatSum, setChosenSubcatSum] = useState(0);
 
   useEffect(() => {
-    const calculateProductiveTime = () => {
-      const now = new Date();
-      const pastDays = new Date(now.setDate(now.getDate() - timeframe));
-      const pastDaysDateString = pastDays.toISOString().split("T")[0];
-
-      const filteredData = userActivityData.filter(
-        (item) => item.date.slice(0, 10) > pastDaysDateString
-      );
-
-      const aggregatedData = filteredData.reduce((acc, item) => {
-        const date = item.date.slice(0, 10);
-        if (!acc[date]) {
-          acc[date] = { categories: {}, coreSubcategories: {} };
-        }
-        if (item.category === "CORE") {
-          const subcategory = item.subcategory;
-          const time = Math.min(
-            item.totalTimeMin,
-            coreLimits[subcategory] || item.totalTimeMin
-          );
-          if (!acc[date].coreSubcategories[subcategory]) {
-            acc[date].coreSubcategories[subcategory] = 0;
-          }
-          acc[date].coreSubcategories[subcategory] += time;
+    if (categories.length > 0) {
+      let sum = 0;
+      categories.forEach((cat) => {
+        if (cat === "WASTE") {
+          sum += periodTimes.WASTE || 0;
         } else {
-          if (!acc[date].categories[item.category]) {
-            acc[date].categories[item.category] = 0;
-          }
-          acc[date].categories[item.category] += item.totalTimeMin;
+          sum += periodTimes[cat]?.TOTAL || 0;
         }
-        return acc;
-      }, {});
-
-      let totalProductiveTime = 0;
-      Object.keys(aggregatedData).forEach((date) => {
-        const coreTotal = Object.values(
-          aggregatedData[date].coreSubcategories
-        ).reduce((a, b) => a + b, 0);
-        aggregatedData[date].categories.CORE = coreTotal;
-
-        const dailyProductiveTime = categories.reduce((sum, category) => {
-          return sum + (aggregatedData[date].categories[category] || 0);
-        }, 0);
-
-        totalProductiveTime += dailyProductiveTime;
       });
+      setChosenCatSum(sum);
+    }
+  }, [periodTimes, categories]);
 
-      setProductiveTime((totalProductiveTime / 60).toFixed(2)); // Convert minutes to hours
-    };
-
-    calculateProductiveTime();
-  }, [userActivityData, categories, timeframe]);
+  useEffect(() => {
+    if (subcategories.length > 0) {
+      let sum = 0;
+      subcategories.forEach((subcat) => {
+        Object.keys(periodTimes).forEach((cat) => {
+          if (periodTimes[cat][subcat]) {
+            sum += periodTimes[cat][subcat];
+          }
+        });
+      });
+      setChosenSubcatSum(sum);
+    }
+  }, [periodTimes, subcategories]);
 
   return (
-    <div className="p-4 bg-primary rounded-lg shadow-md">
-      <h2 className="text-xl font-bold text-gray-800 text-center w-36 h-8">
-        {timeframe} Days
-      </h2>
-      <p className="text-gray-600 text-center">{categories}:</p>
-      <p className="text-2xl font-bold text-gray-800 text-center">
-        {productiveTime}H
+    <div className="bg-primary rounded-lg p-4 w-44">
+      <p className="text-center font-bold">
+        {subcategories.length > 0 ? subcategories : categories}
+      </p>
+      <p className="text-center">
+        {categories.length > 0
+          ? (chosenCatSum / 60).toFixed(2)
+          : (chosenSubcatSum / 60).toFixed(2)}
       </p>
     </div>
   );

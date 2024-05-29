@@ -43,6 +43,13 @@ const currentLocalDate = () => {
   return localDateZero;
 };
 
+const getLocalDateObject = () => {
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60000; // offset in milliseconds
+  const localDate = new Date(now.getTime() - offset);
+  return localDate;
+};
+
 const timeDateTimeToInputDateTime = (dateTime, inputDate) => {
   const dateTimeStr = new Date(dateTime).toISOString();
   const timeString = dateTimeStr.slice(11, 16);
@@ -121,4 +128,5 @@ export default {
   convertMinutesToHHMM,
   calculateTotalTimeMin,
   timeDateTimeToInputDateTime,
+  getLocalDateObject,
 };

@@ -19,7 +19,7 @@ const useFetchCategoryConfig = (userId) => {
     fetchCategoryConfig();
   }, [userId]);
 
-  return { coreLimits, subcategories };
+  return { coreLimits, subcategories, setSubcategories, setCoreLimits };
 };
 
 export default useFetchCategoryConfig;
