@@ -2,23 +2,23 @@ import React from "react";
 
 const PeriodTimesTable = ({ periodTimes, timeframe }) => {
   return (
-    <div className="bg-primary rounded-lg p-4 overflow-x-auto">
-      <table className="bg-blue-100">
+    <div className="bg-primary rounded-lg p-1.5">
+      <table className="bg-custom-lightblue">
         <thead>
           <tr>
-            <th className="px-4 border-b">Category</th>
-            <th className="px-4 border-b">Subcategory</th>
-            <th className="px-4 border-b">Total Minutes</th>
-            <th className="px-4 border-b">Day Avg</th>
+            <th className="px-4">Category</th>
+            <th className="px-4">Subcategory</th>
+            <th className="px-4">Total Minutes</th>
+            <th className="px-4">Day Avg</th>
           </tr>
         </thead>
         <tbody>
           {Object.keys(periodTimes).map((category) =>
             category === "WASTE" ? null : (
               <React.Fragment key={category}>
-                <tr className="border-black border-solid">
+                <tr className="">
                   <td
-                    className="px-4 border-b"
+                    className="px-4"
                     rowSpan={Object.keys(periodTimes[category]).length + 1}
                   >
                     {category}
@@ -29,13 +29,13 @@ const PeriodTimesTable = ({ periodTimes, timeframe }) => {
                   .map((subcategory) => (
                     <tr
                       key={`${category}-${subcategory}`}
-                      className={subcategory === "TOTAL" ? "bg-blue-200" : ""}
+                      className={subcategory === "TOTAL" ? "bg-gray-300" : ""}
                     >
-                      <td className="px-4 border-b">{subcategory}</td>
-                      <td className="px-4 border-b text-right">
+                      <td className="px-4">{subcategory}</td>
+                      <td className="px-4 text-right">
                         {(periodTimes[category][subcategory] / 60).toFixed(2)}
                       </td>
-                      <td className="px-4 border-b text-right">
+                      <td className="px-4 text-right">
                         {(
                           periodTimes[category][subcategory] /
                           60 /

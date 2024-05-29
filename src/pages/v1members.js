@@ -23,7 +23,7 @@ const Members = () => {
   const [isSearchMode, setIsSearchMode] = useState(false);
   const { subcategories } = useFetchCategoryConfig(userId);
   const { userActivityData, setUserActivityData, fetchUserActivityData } =
-    useUserActivityData(userId, 350);
+    useUserActivityData(userId, 32);
   const isMobile = useWindowSize();
 
   // SEARCH MODE
