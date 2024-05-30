@@ -97,7 +97,7 @@ const Members = () => {
   const submitPatch = async (event) => {
     try {
       console.log("Patching data...");
-      const idToPatch = selectedRows;
+      const idsToPatch = selectedRows;
       const { startTime, endTime, adjustment } = selectedRowTimeValues;
       const updatedInput = activityData.activityPatchValidation(
         input,
@@ -105,7 +105,23 @@ const Members = () => {
         endTime,
         adjustment
       );
-      await SDK.patchUserActivityData(userId, idToPatch, updatedInput);
+      if (
+        (updatedInput.startTime ||
+          updatedInput.endTime ||
+          updatedInput.adjustment) &&
+        selectedRows.length > 1
+      ) {
+        alert("Can't patch multiple entries with different times.");
+        setSelectedRows([]);
+        setSelectedRowTimeValues({
+          startTime: "",
+          endTime: "",
+          adjustment: 0,
+        });
+        resetForm();
+        return;
+      }
+      await SDK.patchUserActivityData(userId, idsToPatch, updatedInput);
       setSelectedRows([]);
       setSelectedRowTimeValues({
         startTime: "",

@@ -13,35 +13,65 @@ const useRowNavigation = (
     endTime: "",
     adjustment: 0,
   });
+  const [firstSelectedRow, setFirstSelectedRow] = useState(null);
 
   const handleRowClick = (id, startTime, endTime, adjustment, event) => {
-    if (selectedRows.length === 1 && selectedRows.includes(id)) {
-      setSelectedRows([]);
-      setSelectedRowTimeValues({
-        startTime: "",
-        endTime: "",
-        adjustment: 0,
-      });
-    } else if (event.ctrlKey) {
-      setSelectedRows((prevSelectedRows) => {
-        if (prevSelectedRows.includes(id)) {
-          return prevSelectedRows.filter((rowId) => rowId !== id);
-        } else {
-          return [...prevSelectedRows, id];
-        }
-      });
+    if (event.shiftKey && firstSelectedRow !== null) {
+      // Find the indexes of the first selected row and the current row
+      const firstIndex = userActivityData.findIndex(
+        (item) => item.id === firstSelectedRow
+      );
+      const currentIndex = userActivityData.findIndex((item) => item.id === id);
+
+      // Determine the range to select
+      const [start, end] =
+        firstIndex < currentIndex
+          ? [firstIndex, currentIndex]
+          : [currentIndex, firstIndex];
+
+      // Get the IDs of all rows in the range
+      const newSelectedRows = userActivityData
+        .slice(start, end + 1)
+        .map((item) => item.id);
+
+      setSelectedRows((prevSelectedRows) => [
+        ...new Set([...prevSelectedRows, ...newSelectedRows]),
+      ]);
       setSelectedRowTimeValues({
         startTime,
         endTime,
         adjustment,
       });
     } else {
-      setSelectedRows([id]);
-      setSelectedRowTimeValues({
-        startTime,
-        endTime,
-        adjustment,
-      });
+      if (selectedRows.length === 1 && selectedRows.includes(id)) {
+        setSelectedRows([]);
+        setSelectedRowTimeValues({
+          startTime: "",
+          endTime: "",
+          adjustment: 0,
+        });
+      } else if (event.ctrlKey) {
+        setSelectedRows((prevSelectedRows) => {
+          if (prevSelectedRows.includes(id)) {
+            return prevSelectedRows.filter((rowId) => rowId !== id);
+          } else {
+            return [...prevSelectedRows, id];
+          }
+        });
+        setSelectedRowTimeValues({
+          startTime,
+          endTime,
+          adjustment,
+        });
+      } else {
+        setSelectedRows([id]);
+        setSelectedRowTimeValues({
+          startTime,
+          endTime,
+          adjustment,
+        });
+      }
+      setFirstSelectedRow(id);
     }
   };
 
