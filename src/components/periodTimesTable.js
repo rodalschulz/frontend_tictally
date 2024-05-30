@@ -1,4 +1,5 @@
 import React from "react";
+import datetimeFnc from "../functions/datetimeFnc.js";
 
 const PeriodTimesTable = ({ periodTimes, timeframe }) => {
   return (
@@ -33,14 +34,14 @@ const PeriodTimesTable = ({ periodTimes, timeframe }) => {
                     >
                       <td className="px-4">{subcategory}</td>
                       <td className="px-4 text-right">
-                        {(periodTimes[category][subcategory] / 60).toFixed(2)}
+                        {datetimeFnc.convertMinutesToHHMM(
+                          periodTimes[category][subcategory]
+                        )}
                       </td>
                       <td className="px-4 text-right">
-                        {(
-                          periodTimes[category][subcategory] /
-                          60 /
-                          (timeframe === "30D" ? 30 : 7)
-                        ).toFixed(2)}
+                        {datetimeFnc.convertMinutesToHHMM(
+                          Math.floor(periodTimes[category][subcategory] / 30)
+                        )}
                       </td>
                     </tr>
                   ))}

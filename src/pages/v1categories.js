@@ -6,6 +6,7 @@ import Sidebar from "../components/sidebar.js";
 
 import useFetchCategoryConfig from "../baseComponents/useFetchCategoryConfig.js";
 import useWindowSize from "../baseComponents/useWindowSize.js";
+import configValidation from "../functions/configValidation.js";
 
 const Categories = () => {
   const { userId } = useParams();
@@ -45,8 +46,11 @@ const Categories = () => {
       ])
     );
 
+    const cleanedCoreLimits =
+      configValidation.cleanAndValidateCoreLimits(coreLimits);
+
     const data = {
-      coreLimits: { ...coreLimits },
+      coreLimits: cleanedCoreLimits,
       subcategories: cleanSubcategoriesUpper,
     };
 

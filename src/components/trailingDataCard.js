@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import datetimeFnc from "../functions/datetimeFnc.js";
 
 const TrailingDataCard = ({
   periodTimes,
@@ -37,14 +38,20 @@ const TrailingDataCard = ({
   }, [periodTimes, subcategories]);
 
   return (
-    <div className="bg-primary rounded-lg p-4 w-44 h-max">
+    <div className="bg-primary rounded-lg p-4 w-44 h-">
       <p className="text-center font-bold">
-        {subcategories.length > 0 ? subcategories : categories}
+        {subcategories.length > 0
+          ? subcategories
+          : categories.includes("WORK") &&
+            categories.includes("LEARN") &&
+            categories.includes("BUILD")
+          ? "PRODUCTIVITY"
+          : categories}
       </p>
       <p className="text-center">
         {categories.length > 0
-          ? (chosenCatSum / 60).toFixed(2)
-          : (chosenSubcatSum / 60).toFixed(2)}
+          ? datetimeFnc.convertMinutesToHHMM(chosenCatSum)
+          : datetimeFnc.convertMinutesToHHMM(chosenSubcatSum)}
       </p>
     </div>
   );
