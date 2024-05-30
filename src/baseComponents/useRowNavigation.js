@@ -5,7 +5,8 @@ const useRowNavigation = (
   userId,
   userActivityData,
   fetchUserActivityData,
-  submit
+  submit,
+  setIsLoading
 ) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowTimeValues, setSelectedRowTimeValues] = useState({
@@ -77,6 +78,7 @@ const useRowNavigation = (
 
   const deleteSelected = useCallback(async () => {
     try {
+      setIsLoading(true);
       if (selectedRows.length > 0) {
         await SDK.deleteUserActivityData(userId, selectedRows);
         fetchUserActivityData();
@@ -85,6 +87,7 @@ const useRowNavigation = (
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
   }, [selectedRows, fetchUserActivityData, userId]);
 
   useEffect(() => {

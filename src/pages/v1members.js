@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { FaSpinner } from "react-icons/fa";
 
 import "../styles/v1members.css";
 import * as SDK from "../sdk_backend_fetch.js";
@@ -18,12 +19,13 @@ import useRowNavigation from "../baseComponents/useRowNavigation.js";
 const Members = () => {
   const { userId } = useParams();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [showUTC, setShowUTC] = useState(false);
   const [queryTimeSum, setQueryTimeSum] = useState(0);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const { subcategories } = useFetchCategoryConfig(userId);
   const { userActivityData, setUserActivityData, fetchUserActivityData } =
-    useUserActivityData(userId, 32);
+    useUserActivityData(userId, 32, setIsLoading);
   const isMobile = useWindowSize();
 
   // SEARCH MODE
@@ -76,6 +78,7 @@ const Members = () => {
   };
 
   const submitSearch = async (event) => {
+    setIsLoading(true);
     const queryParams = new URLSearchParams();
     if (input.description) queryParams.append("description", input.description);
     if (input.category) queryParams.append("category", input.category);
@@ -92,9 +95,11 @@ const Members = () => {
     } catch (error) {
       console.error("Error fetching activity data:", error);
     }
+    setIsLoading(false);
   };
 
   const submitPatch = async (event) => {
+    setIsLoading(true);
     try {
       console.log("Patching data...");
       const idsToPatch = selectedRows;
@@ -119,6 +124,7 @@ const Members = () => {
           adjustment: 0,
         });
         resetForm();
+        setIsLoading(false);
         return;
       }
       await SDK.patchUserActivityData(userId, idsToPatch, updatedInput);
@@ -139,20 +145,23 @@ const Members = () => {
       });
     }
     resetForm();
+    setIsLoading(false);
   };
 
   const submit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     if (isSearchMode) {
-      submitSearch(event);
+      await submitSearch(event);
     } else if (selectedRows.length > 0 && !isSearchMode) {
-      submitPatch(event);
+      await submitPatch(event);
     } else {
       try {
         const updatedInput = activityData.activityEntryValidation(input);
         if (!input.category) {
           alert("Mandatory field: Category");
           resetForm();
+          setIsLoading(false);
           return;
         }
         await SDK.postUserActivityData(userId, updatedInput);
@@ -162,6 +171,7 @@ const Members = () => {
       }
       resetForm();
     }
+    setIsLoading(false);
   };
 
   const {
@@ -171,7 +181,13 @@ const Members = () => {
     deleteSelected,
     setSelectedRows,
     setSelectedRowTimeValues,
-  } = useRowNavigation(userId, userActivityData, fetchUserActivityData, submit);
+  } = useRowNavigation(
+    userId,
+    userActivityData,
+    fetchUserActivityData,
+    submit,
+    setIsLoading
+  );
 
   useEffect(() => {
     const handleEscapePress = (e) => {
@@ -400,7 +416,13 @@ const Members = () => {
             </form>
           </section>
         </div>
-
+        {isLoading && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-gray-100 p-4 rounded-lg shadow-lg flex items-center justify-center">
+              <FaSpinner className="text-4xl text-primary animate-spin" />
+            </div>
+          </div>
+        )}
         <div>
           <table
             id="data"

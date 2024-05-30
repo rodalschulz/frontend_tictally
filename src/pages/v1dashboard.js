@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
+import { FaSpinner } from "react-icons/fa";
 
 import StackedBarChart from "../components/stackedBarChart";
 import TrailingDataCard from "../components/trailingDataCard";
@@ -10,12 +11,13 @@ import PeriodTimesTable from "../components/periodTimesTable";
 
 import Sidebar from "../components/sidebar.js";
 import useCalculatePeriodTimes from "../baseComponents/useCalculatePeriodTimes.js";
-import { FaHandHolding } from "react-icons/fa";
 
 const Dashboard = () => {
   const { userId } = useParams();
+
+  const [isLoading, setIsLoading] = useState(false);
   const { coreLimits } = useFetchCategoryConfig(userId);
-  const { userActivityData } = useUserActivityData(userId, 185);
+  const { userActivityData } = useUserActivityData(userId, 185, setIsLoading);
   const [showTable, setShowTable] = useState(false);
 
   const showTableHandler = () => {
@@ -41,7 +43,13 @@ const Dashboard = () => {
         <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 justify-between items-center">
           Dashboard
         </h1>
-
+        {isLoading && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-gray-100 p-4 rounded-lg shadow-lg flex items-center justify-center">
+              <FaSpinner className="text-4xl text-primary animate-spin" />
+            </div>
+          </div>
+        )}
         <div className="flex flex-grow">
           <div
             className="w-full max-w-7xl bg-custom-grey rounded-lg h-[75vh] xs:min-w-full sm:min-w-0 p-1.5"
