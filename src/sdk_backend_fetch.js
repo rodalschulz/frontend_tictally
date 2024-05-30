@@ -109,7 +109,7 @@ export const postUserActivityData = async (userId, data) => {
   }
 };
 
-export const deleteUserActivityData = async (userId, entryId) => {
+export const deleteUserActivityData = async (userId, entryIds) => {
   try {
     const token = localStorage.getItem("token");
     const headers = {
@@ -122,7 +122,7 @@ export const deleteUserActivityData = async (userId, entryId) => {
       {
         method: "DELETE",
         headers: headers,
-        body: JSON.stringify({ entryId: entryId }),
+        body: JSON.stringify({ entryIds: entryIds }),
       }
     );
     if (!response.ok) {
@@ -136,7 +136,7 @@ export const deleteUserActivityData = async (userId, entryId) => {
   }
 };
 
-export const patchUserActivityData = async (userId, entryId, data) => {
+export const patchUserActivityData = async (userId, entryIds, data) => {
   try {
     const token = localStorage.getItem("token");
     const headers = {
@@ -149,7 +149,7 @@ export const patchUserActivityData = async (userId, entryId, data) => {
       {
         method: "PATCH",
         headers: headers,
-        body: JSON.stringify({ entryId: entryId, data: data }),
+        body: JSON.stringify({ entryIds: entryIds, data: data }),
       }
     );
     if (!response.ok) {

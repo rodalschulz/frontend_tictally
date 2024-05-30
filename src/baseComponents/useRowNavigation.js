@@ -7,23 +7,36 @@ const useRowNavigation = (
   fetchUserActivityData,
   submit
 ) => {
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [selectedRowTimeValues, setSelectedRowTimeValues] = useState({
     startTime: "",
     endTime: "",
     adjustment: 0,
   });
 
-  const handleRowClick = (id, startTime, endTime, adjustment) => {
-    if (selectedRow === id) {
-      setSelectedRow(null);
+  const handleRowClick = (id, startTime, endTime, adjustment, event) => {
+    if (selectedRows.length === 1 && selectedRows.includes(id)) {
+      setSelectedRows([]);
       setSelectedRowTimeValues({
         startTime: "",
         endTime: "",
         adjustment: 0,
       });
+    } else if (event.ctrlKey) {
+      setSelectedRows((prevSelectedRows) => {
+        if (prevSelectedRows.includes(id)) {
+          return prevSelectedRows.filter((rowId) => rowId !== id);
+        } else {
+          return [...prevSelectedRows, id];
+        }
+      });
+      setSelectedRowTimeValues({
+        startTime,
+        endTime,
+        adjustment,
+      });
     } else {
-      setSelectedRow(id);
+      setSelectedRows([id]);
       setSelectedRowTimeValues({
         startTime,
         endTime,
@@ -34,28 +47,28 @@ const useRowNavigation = (
 
   const deleteSelected = useCallback(async () => {
     try {
-      if (selectedRow) {
-        await SDK.deleteUserActivityData(userId, selectedRow);
+      if (selectedRows.length > 0) {
+        await SDK.deleteUserActivityData(userId, selectedRows);
         fetchUserActivityData();
-        setSelectedRow(null);
+        setSelectedRows([]);
       }
     } catch (error) {
       console.error(error);
     }
-  }, [selectedRow, fetchUserActivityData, userId]);
+  }, [selectedRows, fetchUserActivityData, userId]);
 
   useEffect(() => {
     const handleArrowKeyPress = (e) => {
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         e.preventDefault();
         const currentIndex = userActivityData.findIndex(
-          (item) => item.id === selectedRow
+          (item) => item.id === selectedRows[selectedRows.length - 1]
         );
         if (currentIndex !== -1) {
           const nextIndex =
             e.key === "ArrowUp" ? currentIndex - 1 : currentIndex + 1;
           if (nextIndex >= 0 && nextIndex < userActivityData.length) {
-            setSelectedRow(userActivityData[nextIndex].id);
+            setSelectedRows([userActivityData[nextIndex].id]);
             setSelectedRowTimeValues({
               startTime: userActivityData[nextIndex].startTime,
               endTime: userActivityData[nextIndex].endTime,
@@ -63,7 +76,7 @@ const useRowNavigation = (
             });
           }
         } else if (userActivityData.length > 0) {
-          setSelectedRow(userActivityData[0].id);
+          setSelectedRows([userActivityData[0].id]);
           setSelectedRowTimeValues({
             date: userActivityData[0].date,
             startTime: userActivityData[0].startTime,
@@ -77,7 +90,7 @@ const useRowNavigation = (
     return () => {
       window.removeEventListener("keydown", handleArrowKeyPress);
     };
-  }, [selectedRow, userActivityData]);
+  }, [selectedRows, userActivityData]);
 
   useEffect(() => {
     const handleDelPress = (e) => {
@@ -101,11 +114,11 @@ const useRowNavigation = (
   useEffect(() => {
     const handleEscapePress = (e) => {
       if (e.key === "Escape") {
-        setSelectedRow(null);
+        setSelectedRows([]);
         setSelectedRowTimeValues({
-          date: null,
-          startTime: null,
-          endTime: null,
+          startTime: "",
+          endTime: "",
+          adjustment: 0,
         });
       }
     };
@@ -127,11 +140,11 @@ const useRowNavigation = (
   }, [submit]);
 
   return {
-    selectedRow,
+    selectedRows,
     selectedRowTimeValues,
     handleRowClick,
     deleteSelected,
-    setSelectedRow,
+    setSelectedRows,
     setSelectedRowTimeValues,
   };
 };

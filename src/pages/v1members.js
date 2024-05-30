@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import "../styles/v1members.css";
@@ -29,9 +29,6 @@ const Members = () => {
   // SEARCH MODE
   const handleToggleClick = () => {
     setIsSearchMode((prevMode) => !prevMode);
-    if (isSearchMode) {
-      fetchUserActivityData();
-    }
   };
 
   const [input, setInput] = useState({
@@ -100,7 +97,7 @@ const Members = () => {
   const submitPatch = async (event) => {
     try {
       console.log("Patching data...");
-      const idToPatch = selectedRow;
+      const idToPatch = selectedRows;
       const { startTime, endTime, adjustment } = selectedRowTimeValues;
       const updatedInput = activityData.activityPatchValidation(
         input,
@@ -109,7 +106,7 @@ const Members = () => {
         adjustment
       );
       await SDK.patchUserActivityData(userId, idToPatch, updatedInput);
-      setSelectedRow(null);
+      setSelectedRows([]);
       setSelectedRowTimeValues({
         startTime: "",
         endTime: "",
@@ -118,7 +115,7 @@ const Members = () => {
       fetchUserActivityData();
     } catch (error) {
       console.error(error);
-      setSelectedRow(null);
+      setSelectedRows([]);
       setSelectedRowTimeValues({
         startTime: null,
         endTime: null,
@@ -132,7 +129,7 @@ const Members = () => {
     event.preventDefault();
     if (isSearchMode) {
       submitSearch(event);
-    } else if (selectedRow && !isSearchMode) {
+    } else if (selectedRows.length > 0 && !isSearchMode) {
       submitPatch(event);
     } else {
       try {
@@ -146,20 +143,37 @@ const Members = () => {
         fetchUserActivityData();
       } catch (error) {
         console.error(error);
-        resetForm();
       }
       resetForm();
     }
   };
 
   const {
-    selectedRow,
+    selectedRows,
     selectedRowTimeValues,
     handleRowClick,
     deleteSelected,
-    setSelectedRow,
+    setSelectedRows,
     setSelectedRowTimeValues,
   } = useRowNavigation(userId, userActivityData, fetchUserActivityData, submit);
+
+  useEffect(() => {
+    const handleEscapePress = (e) => {
+      if (e.key === "Escape") {
+        setSelectedRows([]);
+        setSelectedRowTimeValues({
+          startTime: "",
+          endTime: "",
+          adjustment: 0,
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleEscapePress);
+    return () => {
+      window.removeEventListener("keydown", handleEscapePress);
+    };
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
@@ -240,11 +254,13 @@ const Members = () => {
                           name="description"
                           type="text"
                           className={`data-input description-input ${
-                            selectedRow ? "description-editMode" : ""
+                            selectedRows.length > 0
+                              ? "description-editMode"
+                              : ""
                           } ${isSearchMode ? "description-searchMode" : ""}`}
                           onChange={handleInputChange}
                           placeholder={
-                            selectedRow
+                            selectedRows.length > 0
                               ? "Edit Mode"
                               : isSearchMode
                               ? "Search Mode"
@@ -378,17 +394,19 @@ const Members = () => {
               {userActivityData.map((activity) => (
                 <tr
                   key={activity.id}
-                  onClick={() =>
+                  onClick={(event) =>
                     handleRowClick(
                       activity.id,
                       activity.startTime,
                       activity.endTime,
-                      activity.adjustment
+                      activity.adjustment,
+                      event
                     )
                   }
                   style={{
-                    backgroundColor:
-                      selectedRow === activity.id ? "#264653" : "transparent",
+                    backgroundColor: selectedRows.includes(activity.id)
+                      ? "#264653"
+                      : "transparent",
                   }}
                 >
                   {!isMobile && (
