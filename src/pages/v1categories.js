@@ -67,15 +67,15 @@ const Categories = () => {
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       <Sidebar userId={userId} />
 
-      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16">
-        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold mr-5 flex justify-between items-center text-white">
-          Category Configuration
-        </h1>
-        <div className="w-44">
-          <div>
+      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16 w-full">
+        <div className="xs:w-[220vw] sm:w-full">
+          <h1 className="w-[100%] text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white">
+            Category Configuration
+          </h1>
+          <div className="w-[100%] overflow-x-auto">
             <form className="flex">
-              <table className="min-w-full rounded-lg bg-secondary shadow-md mr-2">
-                <thead className="bg-secondary rounded-lg text-white">
+              <table className="rounded-lg bg-secondary shadow-md">
+                <thead className="bg-secondary text-white">
                   <tr>
                     <th className="px-7 py-2" colSpan={2}>
                       CORE LIMITS
@@ -99,8 +99,8 @@ const Categories = () => {
                   ))}
                 </tbody>
               </table>
-              <table className="min-w-full rounded-lg shadow-md mr-2">
-                <thead className="bg-secondary rounded-lg text-white">
+              <table className="ml-2 rounded-lg shadow-md">
+                <thead className="bg-secondary text-white">
                   <tr>
                     <th className="px-7 py-2">GENERAL</th>
                     <th className="px-7 py-2">WORK</th>
@@ -137,9 +137,9 @@ const Categories = () => {
               </table>
             </form>
           </div>
-          <div>
+          <div className="mt-2">
             <button
-              className="bg-primary rounded-lg p-4 mt-2 text-white font-bold"
+              className="bg-primary rounded-lg p-4 text-white font-bold"
               onClick={submitForm}
             >
               Submit

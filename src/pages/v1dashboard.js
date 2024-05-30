@@ -40,7 +40,7 @@ const Dashboard = () => {
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       <Sidebar userId={userId} />
       <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16">
-        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 justify-between items-center">
+        <h1 className="sm:min-w-[1400px] xs:w-[1300px] sm:w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 justify-between items-center">
           Dashboard
         </h1>
         {isLoading && (
@@ -50,9 +50,9 @@ const Dashboard = () => {
             </div>
           </div>
         )}
-        <div className="flex flex-grow">
+        <div className="flex flex-grow xs:w-[1300px] sm:w-full sm:h-full">
           <div
-            className="w-full max-w-7xl bg-custom-grey rounded-lg h-[75vh] xs:min-w-full sm:min-w-0 p-1.5"
+            className="w-full bg-custom-grey rounded-lg xs:h-[570px] sm:h-[80vh] xs:min-w-[800px] sm:min-w-[70vw] p-1.5"
             style={{ minHeight: "500px" }}
           >
             <StackedBarChart
@@ -61,8 +61,11 @@ const Dashboard = () => {
             />
           </div>
           {!showTable ? (
-            <div className="flex ml-2" onClick={showTableHandler}>
-              <div>
+            <div
+              className="flex ml-2 w-[550px] max-h-[570px] overflow-scroll sm:w-full sm:min-h-[80vh]"
+              onClick={showTableHandler}
+            >
+              <div className="w-full">
                 <div className="bg-secondary rounded-lg mb-2 text-white font-bold text-center">
                   <h2>LAST 30 DAYS</h2>
                 </div>
@@ -105,11 +108,17 @@ const Dashboard = () => {
                 <div className="mb-2">
                   <TrailingDataCard
                     periodTimes={periodTimes30D}
+                    categories={["CORE"]}
+                  />
+                </div>
+                <div className="mb-2">
+                  <TrailingDataCard
+                    periodTimes={periodTimes30D}
                     categories={["WASTE"]}
                   />
                 </div>
               </div>
-              <div>
+              <div className="w-full mr-2">
                 <div className="bg-secondary rounded-lg ml-2 mb-2 text-white font-bold text-center">
                   <h2>LAST 7 DAYS</h2>
                 </div>
@@ -152,6 +161,12 @@ const Dashboard = () => {
                 <div className="ml-2 mb-2">
                   <TrailingDataCard
                     periodTimes={periodTimes7D}
+                    categories={["CORE"]}
+                  />
+                </div>
+                <div className="ml-2 mb-2">
+                  <TrailingDataCard
+                    periodTimes={periodTimes7D}
                     categories={["WASTE"]}
                   />
                 </div>
@@ -159,7 +174,7 @@ const Dashboard = () => {
             </div>
           ) : (
             <div
-              className="overflow-scroll h-[75vh] ml-2"
+              className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[570px] sm:min-h-[80vh] overflow-auto"
               onClick={showTableHandler}
             >
               <PeriodTimesTable

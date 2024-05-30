@@ -3,13 +3,13 @@ import datetimeFnc from "../functions/datetimeFnc.js";
 
 const PeriodTimesTable = ({ periodTimes, timeframe }) => {
   return (
-    <div className="bg-primary rounded-lg p-1.5">
-      <table className="bg-custom-lightblue">
+    <div className="rounded-lg w-full h-full bg-primary overflow-auto p-2">
+      <table className="">
         <thead>
           <tr>
             <th className="px-4">Category</th>
             <th className="px-4">Subcategory</th>
-            <th className="px-4">Total Minutes</th>
+            <th className="px-4">Total</th>
             <th className="px-4">Day Avg</th>
           </tr>
         </thead>
@@ -19,7 +19,7 @@ const PeriodTimesTable = ({ periodTimes, timeframe }) => {
               <React.Fragment key={category}>
                 <tr className="">
                   <td
-                    className="px-4"
+                    className="px-2"
                     rowSpan={Object.keys(periodTimes[category]).length + 1}
                   >
                     {category}
@@ -32,13 +32,13 @@ const PeriodTimesTable = ({ periodTimes, timeframe }) => {
                       key={`${category}-${subcategory}`}
                       className={subcategory === "TOTAL" ? "bg-gray-300" : ""}
                     >
-                      <td className="px-4">{subcategory}</td>
-                      <td className="px-4 text-right">
+                      <td className="px-2">{subcategory}</td>
+                      <td className="px-2 text-right">
                         {datetimeFnc.convertMinutesToHHMM(
                           periodTimes[category][subcategory]
                         )}
                       </td>
-                      <td className="px-4 text-right">
+                      <td className="px-2 text-right">
                         {datetimeFnc.convertMinutesToHHMM(
                           Math.floor(periodTimes[category][subcategory] / 30)
                         )}

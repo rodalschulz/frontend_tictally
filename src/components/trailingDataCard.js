@@ -38,7 +38,7 @@ const TrailingDataCard = ({
   }, [periodTimes, subcategories]);
 
   return (
-    <div className="bg-primary rounded-lg p-4 w-44 h-">
+    <div className="bg-primary rounded-lg p-4 w-full">
       <p className="text-center font-bold">
         {subcategories.length > 0
           ? subcategories
