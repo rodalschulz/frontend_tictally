@@ -1,5 +1,5 @@
 import * as SDK from "../sdk_backend_fetch.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ onLogin }) => {
@@ -8,6 +8,17 @@ const Login = ({ onLogin }) => {
     password: "",
   });
   const navigate = useNavigate();
+  const [rememberMe, setRememberMe] = useState(false);
+
+  useEffect(() => {
+    const username = localStorage.getItem("username");
+    if (username) {
+      setInput({
+        ...input,
+        username: username,
+      });
+    }
+  }, []);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -17,25 +28,41 @@ const Login = ({ onLogin }) => {
     });
   };
 
+  const handleCheckboxChange = (event) => {
+    setRememberMe(event.target.checked);
+  };
+
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
       const user = await SDK.loginUser(input.username, input.password);
+
+      if (user.token) {
+        if (rememberMe) {
+          localStorage.setItem("username", input.username);
+          console.log(input.username);
+        }
+        localStorage.setItem("token", user.token);
+        onLogin(user.id);
+        navigate(`/members/${user.id}/tally`);
+        setInput({
+          username: "",
+          password: "",
+        });
+      } else {
+        alert("Wrong username or password!");
+        console.log("Something went wrong!");
+        setInput({
+          username: "",
+          password: "",
+        });
+      }
+    } catch (error) {
+      console.error(error);
       setInput({
         username: "",
         password: "",
       });
-
-      if (user.token) {
-        localStorage.setItem("token", user.token);
-        onLogin(user.id);
-        navigate(`/members/${user.id}/tally`);
-      } else {
-        alert("Wrong username or password!");
-        console.log("Something went wrong!");
-      }
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -89,6 +116,8 @@ const Login = ({ onLogin }) => {
                   id="remember"
                   aria-describedby="remember"
                   type="checkbox"
+                  checked={rememberMe}
+                  onChange={handleCheckboxChange}
                   className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
                 />
               </div>

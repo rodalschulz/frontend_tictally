@@ -8,10 +8,10 @@ const PeriodTimesTable = ({ periodTimes, timeframe, title }) => {
       <table className="table-auto w-full border-collapse border border-gray-300">
         <thead>
           <tr>
-            <th className="px-4 border border-gray-300">Category</th>
-            <th className="px-4 border border-gray-300">Subcategory</th>
-            <th className="px-4 border border-gray-300">Total</th>
-            <th className="px-4 border border-gray-300">Day Avg</th>
+            <th className="px-4 border border-gray-300 text-sm">Category</th>
+            <th className="px-4 border border-gray-300 text-sm">Subcategory</th>
+            <th className="px-4 border border-gray-300 text-sm">Total</th>
+            <th className="px-4 border border-gray-300 text-sm">Day Avg</th>
           </tr>
         </thead>
         <tbody>
@@ -43,7 +43,10 @@ const PeriodTimesTable = ({ periodTimes, timeframe, title }) => {
                       </td>
                       <td className="px-2 text-center border border-gray-300">
                         {datetimeFnc.convertMinutesToHHMM(
-                          Math.floor(periodTimes[category][subcategory] / 30)
+                          Math.floor(
+                            periodTimes[category][subcategory] /
+                              (timeframe === "30D" ? 30 : 7)
+                          )
                         )}
                       </td>
                     </tr>
