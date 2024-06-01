@@ -15,6 +15,7 @@ import useFetchCategoryConfig from "../baseComponents/useFetchCategoryConfig.js"
 import useWindowSize from "../baseComponents/useWindowSize.js";
 import useUserActivityData from "../baseComponents/useUserActivityData.js";
 import useRowNavigation from "../baseComponents/useRowNavigation.js";
+import Instructions from "../components/instructions.js";
 
 const Members = () => {
   const { userId } = useParams();
@@ -22,6 +23,7 @@ const Members = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showUTC, setShowUTC] = useState(false);
   const [queryTimeSum, setQueryTimeSum] = useState(0);
+  const [displayInstructions, setDisplayInstructions] = useState(false);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const { subcategories } = useFetchCategoryConfig(userId);
   const { userActivityData, setUserActivityData, fetchUserActivityData } =
@@ -214,6 +216,8 @@ const Members = () => {
         isMobile={isMobile}
         submit={submit}
         remove={deleteSelected}
+        displayInstructions={displayInstructions}
+        setDisplayInstructions={setDisplayInstructions}
       />
       <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16 xs:max-w-full sm:max-w-[2000px]">
         <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 flex justify-between items-center">
@@ -423,6 +427,10 @@ const Members = () => {
             </div>
           </div>
         )}
+        {!isLoading &&
+          (userActivityData.length === 0 || displayInstructions) && (
+            <Instructions pageName="tally" />
+          )}
         <div>
           <table
             id="data"

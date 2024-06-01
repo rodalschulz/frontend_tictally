@@ -22,6 +22,10 @@ const Register = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
+      if (input.username.includes(" ")) {
+        alert("Username cannot contain spaces.");
+        return;
+      }
       const response = await SDK.registerUser(
         input.email,
         input.username,

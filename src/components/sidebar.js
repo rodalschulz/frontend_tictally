@@ -5,12 +5,20 @@ import {
   FaList,
   FaTags,
   FaSignOutAlt,
+  FaRegQuestionCircle,
 } from "react-icons/fa";
 import { MdDeleteForever, MdOutlinePlaylistAdd } from "react-icons/md";
 import SidebarButton from "../baseComponents/sidebarButton";
 import * as SDK from "../sdk_backend_fetch";
 
-const Sidebar = ({ userId, isMobile, submit, remove }) => {
+const Sidebar = ({
+  userId,
+  isMobile,
+  submit,
+  remove,
+  displayInstructions,
+  setDisplayInstructions,
+}) => {
   // NAVIGATION
   const navigateDashboard = () => {
     window.location.href = `/members/${userId}/dashboard`;
@@ -20,6 +28,11 @@ const Sidebar = ({ userId, isMobile, submit, remove }) => {
   };
   const navigateCategories = () => {
     window.location.href = `/members/${userId}/categories`;
+  };
+
+  // OTHERS
+  const displayInstructionsHandler = () => {
+    setDisplayInstructions(!displayInstructions);
   };
 
   const logOut = async () => {
@@ -53,6 +66,10 @@ const Sidebar = ({ userId, isMobile, submit, remove }) => {
           )}
         </div>
         <div className="space-y-4 mt-auto p-2 xs:mb-20 sm:mb-0">
+          <SidebarButton
+            onClick={displayInstructionsHandler}
+            icon={<FaRegQuestionCircle />}
+          />
           <SidebarButton onClick={logOut} icon={<FaSignOutAlt />} />
         </div>
       </div>

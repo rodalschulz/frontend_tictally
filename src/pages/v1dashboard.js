@@ -11,11 +11,13 @@ import PeriodTimesTable from "../components/periodTimesTable";
 
 import Sidebar from "../components/sidebar.js";
 import useCalculatePeriodTimes from "../baseComponents/useCalculatePeriodTimes.js";
+import Instructions from "../components/instructions.js";
 
 const Dashboard = () => {
   const { userId } = useParams();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [displayInstructions, setDisplayInstructions] = useState(false);
   const { coreLimits } = useFetchCategoryConfig(userId);
   const { userActivityData } = useUserActivityData(userId, 185, setIsLoading);
   const [showTable, setShowTable] = useState(false);
@@ -45,7 +47,11 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
-      <Sidebar userId={userId} />
+      <Sidebar
+        userId={userId}
+        displayInstructions={displayInstructions}
+        setDisplayInstructions={setDisplayInstructions}
+      />
       <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16">
         <h1 className="sm:min-w-[1400px] xs:w-[1300px] sm:w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 justify-between items-center">
           Dashboard
@@ -57,6 +63,10 @@ const Dashboard = () => {
             </div>
           </div>
         )}
+        {!isLoading &&
+          (userActivityData.length === 0 || displayInstructions) && (
+            <Instructions pageName="dashboard" />
+          )}
         <div className="flex flex-grow xs:w-[1300px] sm:w-full sm:h-full">
           <div
             className="w-full bg-custom-grey rounded-lg xs:h-[570px] sm:h-[80vh] xs:min-w-[800px] sm:min-w-[70vw] p-1.5"

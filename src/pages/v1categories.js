@@ -3,20 +3,57 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import Sidebar from "../components/sidebar.js";
-
 import useFetchCategoryConfig from "../baseComponents/useFetchCategoryConfig.js";
 import useWindowSize from "../baseComponents/useWindowSize.js";
 import configValidation from "../functions/configValidation.js";
+import Instructions from "../components/instructions.js";
 
 const Categories = () => {
   const { userId } = useParams();
-  const { subcategories, coreLimits, setCoreLimits, setSubcategories } =
-    useFetchCategoryConfig(userId);
+  const {
+    subcategories: fetchedSubcategories,
+    coreLimits: fetchedCoreLimits,
+    setCoreLimits,
+    setSubcategories,
+  } = useFetchCategoryConfig(userId);
   const isMobile = useWindowSize();
+  const [displayInstructions, setDisplayInstructions] = useState(false);
+
+  const defaultCoreLimits = {
+    SLEEP: "",
+    EAT: "",
+    GROOM: "",
+    FITNESS: "",
+    RELIEF: "",
+    INFORM: "",
+  };
+
+  const defaultSubcategories = {
+    GENERAL: Array(10).fill(""),
+    WORK: Array(10).fill(""),
+    LEARN: Array(10).fill(""),
+    BUILD: Array(10).fill(""),
+    RECOVERY: Array(10).fill(""),
+  };
+
+  const [coreLimits, setCoreLimitsState] = useState(defaultCoreLimits);
+  const [subcategories, setSubcategoriesState] = useState(defaultSubcategories);
+
+  useEffect(() => {
+    if (fetchedCoreLimits && Object.keys(fetchedCoreLimits).length > 0) {
+      setCoreLimitsState(fetchedCoreLimits);
+    }
+  }, [fetchedCoreLimits]);
+
+  useEffect(() => {
+    if (fetchedSubcategories && Object.keys(fetchedSubcategories).length > 0) {
+      setSubcategoriesState(fetchedSubcategories);
+    }
+  }, [fetchedSubcategories]);
 
   const handleInputChange = (event, rowIndex, columnIndex, category) => {
     const { value } = event.target;
-    setSubcategories((prevSubcategories) => {
+    setSubcategoriesState((prevSubcategories) => {
       const newSubcategories = { ...prevSubcategories };
       newSubcategories[category][rowIndex] = value;
       return newSubcategories;
@@ -25,7 +62,7 @@ const Categories = () => {
 
   const handleCoreLimitChange = (event) => {
     const { name, value } = event.target;
-    setCoreLimits((prevCoreLimits) => ({
+    setCoreLimitsState((prevCoreLimits) => ({
       ...prevCoreLimits,
       [name]: value,
     }));
@@ -65,13 +102,18 @@ const Categories = () => {
 
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
-      <Sidebar userId={userId} />
+      <Sidebar
+        userId={userId}
+        displayInstructions={displayInstructions}
+        setDisplayInstructions={setDisplayInstructions}
+      />
 
       <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16 w-full">
         <div className="xs:w-[220vw] sm:w-full">
           <h1 className="w-[100%] text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white">
             Category Configuration
           </h1>
+          {displayInstructions && <Instructions pageName="config" />}
           <div className="w-[100%] overflow-x-auto">
             <form className="flex">
               <table className="rounded-lg bg-secondary shadow-md">
