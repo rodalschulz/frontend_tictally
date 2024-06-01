@@ -19,10 +19,17 @@ const Dashboard = () => {
   const { coreLimits } = useFetchCategoryConfig(userId);
   const { userActivityData } = useUserActivityData(userId, 185, setIsLoading);
   const [showTable, setShowTable] = useState(false);
+  const [showTable7D, setShowTable7D] = useState(false);
+  const [showTable30D, setShowTable30D] = useState(false);
 
   const showTableHandler = () => {
     setShowTable(!showTable);
-    console.log("showTable", showTable);
+    setShowTable30D(!showTable30D);
+  };
+
+  const showTableHandler2 = () => {
+    setShowTable(!showTable);
+    setShowTable7D(!showTable7D);
   };
 
   const periodTimes30D = useCalculatePeriodTimes(
@@ -60,12 +67,9 @@ const Dashboard = () => {
               coreLimits={coreLimits}
             />
           </div>
-          {!showTable ? (
-            <div
-              className="flex ml-2 w-[550px] max-h-[570px] overflow-scroll sm:w-full sm:min-h-[80vh]"
-              onClick={showTableHandler}
-            >
-              <div className="w-full">
+          {!showTable && !showTable30D && !showTable7D ? (
+            <div className="flex ml-2 w-[550px] max-h-[570px] overflow-scroll sm:w-full sm:min-h-[80vh]">
+              <div className="w-full" onClick={showTableHandler}>
                 <div className="bg-secondary rounded-lg mb-2 text-white font-bold text-center">
                   <h2>LAST 30 DAYS</h2>
                 </div>
@@ -118,7 +122,7 @@ const Dashboard = () => {
                   />
                 </div>
               </div>
-              <div className="w-full mr-2">
+              <div className="w-full mr-2" onClick={showTableHandler2}>
                 <div className="bg-secondary rounded-lg ml-2 mb-2 text-white font-bold text-center">
                   <h2>LAST 7 DAYS</h2>
                 </div>
@@ -173,15 +177,31 @@ const Dashboard = () => {
               </div>
             </div>
           ) : (
-            <div
-              className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[570px] sm:min-h-[80vh] overflow-auto"
-              onClick={showTableHandler}
-            >
-              <PeriodTimesTable
-                periodTimes={periodTimes30D}
-                timeframe={"30D"}
-              />
-            </div>
+            {
+              ...(showTable && showTable30D ? (
+                <div
+                  className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[570px] sm:min-h-[80vh] overflow-auto"
+                  onClick={showTableHandler}
+                >
+                  <PeriodTimesTable
+                    periodTimes={periodTimes30D}
+                    timeframe={"30D"}
+                    title={"Last 30 Days"}
+                  />
+                </div>
+              ) : (
+                <div
+                  className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[570px] sm:min-h-[80vh] overflow-auto"
+                  onClick={showTable7D ? showTableHandler2 : showTableHandler}
+                >
+                  <PeriodTimesTable
+                    periodTimes={periodTimes7D}
+                    timeframe={"7D"}
+                    title={"Last 7 Days"}
+                  />
+                </div>
+              )),
+            }
           )}
         </div>
       </main>

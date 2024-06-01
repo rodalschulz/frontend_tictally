@@ -1,16 +1,17 @@
 import React from "react";
 import datetimeFnc from "../functions/datetimeFnc.js";
 
-const PeriodTimesTable = ({ periodTimes, timeframe }) => {
+const PeriodTimesTable = ({ periodTimes, timeframe, title }) => {
   return (
-    <div className="rounded-lg w-full h-full bg-primary overflow-auto p-2">
-      <table className="">
+    <div className="rounded-lg w-full h-full bg-white overflow-auto p-2">
+      <h1 className="text-center text-2xl pb-2">{title}</h1>
+      <table className="table-auto w-full border-collapse border border-gray-300">
         <thead>
           <tr>
-            <th className="px-4">Category</th>
-            <th className="px-4">Subcategory</th>
-            <th className="px-4">Total</th>
-            <th className="px-4">Day Avg</th>
+            <th className="px-4 border border-gray-300">Category</th>
+            <th className="px-4 border border-gray-300">Subcategory</th>
+            <th className="px-4 border border-gray-300">Total</th>
+            <th className="px-4 border border-gray-300">Day Avg</th>
           </tr>
         </thead>
         <tbody>
@@ -19,7 +20,7 @@ const PeriodTimesTable = ({ periodTimes, timeframe }) => {
               <React.Fragment key={category}>
                 <tr className="">
                   <td
-                    className="px-2"
+                    className="px-2 border border-gray-300"
                     rowSpan={Object.keys(periodTimes[category]).length + 1}
                   >
                     {category}
@@ -30,15 +31,17 @@ const PeriodTimesTable = ({ periodTimes, timeframe }) => {
                   .map((subcategory) => (
                     <tr
                       key={`${category}-${subcategory}`}
-                      className={subcategory === "TOTAL" ? "bg-gray-300" : ""}
+                      className={
+                        subcategory === "TOTAL" ? "bg-primary text-white" : ""
+                      }
                     >
                       <td className="px-2">{subcategory}</td>
-                      <td className="px-2 text-right">
+                      <td className="px-2 text-center border border-gray-300">
                         {datetimeFnc.convertMinutesToHHMM(
                           periodTimes[category][subcategory]
                         )}
                       </td>
-                      <td className="px-2 text-right">
+                      <td className="px-2 text-center border border-gray-300">
                         {datetimeFnc.convertMinutesToHHMM(
                           Math.floor(periodTimes[category][subcategory] / 30)
                         )}
