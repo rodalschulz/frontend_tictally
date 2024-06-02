@@ -45,14 +45,18 @@ const Instructions = ({ pageName }) => {
   );
 
   const configInstructions = (
-    <div className="bg-primary rounded-lg px-5 py-4 text-white mt-20 ml-10 w-[50%] min-w-[300px] max-w-[800px] absolute bg-opacity-95">
+    <div className="bg-primary rounded-lg px-5 py-4 text-white mt-20 ml-10 w-[50%] min-w-[300px] max-w-[800px] absolute bg-opacity-90">
       <h1 className="mb-2 font-bold text-center text-lg">
         Welcome to your configuration page!
       </h1>
       <p>
         Here you can create your own custom subcategories and core limits. Your
-        subcategories will be saved to the database and will be reflected in the
-        My Tally page.
+        subcategories will be saved and will be reflected in your Tally. You can
+        also modify your core subcategory limits here. They will help determine
+        the total time spent in CORE activities; as an example, if you set a
+        core limit of 7 hours for SLEEP, but you input 8 hours of sleep, only 7
+        of those will be counted towards your total core time and the rest will
+        be classified as WASTE.
       </p>
     </div>
   );

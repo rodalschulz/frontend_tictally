@@ -236,267 +236,269 @@ const Members = () => {
           </span>
         </h1>
 
-        <div>
-          <section id="input-header">
-            <form ref={formRef} onSubmit={submit}>
-              <table
-                id="input-table"
-                className="sm:min-w-[1400px] w-full text-white text-sm mr-5 rounded-[7px] bg-gray-800"
-              >
-                <thead>
-                  <tr>
-                    {!isMobile && <th>Entry/Search</th>}
-                    {!isMobile && <th>DATE</th>}
-                    {!isMobile && <th>DESCRIPTION</th>}
-                    <th>CATEG</th>
-                    <th>SUBCAT</th>
-                    <th>START</th>
-                    <th>END</th>
-                    {!isMobile && <th>ADJ</th>}
-                    <th>TIME</th>
-                    {showUTC && !isMobile && (
-                      <>
-                        <th>UTC</th>
-                        <th>CREATED UTC</th>
-                        <th>UPDATED UTC</th>
-                      </>
-                    )}
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    {!isMobile && (
-                      <td>
-                        {" "}
-                        <EntrySearchToggleButton
-                          isSearchMode={isSearchMode}
-                          handleClick={handleToggleClick}
-                        />
-                      </td>
-                    )}
-                    {!isMobile && (
-                      <td className="input-name">
-                        <input
-                          name="date"
-                          type="date"
-                          className="data-input"
-                          onChange={handleInputChange}
-                        />
-                      </td>
-                    )}
-                    {!isMobile && (
-                      <td>
-                        <input
-                          name="description"
-                          type="text"
-                          className={`data-input description-input ${
-                            selectedRows.length > 0
-                              ? "description-editMode"
-                              : ""
-                          } ${isSearchMode ? "description-searchMode" : ""}`}
-                          onChange={handleInputChange}
-                          placeholder={
-                            selectedRows.length > 0
-                              ? "Edit Mode"
-                              : isSearchMode
-                              ? "Search Mode"
-                              : "Entry Mode"
-                          }
-                        />
-                      </td>
-                    )}
-                    <td>
-                      <select
-                        name="category"
-                        className="data-input"
-                        onChange={handleInputChange}
-                      >
-                        <option value="">Select</option>
-                        <option value="GENERAL">GENERAL</option>
-                        <option value="WORK">WORK</option>
-                        <option value="CORE">CORE</option>
-                        <option value="LEARN">LEARN</option>
-                        <option value="BUILD">BUILD</option>
-                        <option value="RECOVERY">RECOVERY</option>
-                      </select>
-                    </td>
-                    <td>
-                      {isSearchMode ? (
-                        <input
-                          name="subcategory"
-                          type="text"
-                          className="data-input"
-                          onChange={handleInputChange}
-                        />
-                      ) : input.category === "CORE" ? (
-                        <select
-                          name="subcategory"
-                          className="data-input"
-                          onChange={handleInputChange}
-                          value={input.subcategory || ""}
-                        >
-                          <option value="">Select</option>
-                          <option value="SLEEP">SLEEP</option>
-                          <option value="EAT">EAT</option>
-                          <option value="GROOM">GROOM</option>
-                          <option value="FITNESS">FITNESS</option>
-                          <option value="RELIEF">RELIEF</option>
-                          <option value="INFORM">INFORM</option>
-                        </select>
-                      ) : (
-                        <select
-                          name="subcategory"
-                          className="data-input"
-                          onChange={handleInputChange}
-                          value={input.subcategory || ""}
-                        >
-                          <option value="">Select</option>
-                          {subcategories[input.category]?.map(
-                            (subcat, index) => (
-                              <option key={index} value={subcat}>
-                                {subcat}
-                              </option>
-                            )
-                          )}
-                        </select>
-                      )}
-                    </td>
-                    <td>
-                      <input
-                        name="startTime"
-                        type="time"
-                        className="data-input"
-                        onChange={handleInputChange}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        name="endTime"
-                        type="time"
-                        className="data-input"
-                        onChange={handleInputChange}
-                      />
-                    </td>
-
-                    {!isMobile && (
-                      <td>
-                        <input
-                          name="adjustment"
-                          type="text"
-                          className="data-input"
-                          onChange={handleInputChange}
-                          placeholder="mins"
-                        />
-                      </td>
-                    )}
-                    <td className="text-[13px]">
-                      {isSearchMode
-                        ? datetimeFnc.convertMinutesToHHMM(queryTimeSum)
-                        : "-"}
-                    </td>
-                    {showUTC && !isMobile && (
-                      <>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </>
-                    )}
-                  </tr>
-                  {isSearchMode && (
-                    <tr>
-                      <td></td>
-                      <td className="input-name">
-                        <input
-                          name="date2"
-                          type="date"
-                          className="data-input"
-                          onChange={handleInputChange}
-                        />
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </form>
-          </section>
-        </div>
-        {isLoading && (
-          <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div className="bg-gray-100 p-4 rounded-lg shadow-lg flex items-center justify-center">
-              <FaSpinner className="text-4xl text-primary animate-spin" />
-            </div>
-          </div>
-        )}
-        {!isLoading &&
-          (userActivityData.length === 0 || displayInstructions) && (
-            <Instructions pageName="tally" />
-          )}
-        <div>
-          <table
-            id="data"
-            className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px] mr-5 mt-3"
-          >
-            <tbody>
-              {userActivityData.map((activity) => (
-                <tr
-                  key={activity.id}
-                  onClick={(event) =>
-                    handleRowClick(
-                      activity.id,
-                      activity.startTime,
-                      activity.endTime,
-                      activity.adjustment,
-                      event
-                    )
-                  }
-                  style={{
-                    backgroundColor: selectedRows.includes(activity.id)
-                      ? "#264653"
-                      : "transparent",
-                  }}
+        <div className="">
+          <div className="sticky top-1">
+            <section id="input-header" className="">
+              <form ref={formRef} onSubmit={submit}>
+                <table
+                  id="input-table"
+                  className="sm:min-w-[1400px] w-full text-white text-sm mr-5 rounded-[7px] bg-gray-800"
                 >
-                  {!isMobile && (
-                    <td>{datetimeFnc.getWeekDay(activity.date)}</td>
-                  )}
-                  {!isMobile && (
+                  <thead>
+                    <tr>
+                      {!isMobile && <th>Entry/Search</th>}
+                      {!isMobile && <th>DATE</th>}
+                      {!isMobile && <th>DESCRIPTION</th>}
+                      <th>CATEG</th>
+                      <th>SUBCAT</th>
+                      <th>START</th>
+                      <th>END</th>
+                      {!isMobile && <th>ADJ</th>}
+                      <th>TIME</th>
+                      {showUTC && !isMobile && (
+                        <>
+                          <th>UTC</th>
+                          <th>CREATED UTC</th>
+                          <th>UPDATED UTC</th>
+                        </>
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      {!isMobile && (
+                        <td>
+                          {" "}
+                          <EntrySearchToggleButton
+                            isSearchMode={isSearchMode}
+                            handleClick={handleToggleClick}
+                          />
+                        </td>
+                      )}
+                      {!isMobile && (
+                        <td className="input-name">
+                          <input
+                            name="date"
+                            type="date"
+                            className="data-input"
+                            onChange={handleInputChange}
+                          />
+                        </td>
+                      )}
+                      {!isMobile && (
+                        <td>
+                          <input
+                            name="description"
+                            type="text"
+                            className={`data-input description-input ${
+                              selectedRows.length > 0
+                                ? "description-editMode"
+                                : ""
+                            } ${isSearchMode ? "description-searchMode" : ""}`}
+                            onChange={handleInputChange}
+                            placeholder={
+                              selectedRows.length > 0
+                                ? "Edit Mode"
+                                : isSearchMode
+                                ? "Search Mode"
+                                : "Entry Mode"
+                            }
+                          />
+                        </td>
+                      )}
+                      <td>
+                        <select
+                          name="category"
+                          className="data-input"
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select</option>
+                          <option value="GENERAL">GENERAL</option>
+                          <option value="WORK">WORK</option>
+                          <option value="CORE">CORE</option>
+                          <option value="LEARN">LEARN</option>
+                          <option value="BUILD">BUILD</option>
+                          <option value="RECOVERY">RECOVERY</option>
+                        </select>
+                      </td>
+                      <td>
+                        {isSearchMode ? (
+                          <input
+                            name="subcategory"
+                            type="text"
+                            className="data-input"
+                            onChange={handleInputChange}
+                          />
+                        ) : input.category === "CORE" ? (
+                          <select
+                            name="subcategory"
+                            className="data-input"
+                            onChange={handleInputChange}
+                            value={input.subcategory || ""}
+                          >
+                            <option value="">Select</option>
+                            <option value="SLEEP">SLEEP</option>
+                            <option value="EAT">EAT</option>
+                            <option value="GROOM">GROOM</option>
+                            <option value="FITNESS">FITNESS</option>
+                            <option value="RELIEF">RELIEF</option>
+                            <option value="INFORM">INFORM</option>
+                          </select>
+                        ) : (
+                          <select
+                            name="subcategory"
+                            className="data-input"
+                            onChange={handleInputChange}
+                            value={input.subcategory || ""}
+                          >
+                            <option value="">Select</option>
+                            {subcategories[input.category]?.map(
+                              (subcat, index) => (
+                                <option key={index} value={subcat}>
+                                  {subcat}
+                                </option>
+                              )
+                            )}
+                          </select>
+                        )}
+                      </td>
+                      <td>
+                        <input
+                          name="startTime"
+                          type="time"
+                          className="data-input"
+                          onChange={handleInputChange}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          name="endTime"
+                          type="time"
+                          className="data-input"
+                          onChange={handleInputChange}
+                        />
+                      </td>
+
+                      {!isMobile && (
+                        <td>
+                          <input
+                            name="adjustment"
+                            type="text"
+                            className="data-input"
+                            onChange={handleInputChange}
+                            placeholder="mins"
+                          />
+                        </td>
+                      )}
+                      <td className="text-[13px]">
+                        {isSearchMode
+                          ? datetimeFnc.convertMinutesToHHMM(queryTimeSum)
+                          : "-"}
+                      </td>
+                      {showUTC && !isMobile && (
+                        <>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </>
+                      )}
+                    </tr>
+                    {isSearchMode && (
+                      <tr>
+                        <td></td>
+                        <td className="input-name">
+                          <input
+                            name="date2"
+                            type="date"
+                            className="data-input"
+                            onChange={handleInputChange}
+                          />
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </form>
+            </section>
+          </div>
+          {isLoading && (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div className="bg-gray-100 p-4 rounded-lg shadow-lg flex items-center justify-center">
+                <FaSpinner className="text-4xl text-primary animate-spin" />
+              </div>
+            </div>
+          )}
+          {!isLoading &&
+            (userActivityData.length === 0 || displayInstructions) && (
+              <Instructions pageName="tally" />
+            )}
+          <div>
+            <table
+              id="data"
+              className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px] mr-5 mt-3"
+            >
+              <tbody>
+                {userActivityData.map((activity) => (
+                  <tr
+                    key={activity.id}
+                    onClick={(event) =>
+                      handleRowClick(
+                        activity.id,
+                        activity.startTime,
+                        activity.endTime,
+                        activity.adjustment,
+                        event
+                      )
+                    }
+                    style={{
+                      backgroundColor: selectedRows.includes(activity.id)
+                        ? "#264653"
+                        : "transparent",
+                    }}
+                  >
+                    {!isMobile && (
+                      <td>{datetimeFnc.getWeekDay(activity.date)}</td>
+                    )}
+                    {!isMobile && (
+                      <td>
+                        {datetimeFnc.getDDMMYYYY(activity.date.slice(0, 10))}
+                      </td>
+                    )}
+                    {!isMobile && <td>{activity.description}</td>}
+                    <td>{activity.category}</td>
+                    <td>{activity.subcategory}</td>
+                    <td>{activity.startTime}</td>
+                    <td>{activity.endTime}</td>
+                    {!isMobile && (
+                      <td>
+                        {activity.adjustment === 0 ? "-" : activity.adjustment}
+                      </td>
+                    )}
                     <td>
-                      {datetimeFnc.getDDMMYYYY(activity.date.slice(0, 10))}
+                      {datetimeFnc.convertMinutesToHHMM(activity.totalTimeMin)}
                     </td>
-                  )}
-                  {!isMobile && <td>{activity.description}</td>}
-                  <td>{activity.category}</td>
-                  <td>{activity.subcategory}</td>
-                  <td>{activity.startTime}</td>
-                  <td>{activity.endTime}</td>
-                  {!isMobile && (
-                    <td>
-                      {activity.adjustment === 0 ? "-" : activity.adjustment}
-                    </td>
-                  )}
-                  <td>
-                    {datetimeFnc.convertMinutesToHHMM(activity.totalTimeMin)}
-                  </td>
-                  {showUTC && !isMobile && (
-                    <>
-                      <td>{activity.timezone}</td>
-                      <td>{`${activity.createdAt.slice(
-                        11,
-                        16
-                      )} ${datetimeFnc.getDDMMYY(
-                        activity.createdAt.slice(0, 10)
-                      )}`}</td>
-                      <td>{`${activity.updatedAt.slice(
-                        11,
-                        16
-                      )} ${datetimeFnc.getDDMMYY(
-                        activity.updatedAt.slice(0, 10)
-                      )}`}</td>
-                    </>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    {showUTC && !isMobile && (
+                      <>
+                        <td>{activity.timezone}</td>
+                        <td>{`${activity.createdAt.slice(
+                          11,
+                          16
+                        )} ${datetimeFnc.getDDMMYY(
+                          activity.createdAt.slice(0, 10)
+                        )}`}</td>
+                        <td>{`${activity.updatedAt.slice(
+                          11,
+                          16
+                        )} ${datetimeFnc.getDDMMYY(
+                          activity.updatedAt.slice(0, 10)
+                        )}`}</td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </main>
     </div>
