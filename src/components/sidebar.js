@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import {
   FaFileDownload,
   FaRegChartBar,
-  FaList,
+  FaTable,
   FaTags,
   FaSignOutAlt,
   FaRegQuestionCircle,
 } from "react-icons/fa";
+import { GrConfigure } from "react-icons/gr";
 import { MdDeleteForever, MdOutlinePlaylistAdd } from "react-icons/md";
 import SidebarButton from "../baseComponents/sidebarButton";
 import * as SDK from "../sdk_backend_fetch";
@@ -53,15 +54,27 @@ const Sidebar = ({
       <div className="sm:relative bg-custom-grey text-white flex flex-col">
         <div className="flex-grow space-y-4 mt-4 p-2">
           <SidebarButton onClick={navigateDashboard} icon={<FaRegChartBar />} />
-          <SidebarButton onClick={navigateTally} icon={<FaList />} />
-          <SidebarButton onClick={navigateCategories} icon={<FaTags />} />
+          <SidebarButton onClick={navigateTally} icon={<FaTable />} />
+          <SidebarButton onClick={navigateCategories} icon={<GrConfigure />} />
         </div>
         <div className="flex-grow space-y-4 mt-4 p-2">
           {isMobile && (
             <>
-              <SidebarButton onClick={submit} icon={<MdOutlinePlaylistAdd />} />
-              <SidebarButton onClick={remove} icon={<MdDeleteForever />} />
-              <SidebarButton onClick={downloadCSV} icon={<FaFileDownload />} />
+              <SidebarButton
+                onClick={submit}
+                icon={<MdOutlinePlaylistAdd />}
+                bgColor={"bg-gray-700"}
+              />
+              <SidebarButton
+                onClick={remove}
+                icon={<MdDeleteForever />}
+                bgColor={"bg-gray-700"}
+              />
+              <SidebarButton
+                onClick={downloadCSV}
+                icon={<FaFileDownload />}
+                bgColor={"bg-gray-700"}
+              />
             </>
           )}
         </div>

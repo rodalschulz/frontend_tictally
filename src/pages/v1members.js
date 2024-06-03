@@ -17,6 +17,8 @@ import useUserActivityData from "../baseComponents/useUserActivityData.js";
 import useRowNavigation from "../baseComponents/useRowNavigation.js";
 import Instructions from "../components/instructions.js";
 
+import { MdAccessTimeFilled } from "react-icons/md";
+
 const Members = () => {
   const { userId } = useParams();
 
@@ -228,7 +230,7 @@ const Members = () => {
                 className="btn bg-custom-databg btn-sm mr-2 w-10 border-gray-800 hover:bg-primary"
                 onClick={() => setShowUTC(!showUTC)}
               >
-                UTC
+                <MdAccessTimeFilled />
               </button>
             )}
             {!isMobile && <UploadCSVbtn />}

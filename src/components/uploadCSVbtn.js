@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import * as SDK from "../sdk_backend_fetch.js";
 import { useParams } from "react-router-dom";
+import { FaCloudUploadAlt, FaFileCsv } from "react-icons/fa";
 
 const UploadCSVbtn = () => {
   const { userId } = useParams();
@@ -41,20 +42,20 @@ const UploadCSVbtn = () => {
           />
           <label
             htmlFor="file-upload"
-            className={`btn btn-sm w-8 border-gray-800 text-white ${
+            className={`btn btn-sm w-10 border-gray-800 text-white ${
               file
                 ? "bg-primary text-white font-bold border-white text-[20px]"
                 : "bg-custom-databg"
             } hover:bg-primary rounded-r-none`}
           >
-            F
+            <FaFileCsv />
           </label>
           <div className="h-full w-0.5 bg-gray-800"></div>
           <button
             type="submit"
-            className="btn bg-custom-databg btn-sm w-20 border-gray-800 hover:bg-primary text-white rounded-l-none mr-2"
+            className="btn bg-custom-databg btn-sm w-10 border-gray-800 hover:bg-primary text-white rounded-l-none mr-2"
           >
-            Upload
+            <FaCloudUploadAlt />
           </button>
         </div>
       </form>
