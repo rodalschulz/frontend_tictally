@@ -7,6 +7,7 @@ import Categories from "./pages/v1categories.js";
 import Dashboard from "./pages/v1dashboard.js";
 import * as SDK from "./sdk_backend_fetch.js";
 import "./index.css";
+import EmailVerification from "./components/emailVerification.js";
 
 import { useEffect, useState } from "react";
 
@@ -42,6 +43,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/verify-email" Component={EmailVerification} />"
       <Route
         path="/login"
         element={

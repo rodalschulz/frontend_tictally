@@ -298,3 +298,24 @@ export const updateUserCategoryConfig = async (userId, data) => {
     throw error;
   }
 };
+
+// EMAIL VERIFICATION
+export const verifyEmail = async (verificationToken) => {
+  try {
+    const response = await fetch(
+      `${baseURL}/${version}/verify-email?token=${verificationToken}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey,
+        },
+      }
+    );
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error verifying email:", error);
+    throw error;
+  }
+};
