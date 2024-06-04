@@ -2,9 +2,11 @@ import * as SDK from "../sdk_backend_fetch.js";
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaSpinner } from "react-icons/fa";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [input, setInput] = useState({
     email: "",
@@ -21,6 +23,7 @@ const Register = () => {
 
   const submitHandler = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     try {
       if (input.username.includes(" ")) {
         alert("Username cannot contain spaces.");
@@ -36,13 +39,18 @@ const Register = () => {
         username: "",
         password: "",
       });
-      alert(response.response);
-      navigate("/login");
+      setIsLoading(false);
+      if (!isLoading) {
+        alert(response.response);
+        navigate("/login");
+      }
     } catch (error) {
       alert(
         "Something went wrong! The email or username could be already taken."
       );
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,6 +65,13 @@ const Register = () => {
             </button>
           </Link>
         </div>
+        {isLoading && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-gray-100 p-4 rounded-lg shadow-lg flex items-center justify-center">
+              <FaSpinner className="text-4xl text-primary animate-spin" />
+            </div>
+          </div>
+        )}
         <form onSubmit={submitHandler} className="space-y-6">
           <div>
             <label

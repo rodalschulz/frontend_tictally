@@ -50,7 +50,7 @@ const Login = ({ onLogin }) => {
           password: "",
         });
       } else {
-        alert("Wrong username or password!");
+        alert(user.response);
         console.log("Something went wrong!");
         setInput({
           username: "",
