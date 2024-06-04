@@ -8,6 +8,8 @@ import Dashboard from "./pages/v1dashboard.js";
 import * as SDK from "./sdk_backend_fetch.js";
 import "./index.css";
 import EmailVerification from "./components/emailVerification.js";
+import PasswordRecovery from "./pages/v1passwordRecovery.js";
+import PasswordReset from "./pages/v1passwordReset.js";
 
 import { useEffect, useState } from "react";
 
@@ -44,6 +46,8 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/register" element={<Register />} />
       <Route path="/verify-email" Component={EmailVerification} />"
+      <Route path="/password-recovery" Component={PasswordRecovery} />"
+      <Route path="/password-reset" Component={PasswordReset} />"
       <Route
         path="/login"
         element={

@@ -53,6 +53,24 @@ export const isAuthenticated = async () => {
   }
 };
 
+export const passwordReset = async (password, token) => {
+  try {
+    const response = await fetch(`${baseURL}/${version}/password-reset`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+      },
+      body: JSON.stringify({ password, token }),
+    });
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    throw error;
+  }
+};
+
 // USER ACTIVITY DATA
 export const getUserActivityData = async (userId, totalEntries) => {
   try {
@@ -299,7 +317,7 @@ export const updateUserCategoryConfig = async (userId, data) => {
   }
 };
 
-// EMAIL VERIFICATION
+// EMAIL RELATED
 export const verifyEmail = async (verificationToken) => {
   try {
     const response = await fetch(
@@ -316,6 +334,24 @@ export const verifyEmail = async (verificationToken) => {
     return json;
   } catch (error) {
     console.error("Error verifying email:", error);
+    throw error;
+  }
+};
+
+export const passwordRecoveryEmail = async (email) => {
+  try {
+    const response = await fetch(`${baseURL}/${version}/password-recovery`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+      },
+      body: JSON.stringify({ email }),
+    });
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error sending password recovery email:", error);
     throw error;
   }
 };

@@ -66,6 +66,10 @@ const Login = ({ onLogin }) => {
     }
   };
 
+  const passwordRecoveryHandler = () => {
+    navigate("/password-recovery");
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
@@ -126,6 +130,12 @@ const Login = ({ onLogin }) => {
                   Remember me
                 </label>
               </div>
+            </div>
+            <div
+              className="ml-3 text-sm text-gray-500"
+              onClick={passwordRecoveryHandler}
+            >
+              Forgot your password?
             </div>
           </div>
           <div>
