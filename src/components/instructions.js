@@ -75,12 +75,31 @@ const Instructions = ({ pageName }) => {
     </div>
   );
 
+  const pendingTasksInstructions = (
+    <div className="bg-primary rounded-lg px-5 py-4 text-white mt-20 ml-10 w-[50%] min-w-[300px] max-w-[800px] absolute bg-opacity-95">
+      <h1 className="mb-2 font-bold text-center text-lg">
+        Welcome to Pending Tasks!
+      </h1>
+      <p>
+        We categorize your tasks into 4 categories. Ad-hoc tasks are tasks that
+        don't have a scheduled date. Upcoming tasks are scheduled tasks from the
+        next 14 days. Recent tasks are tasks that have been completed recently
+        or that have expired. Far-Off tasks are tasks that are scheduled for
+        more than 14 days in the future, with a maximum of 365 days.
+      </p>
+      <br />
+      <p>You can click the check button to mark a task as completed.</p>
+    </div>
+  );
+
   if (pageName === "tally") {
     return tallyInstructions;
   } else if (pageName === "config") {
     return configInstructions;
   } else if (pageName === "dashboard") {
     return dashboardInstructions;
+  } else if (pageName === "pendingTasks") {
+    return pendingTasksInstructions;
   }
 };
 

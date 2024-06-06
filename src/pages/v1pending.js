@@ -185,7 +185,7 @@ const Pending = () => {
                     <th>Urgency</th>
                     <th>Recurring</th>
                     <th>Period</th>
-                    <th>Completed</th>
+                    <th>State</th>
                     <th>Buttons</th>
                   </tr>
                 </thead>
@@ -285,6 +285,9 @@ const Pending = () => {
                 <FaSpinner className="text-4xl text-primary animate-spin" />
               </div>
             </div>
+          )}
+          {!isLoading && (pendingTasks.length === 0 || displayInstructions) && (
+            <Instructions pageName="pendingTasks" />
           )}
           <div className="pt-2 pb-4 mt-3 rounded-md">
             <h2 className="pl-2 font-bold text-gray-500">Ad-hoc</h2>
