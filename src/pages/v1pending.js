@@ -16,16 +16,18 @@ import "../styles/v1pending.css";
 
 const Pending = () => {
   const { userId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const daysForwardLimit = 365;
   const daysForward = 14;
+  const nowStart = new Date();
+  nowStart.setDate(nowStart.getDate() - 1);
   const now = new Date();
+  now.setHours(23, 59, 59, 999);
   const futureDate = new Date(now);
   futureDate.setDate(now.getDate() + daysForward);
 
-  const [isLoading, setIsLoading] = useState(false);
   const { pendingTasks, setPendingTasks, fetchPendingTasks } =
-    useFetchPendingTasks(userId, daysForwardLimit, setIsLoading);
+    useFetchPendingTasks(userId, 365, setIsLoading);
   const isMobile = useWindowSize();
   const [displayInstructions, setDisplayInstructions] = useState(false);
 
@@ -46,12 +48,15 @@ const Pending = () => {
   const upcoming = pendingTasks.filter(
     (task) =>
       task.date &&
-      new Date(task.date) >= now &&
+      !task.state &&
+      new Date(task.date) >= nowStart &&
       new Date(task.date) <= futureDate
   );
   const recentDoneOrExpired = pendingTasks.filter((task) =>
-    task.date
+    task.date && task.state
       ? new Date(task.date) < now
+      : task.date
+      ? new Date(task.date) < nowStart
       : task.state && new Date(task.updatedAt) <= now
   );
   const farOff = pendingTasks.filter(
@@ -264,7 +269,7 @@ const Pending = () => {
                     <td>
                       <button
                         onClick={submitDonePatch}
-                        className="bg-primary px-2 py-1 pw-1 rounded-lg"
+                        className="bg-primary px-2 py-1 pw-1 rounded-lg hover:bg-custom-databg"
                       >
                         <FaCheck />
                       </button>
@@ -281,157 +286,167 @@ const Pending = () => {
               </div>
             </div>
           )}
-          <h2 className="pl-2 mt-3 font-bold text-gray-500">Ad-hoc</h2>
-          <div className="mt-1">
-            <table
-              id="output-table-pending"
-              className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
-            >
-              <tbody>
-                {pendingTasks &&
-                  adhoc.map((task) => (
-                    <tr
-                      key={task.id}
-                      onClick={(event) =>
-                        handleRowClick(task.id, "", "", "", event)
-                      }
-                      style={{
-                        backgroundColor: selectedRows.includes(task.id)
-                          ? "#264653"
-                          : "transparent",
-                      }}
-                    >
-                      <td className=""></td>
-                      <td className=""></td>
-                      <td className=""></td>
-                      <td>{task.description}</td>
-                      <td>{task.relevance ? task.relevance : ""}</td>
-                      <td>{task.urgency}</td>
-                      <td>{task.recurring ? task.recurring : ""}</td>
-                      <td>{task.periodRecurrence}</td>
-                      <td>{task.state ? "Done" : "Pending"}</td>
-                      <td></td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+          <div className="pt-2 pb-4 mt-3 rounded-md">
+            <h2 className="pl-2 font-bold text-gray-500">Ad-hoc</h2>
+            <div className="mt-1">
+              <table
+                id="output-table-pending"
+                className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
+              >
+                <tbody>
+                  {pendingTasks &&
+                    adhoc.map((task) => (
+                      <tr
+                        key={task.id}
+                        onClick={(event) =>
+                          handleRowClick(task.id, "", "", "", event)
+                        }
+                        style={{
+                          backgroundColor: selectedRows.includes(task.id)
+                            ? "#264653"
+                            : "transparent",
+                        }}
+                      >
+                        <td className=""></td>
+                        <td className=""></td>
+                        <td className=""></td>
+                        <td>{task.description}</td>
+                        <td>{task.relevance ? task.relevance : ""}</td>
+                        <td>{task.urgency}</td>
+                        <td>{task.recurring ? task.recurring : ""}</td>
+                        <td>{task.periodRecurrence}</td>
+                        <td>{task.state ? "Done" : "Pending"}</td>
+                        <td></td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+            <h2 className="pl-2 mt-3 font-bold text-gray-500">Upcoming</h2>
+            <div className="mt-1">
+              <table
+                id="output-table-pending"
+                className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
+              >
+                <tbody>
+                  {pendingTasks &&
+                    upcoming.map((task) => (
+                      <tr
+                        key={task.id}
+                        onClick={(event) =>
+                          handleRowClick(task.id, "", "", "", event)
+                        }
+                        style={{
+                          backgroundColor: selectedRows.includes(task.id)
+                            ? "#264653"
+                            : "transparent",
+                          color: new Date(task.date) < now ? "cyan" : "white",
+                          fontWeight:
+                            new Date(task.date) < now ? "bold" : "normal",
+                        }}
+                      >
+                        <td>{datetimeFnc.getWeekDay(task.date)}</td>
+                        <td>
+                          {task.date
+                            ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
+                            : ""}
+                        </td>
+                        <td>{task.time ? task.time : ""}</td>
+                        <td>{task.description}</td>
+                        <td>{task.relevance ? task.relevance : ""}</td>
+                        <td>{task.urgency}</td>
+                        <td>{task.recurring ? task.recurring : ""}</td>
+                        <td>{task.periodRecurrence}</td>
+                        <td>{task.state ? "Done" : "Pending"}</td>
+                        <td></td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-          <h2 className="pl-2 mt-3 font-bold text-gray-500">Upcoming</h2>
-          <div className="mt-1">
-            <table
-              id="output-table-pending"
-              className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
-            >
-              <tbody>
-                {pendingTasks &&
-                  upcoming.map((task) => (
-                    <tr
-                      key={task.id}
-                      onClick={(event) =>
-                        handleRowClick(task.id, "", "", "", event)
-                      }
-                      style={{
-                        backgroundColor: selectedRows.includes(task.id)
-                          ? "#264653"
-                          : "transparent",
-                      }}
-                    >
-                      <td>{datetimeFnc.getWeekDay(task.date)}</td>
-                      <td>
-                        {task.date
-                          ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
-                          : ""}
-                      </td>
-                      <td>{task.time ? task.time : ""}</td>
-                      <td>{task.description}</td>
-                      <td>{task.relevance ? task.relevance : ""}</td>
-                      <td>{task.urgency}</td>
-                      <td>{task.recurring ? task.recurring : ""}</td>
-                      <td>{task.periodRecurrence}</td>
-                      <td>{task.state ? "Done" : "Pending"}</td>
-                      <td></td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-          <h2 className="pl-2 mt-3 font-bold text-gray-500">Recent</h2>
-          <div className="mt-1">
-            <table
-              id="output-table-pending"
-              className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
-            >
-              <tbody>
-                {pendingTasks &&
-                  recentDoneOrExpired.map((task) => (
-                    <tr
-                      key={task.id}
-                      onClick={(event) =>
-                        handleRowClick(task.id, "", "", "", event)
-                      }
-                      style={{
-                        backgroundColor: selectedRows.includes(task.id)
-                          ? "#264653"
-                          : "transparent",
-                      }}
-                    >
-                      <td>{task.date && datetimeFnc.getWeekDay(task.date)}</td>
-                      <td>
-                        {task.date
-                          ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
-                          : ""}
-                      </td>
-                      <td>{task.time ? task.time : ""}</td>
-                      <td>{task.description}</td>
-                      <td>{task.relevance ? task.relevance : ""}</td>
-                      <td>{task.urgency}</td>
-                      <td>{task.recurring ? task.recurring : ""}</td>
-                      <td>{task.periodRecurrence}</td>
-                      <td>{task.state ? "Done" : "Pending"}</td>
-                      <td></td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-          <h2 className="pl-2 mt-3 font-bold text-gray-500">Far-Off</h2>
-          <div className="mt-1">
-            <table
-              id="output-table-pending"
-              className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
-            >
-              <tbody>
-                {pendingTasks &&
-                  farOff.map((task) => (
-                    <tr
-                      key={task.id}
-                      onClick={(event) =>
-                        handleRowClick(task.id, "", "", "", event)
-                      }
-                      style={{
-                        backgroundColor: selectedRows.includes(task.id)
-                          ? "#264653"
-                          : "transparent",
-                      }}
-                    >
-                      <td>{datetimeFnc.getWeekDay(task.date)}</td>
-                      <td>
-                        {task.date
-                          ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
-                          : ""}
-                      </td>
-                      <td>{task.time ? task.time : ""}</td>
-                      <td>{task.description}</td>
-                      <td>{task.relevance ? task.relevance : ""}</td>
-                      <td>{task.urgency}</td>
-                      <td>{task.recurring ? task.recurring : ""}</td>
-                      <td>{task.periodRecurrence}</td>
-                      <td>{task.state ? "Done" : "Pending"}</td>
-                      <td></td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+          <p className="bg-secondary text-secondary mt-3 h-1 rounded-lg"> </p>
+          <div className="pt-2 pb-4 mt-3 rounded-md">
+            <h2 className="pl-2 font-bold text-gray-500">Recent</h2>
+            <div className="mt-1">
+              <table
+                id="output-table-pending"
+                className="sm:min-w-[1400px] w-full text-gray-300 text-[12px] bg-custom-databg rounded-[7px]"
+              >
+                <tbody>
+                  {pendingTasks &&
+                    recentDoneOrExpired.map((task) => (
+                      <tr
+                        key={task.id}
+                        onClick={(event) =>
+                          handleRowClick(task.id, "", "", "", event)
+                        }
+                        style={{
+                          backgroundColor: selectedRows.includes(task.id)
+                            ? "#264653"
+                            : "transparent",
+                        }}
+                      >
+                        <td>
+                          {task.date && datetimeFnc.getWeekDay(task.date)}
+                        </td>
+                        <td>
+                          {task.date
+                            ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
+                            : ""}
+                        </td>
+                        <td>{task.time ? task.time : ""}</td>
+                        <td>{task.description}</td>
+                        <td>{task.relevance ? task.relevance : ""}</td>
+                        <td>{task.urgency}</td>
+                        <td>{task.recurring ? task.recurring : ""}</td>
+                        <td>{task.periodRecurrence}</td>
+                        <td>{task.state ? "Done" : "Pending"}</td>
+                        <td></td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+            <h2 className="pl-2 mt-3 font-bold text-gray-500">Far-Off</h2>
+            <div className="mt-1">
+              <table
+                id="output-table-pending"
+                className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
+              >
+                <tbody>
+                  {pendingTasks &&
+                    farOff.map((task) => (
+                      <tr
+                        key={task.id}
+                        onClick={(event) =>
+                          handleRowClick(task.id, "", "", "", event)
+                        }
+                        style={{
+                          backgroundColor: selectedRows.includes(task.id)
+                            ? "#264653"
+                            : "transparent",
+                        }}
+                      >
+                        <td>{datetimeFnc.getWeekDay(task.date)}</td>
+                        <td>
+                          {task.date
+                            ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
+                            : ""}
+                        </td>
+                        <td>{task.time ? task.time : ""}</td>
+                        <td>{task.description}</td>
+                        <td>{task.relevance ? task.relevance : ""}</td>
+                        <td>{task.urgency}</td>
+                        <td>{task.recurring ? task.recurring : ""}</td>
+                        <td>{task.periodRecurrence}</td>
+                        <td>{task.state ? "Done" : "Pending"}</td>
+                        <td></td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </main>
