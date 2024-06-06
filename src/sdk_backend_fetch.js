@@ -72,7 +72,7 @@ export const passwordReset = async (password, token) => {
 };
 
 // USER ACTIVITY DATA
-export const getUserActivityData = async (userId, totalEntries) => {
+export const getUserActivityData = async (userId, daysTotal) => {
   try {
     const token = localStorage.getItem("token");
     const headers = {
@@ -82,7 +82,7 @@ export const getUserActivityData = async (userId, totalEntries) => {
     };
 
     const response = await fetch(
-      `${baseURL}/${version}/users/${userId}/activity-data?totalEntries=${totalEntries}`,
+      `${baseURL}/${version}/users/${userId}/activity-data?totalEntries=${daysTotal}`,
       {
         headers: headers,
       }
@@ -352,6 +352,62 @@ export const passwordRecoveryEmail = async (email) => {
     return json;
   } catch (error) {
     console.error("Error sending password recovery email:", error);
+    throw error;
+  }
+};
+
+// PENDING TASKS
+export const postUserPendingTask = async (userId, data) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/pending-tasks`,
+      {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(data),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to post user pending task");
+    }
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error posting user pending task:", error);
+    throw error;
+  }
+};
+
+export const getUserPendingTasks = async (userId, daysTotal) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/pending-tasks?daysTotal=${daysTotal}`,
+      {
+        headers: headers,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user pending tasks");
+    }
+
+    const json = await response.json();
+    return json.userPendingTasks;
+  } catch (error) {
+    console.error("Error fetching user pending tasks:", error);
     throw error;
   }
 };

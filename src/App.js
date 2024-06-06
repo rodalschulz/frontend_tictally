@@ -10,6 +10,7 @@ import "./index.css";
 import EmailVerification from "./components/emailVerification.js";
 import PasswordRecovery from "./pages/v1passwordRecovery.js";
 import PasswordReset from "./pages/v1passwordReset.js";
+import Pending from "./pages/v1pending.js";
 
 import { useEffect, useState } from "react";
 
@@ -63,6 +64,12 @@ function App() {
         path="/members/:userId/tally"
         element={
           loading ? null : isAuthenticated ? <Members /> : <Navigate to="/" />
+        }
+      />
+      <Route
+        path="/members/:userId/pending"
+        element={
+          loading ? null : isAuthenticated ? <Pending /> : <Navigate to="/" />
         }
       />
       <Route

@@ -1,20 +1,19 @@
 import { useState, useEffect, useCallback } from "react";
 import * as SDK from "../sdk_backend_fetch.js";
 
-const useUserActivityData = (userId, entries, setIsLoading) => {
+const useUserActivityData = (userId, daysTotal, setIsLoading) => {
   const [userActivityData, setUserActivityData] = useState([]);
 
   const fetchUserActivityData = useCallback(async () => {
-    const totalEntries = entries;
     setIsLoading(true);
     try {
-      const data = await SDK.getUserActivityData(userId, totalEntries);
+      const data = await SDK.getUserActivityData(userId, daysTotal);
       setUserActivityData(data);
     } catch (error) {
       console.error(error);
     }
     setIsLoading(false);
-  }, [userId, entries]);
+  }, [userId, daysTotal]);
 
   useEffect(() => {
     fetchUserActivityData();

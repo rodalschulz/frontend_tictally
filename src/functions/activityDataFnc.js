@@ -43,7 +43,6 @@ const activityEntryValidation = (input) => {
     input.subcategory = input.subcategory.toUpperCase();
   }
   if (!input.startTime) {
-    // implement that if input.date is today, then input.startTime is current time, otherwise nothing
     input.startTime = datetimeFnc.currentLocalTime();
   }
   if (input.startTime && input.endTime) {
