@@ -365,6 +365,7 @@ export const postUserPendingTask = async (userId, data) => {
       "Content-Type": "application/json",
       "x-api-key": apiKey,
     };
+
     const response = await fetch(
       `${baseURL}/${version}/users/${userId}/pending-tasks`,
       {
@@ -408,6 +409,33 @@ export const getUserPendingTasks = async (userId, daysTotal) => {
     return json.userPendingTasks;
   } catch (error) {
     console.error("Error fetching user pending tasks:", error);
+    throw error;
+  }
+};
+
+export const deleteUserPendingTasks = async (userId, entryIds) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/pending-tasks`,
+      {
+        method: "DELETE",
+        headers: headers,
+        body: JSON.stringify({ entryIds: entryIds }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to delete user pending tasks");
+    }
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error deleting user pending tasks:", error);
     throw error;
   }
 };

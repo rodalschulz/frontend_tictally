@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { FaSpinner } from "react-icons/fa";
 
 import Sidebar from "../components/sidebar.js";
 import useWindowSize from "../baseComponents/useWindowSize.js";
@@ -8,6 +9,7 @@ import * as SDK from "../sdk_backend_fetch.js";
 import pendingValidation from "../functions/pendingValidation.js";
 import useFetchPendingTasks from "../baseComponents/useFetchPendingTasks.js";
 import datetimeFnc from "../functions/datetimeFnc.js";
+import useRowNavigation from "../baseComponents/useRowNavigation.js";
 
 import "../styles/v1pending.css";
 
@@ -68,6 +70,15 @@ const Pending = () => {
       console.error(error);
     }
   };
+
+  const { selectedRows, setSelectedRows, handleRowClick, deleteSelected } =
+    useRowNavigation(
+      userId,
+      pendingTasks,
+      fetchPendingTasks,
+      submit,
+      setIsLoading
+    );
 
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
@@ -189,8 +200,15 @@ const Pending = () => {
               </table>
             </form>
           </div>
+          {isLoading && (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div className="bg-gray-100 p-4 rounded-lg shadow-lg flex items-center justify-center">
+                <FaSpinner className="text-4xl text-primary animate-spin" />
+              </div>
+            </div>
+          )}
           <h2 className="pl-2 mt-3 font-bold">Ad-hoc</h2>
-          <div className="h-24 overflow-y-auto mt-1">
+          <div className="h-60 overflow-y-scroll mt-1">
             <table
               id="output-table-pending"
               className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
@@ -198,7 +216,17 @@ const Pending = () => {
               <tbody>
                 {pendingTasks &&
                   flexibleTasks.map((task) => (
-                    <tr key={task.id}>
+                    <tr
+                      key={task.id}
+                      onClick={(event) =>
+                        handleRowClick(task.id, "", "", "", event)
+                      }
+                      style={{
+                        backgroundColor: selectedRows.includes(task.id)
+                          ? "#264653"
+                          : "transparent",
+                      }}
+                    >
                       <td>{datetimeFnc.getWeekDay(task.date)}</td>
                       <td>
                         {task.date
@@ -219,7 +247,7 @@ const Pending = () => {
             </table>
           </div>
           <h2 className="pl-2 mt-3 font-bold">Commitments</h2>
-          <div>
+          <div className="h-60 overflow-y-scroll mt-1">
             <table
               id="output-table-pending"
               className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
@@ -227,7 +255,17 @@ const Pending = () => {
               <tbody>
                 {pendingTasks &&
                   appointmentTasks.map((task) => (
-                    <tr key={task.id}>
+                    <tr
+                      key={task.id}
+                      onClick={(event) =>
+                        handleRowClick(task.id, "", "", "", event)
+                      }
+                      style={{
+                        backgroundColor: selectedRows.includes(task.id)
+                          ? "#264653"
+                          : "transparent",
+                      }}
+                    >
                       <td>{datetimeFnc.getWeekDay(task.date)}</td>
                       <td>
                         {task.date

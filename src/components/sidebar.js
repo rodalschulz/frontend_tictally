@@ -62,7 +62,7 @@ const Sidebar = ({
           <SidebarButton onClick={navigateDashboard} icon={<FaRegChartBar />} />
           <SidebarButton onClick={navigateTally} icon={<FaTable />} />
           <SidebarButton onClick={navigateCategories} icon={<GrConfigure />} />
-          <SidebarButton icon={<MdAlarmOn />} bgColor={"bg-gray-400"} />
+          <SidebarButton onClick={navigatePending} icon={<MdAlarmOn />} />
         </div>
         <div className="flex-grow space-y-4 mt-4 p-2">
           {isMobile && (

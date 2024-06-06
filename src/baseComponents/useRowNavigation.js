@@ -3,8 +3,8 @@ import * as SDK from "../sdk_backend_fetch.js";
 
 const useRowNavigation = (
   userId,
-  userActivityData,
-  fetchUserActivityData,
+  userData,
+  fetchUserData,
   submit,
   setIsLoading
 ) => {
@@ -19,10 +19,10 @@ const useRowNavigation = (
   const handleRowClick = (id, startTime, endTime, adjustment, event) => {
     if (event.shiftKey && firstSelectedRow !== null) {
       // Find the indexes of the first selected row and the current row
-      const firstIndex = userActivityData.findIndex(
+      const firstIndex = userData.findIndex(
         (item) => item.id === firstSelectedRow
       );
-      const currentIndex = userActivityData.findIndex((item) => item.id === id);
+      const currentIndex = userData.findIndex((item) => item.id === id);
 
       // Determine the range to select
       const [start, end] =
@@ -31,7 +31,7 @@ const useRowNavigation = (
           : [currentIndex, firstIndex];
 
       // Get the IDs of all rows in the range
-      const newSelectedRows = userActivityData
+      const newSelectedRows = userData
         .slice(start, end + 1)
         .map((item) => item.id);
 
@@ -80,40 +80,45 @@ const useRowNavigation = (
     try {
       setIsLoading(true);
       if (selectedRows.length > 0) {
-        await SDK.deleteUserActivityData(userId, selectedRows);
-        fetchUserActivityData();
+        // check for adjustment property to determine if we are deleting activities or pending tasks
+        if (userData[0].hasOwnProperty("adjustment")) {
+          await SDK.deleteUserActivityData(userId, selectedRows);
+        } else {
+          await SDK.deleteUserPendingTasks(userId, selectedRows);
+        }
+        fetchUserData();
         setSelectedRows([]);
       }
     } catch (error) {
       console.error(error);
     }
     setIsLoading(false);
-  }, [selectedRows, fetchUserActivityData, userId]);
+  }, [selectedRows, fetchUserData, userId]);
 
   useEffect(() => {
     const handleArrowKeyPress = (e) => {
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         e.preventDefault();
-        const currentIndex = userActivityData.findIndex(
+        const currentIndex = userData.findIndex(
           (item) => item.id === selectedRows[selectedRows.length - 1]
         );
         if (currentIndex !== -1) {
           const nextIndex =
             e.key === "ArrowUp" ? currentIndex - 1 : currentIndex + 1;
-          if (nextIndex >= 0 && nextIndex < userActivityData.length) {
-            setSelectedRows([userActivityData[nextIndex].id]);
+          if (nextIndex >= 0 && nextIndex < userData.length) {
+            setSelectedRows([userData[nextIndex].id]);
             setSelectedRowTimeValues({
-              startTime: userActivityData[nextIndex].startTime,
-              endTime: userActivityData[nextIndex].endTime,
-              adjustment: userActivityData[nextIndex].adjustment,
+              startTime: userData[nextIndex].startTime,
+              endTime: userData[nextIndex].endTime,
+              adjustment: userData[nextIndex].adjustment,
             });
           }
-        } else if (userActivityData.length > 0) {
-          setSelectedRows([userActivityData[0].id]);
+        } else if (userData.length > 0) {
+          setSelectedRows([userData[0].id]);
           setSelectedRowTimeValues({
-            date: userActivityData[0].date,
-            startTime: userActivityData[0].startTime,
-            endTime: userActivityData[0].endTime,
+            date: userData[0].date,
+            startTime: userData[0].startTime,
+            endTime: userData[0].endTime,
           });
         }
       }
@@ -123,7 +128,7 @@ const useRowNavigation = (
     return () => {
       window.removeEventListener("keydown", handleArrowKeyPress);
     };
-  }, [selectedRows, userActivityData]);
+  }, [selectedRows, userData]);
 
   useEffect(() => {
     const handleDelPress = (e) => {
