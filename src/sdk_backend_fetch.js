@@ -413,6 +413,33 @@ export const getUserPendingTasks = async (userId, daysTotal) => {
   }
 };
 
+export const patchUserPendingTask = async (userId, entryIds, data) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/pending-tasks`,
+      {
+        method: "PATCH",
+        headers: headers,
+        body: JSON.stringify({ entryIds: entryIds, data: data }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to patch user pending task");
+    }
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error patching user pending task:", error);
+    throw error;
+  }
+};
+
 export const deleteUserPendingTasks = async (userId, entryIds) => {
   try {
     const token = localStorage.getItem("token");

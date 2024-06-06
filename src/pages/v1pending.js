@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { FaSpinner } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 
 import Sidebar from "../components/sidebar.js";
 import useWindowSize from "../baseComponents/useWindowSize.js";
@@ -16,9 +17,15 @@ import "../styles/v1pending.css";
 const Pending = () => {
   const { userId } = useParams();
 
+  const daysForwardLimit = 365;
+  const daysForward = 14;
+  const now = new Date();
+  const futureDate = new Date(now);
+  futureDate.setDate(now.getDate() + daysForward);
+
   const [isLoading, setIsLoading] = useState(false);
   const { pendingTasks, setPendingTasks, fetchPendingTasks } =
-    useFetchPendingTasks(userId, 15, setIsLoading);
+    useFetchPendingTasks(userId, daysForwardLimit, setIsLoading);
   const isMobile = useWindowSize();
   const [displayInstructions, setDisplayInstructions] = useState(false);
 
@@ -28,13 +35,28 @@ const Pending = () => {
     description: null,
     relevance: "",
     urgency: "",
-    recurring: "",
+    recurring: null,
     periodRecurrence: "",
   });
   const formRef = useRef(null);
 
-  const flexibleTasks = pendingTasks.filter((task) => !task.date && !task.time);
-  const appointmentTasks = pendingTasks.filter((task) => task.date);
+  const adhoc = pendingTasks.filter(
+    (task) => !task.date && !task.time && !task.state
+  );
+  const upcoming = pendingTasks.filter(
+    (task) =>
+      task.date &&
+      new Date(task.date) >= now &&
+      new Date(task.date) <= futureDate
+  );
+  const recentDoneOrExpired = pendingTasks.filter((task) =>
+    task.date
+      ? new Date(task.date) < now
+      : task.state && new Date(task.updatedAt) <= now
+  );
+  const farOff = pendingTasks.filter(
+    (task) => task.date && !task.state && new Date(task.date) > futureDate
+  );
 
   const resetForm = () => {
     setInput({
@@ -43,7 +65,7 @@ const Pending = () => {
       description: null,
       relevance: "",
       urgency: "",
-      recurring: "",
+      recurring: null,
       periodRecurrence: "",
     });
     if (formRef.current) {
@@ -59,15 +81,60 @@ const Pending = () => {
     });
   };
 
-  const submit = async (event) => {
-    event.preventDefault();
+  const submitPatch = async (event) => {
+    setIsLoading(true);
     try {
-      const updatedInput = pendingValidation.pendingEntryValidation(input);
-      resetForm();
-      await SDK.postUserPendingTask(userId, updatedInput);
+      const updatedInput = pendingValidation.pendingPatchValidation(input);
+      console.log(`Updated Input: ${JSON.stringify(updatedInput)}`);
+      await SDK.patchUserPendingTask(userId, selectedRows, updatedInput);
       fetchPendingTasks();
     } catch (error) {
       console.error(error);
+    } finally {
+      setSelectedRows([]);
+      resetForm();
+      setIsLoading(false);
+    }
+  };
+
+  const submit = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    if (selectedRows.length > 0) {
+      console.log("Submitting Patch");
+      await submitPatch(event);
+    } else {
+      try {
+        const updatedInput = pendingValidation.pendingEntryValidation(input);
+        await SDK.postUserPendingTask(userId, updatedInput);
+        fetchPendingTasks();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        resetForm();
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const submitDonePatch = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    if (selectedRows.length === 0) {
+      alert("Select a task to mark as done.");
+      setIsLoading(false);
+      return;
+    } else {
+      try {
+        const updatedInput = { state: true };
+        await SDK.patchUserPendingTask(userId, selectedRows, updatedInput);
+        fetchPendingTasks();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setSelectedRows([]);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -153,7 +220,7 @@ const Pending = () => {
                       >
                         <option value="">Select</option>
                         <option value="HIGH">HIGH</option>
-                        <option value="NORMAL">NORMAL</option>
+                        <option value="AVG">AVG</option>
                         <option value="LOW">LOW</option>
                       </select>
                     </td>
@@ -166,7 +233,7 @@ const Pending = () => {
                       >
                         <option value="">Select</option>
                         <option value="HIGH">HIGH</option>
-                        <option value="NORMAL">NORMAL</option>
+                        <option value="AVG">AVG</option>
                         <option value="LOW">LOW</option>
                       </select>
                     </td>
@@ -194,7 +261,14 @@ const Pending = () => {
                         <option value="YEARLY">YEARLY</option>
                       </select>
                     </td>
-                    <td></td>
+                    <td>
+                      <button
+                        onClick={submitDonePatch}
+                        className="bg-primary px-2 py-1 pw-1 rounded-lg"
+                      >
+                        <FaCheck />
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -207,15 +281,15 @@ const Pending = () => {
               </div>
             </div>
           )}
-          <h2 className="pl-2 mt-3 font-bold">Ad-hoc</h2>
-          <div className="h-60 overflow-y-scroll mt-1">
+          <h2 className="pl-2 mt-3 font-bold text-gray-500">Ad-hoc</h2>
+          <div className="mt-1">
             <table
               id="output-table-pending"
               className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
             >
               <tbody>
                 {pendingTasks &&
-                  flexibleTasks.map((task) => (
+                  adhoc.map((task) => (
                     <tr
                       key={task.id}
                       onClick={(event) =>
@@ -227,34 +301,30 @@ const Pending = () => {
                           : "transparent",
                       }}
                     >
-                      <td>{datetimeFnc.getWeekDay(task.date)}</td>
-                      <td>
-                        {task.date
-                          ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
-                          : ""}
-                      </td>
-                      <td>{task.time ? task.time : ""}</td>
+                      <td className=""></td>
+                      <td className=""></td>
+                      <td className=""></td>
                       <td>{task.description}</td>
                       <td>{task.relevance ? task.relevance : ""}</td>
                       <td>{task.urgency}</td>
                       <td>{task.recurring ? task.recurring : ""}</td>
                       <td>{task.periodRecurrence}</td>
-                      <td>{task.completed ? task.completed : "Pending"}</td>
+                      <td>{task.state ? "Done" : "Pending"}</td>
                       <td></td>
                     </tr>
                   ))}
               </tbody>
             </table>
           </div>
-          <h2 className="pl-2 mt-3 font-bold">Commitments</h2>
-          <div className="h-60 overflow-y-scroll mt-1">
+          <h2 className="pl-2 mt-3 font-bold text-gray-500">Upcoming</h2>
+          <div className="mt-1">
             <table
               id="output-table-pending"
               className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
             >
               <tbody>
                 {pendingTasks &&
-                  appointmentTasks.map((task) => (
+                  upcoming.map((task) => (
                     <tr
                       key={task.id}
                       onClick={(event) =>
@@ -278,7 +348,85 @@ const Pending = () => {
                       <td>{task.urgency}</td>
                       <td>{task.recurring ? task.recurring : ""}</td>
                       <td>{task.periodRecurrence}</td>
-                      <td>{task.completed ? task.completed : "Pending"}</td>
+                      <td>{task.state ? "Done" : "Pending"}</td>
+                      <td></td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          <h2 className="pl-2 mt-3 font-bold text-gray-500">Recent</h2>
+          <div className="mt-1">
+            <table
+              id="output-table-pending"
+              className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
+            >
+              <tbody>
+                {pendingTasks &&
+                  recentDoneOrExpired.map((task) => (
+                    <tr
+                      key={task.id}
+                      onClick={(event) =>
+                        handleRowClick(task.id, "", "", "", event)
+                      }
+                      style={{
+                        backgroundColor: selectedRows.includes(task.id)
+                          ? "#264653"
+                          : "transparent",
+                      }}
+                    >
+                      <td>{task.date && datetimeFnc.getWeekDay(task.date)}</td>
+                      <td>
+                        {task.date
+                          ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
+                          : ""}
+                      </td>
+                      <td>{task.time ? task.time : ""}</td>
+                      <td>{task.description}</td>
+                      <td>{task.relevance ? task.relevance : ""}</td>
+                      <td>{task.urgency}</td>
+                      <td>{task.recurring ? task.recurring : ""}</td>
+                      <td>{task.periodRecurrence}</td>
+                      <td>{task.state ? "Done" : "Pending"}</td>
+                      <td></td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          <h2 className="pl-2 mt-3 font-bold text-gray-500">Far-Off</h2>
+          <div className="mt-1">
+            <table
+              id="output-table-pending"
+              className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
+            >
+              <tbody>
+                {pendingTasks &&
+                  farOff.map((task) => (
+                    <tr
+                      key={task.id}
+                      onClick={(event) =>
+                        handleRowClick(task.id, "", "", "", event)
+                      }
+                      style={{
+                        backgroundColor: selectedRows.includes(task.id)
+                          ? "#264653"
+                          : "transparent",
+                      }}
+                    >
+                      <td>{datetimeFnc.getWeekDay(task.date)}</td>
+                      <td>
+                        {task.date
+                          ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
+                          : ""}
+                      </td>
+                      <td>{task.time ? task.time : ""}</td>
+                      <td>{task.description}</td>
+                      <td>{task.relevance ? task.relevance : ""}</td>
+                      <td>{task.urgency}</td>
+                      <td>{task.recurring ? task.recurring : ""}</td>
+                      <td>{task.periodRecurrence}</td>
+                      <td>{task.state ? "Done" : "Pending"}</td>
                       <td></td>
                     </tr>
                   ))}

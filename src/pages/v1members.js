@@ -105,7 +105,6 @@ const Members = () => {
   const submitPatch = async (event) => {
     setIsLoading(true);
     try {
-      console.log("Patching data...");
       const idsToPatch = selectedRows;
       const { startTime, endTime, adjustment } = selectedRowTimeValues;
       const updatedInput = activityData.activityPatchValidation(
@@ -138,6 +137,7 @@ const Members = () => {
         endTime: "",
         adjustment: 0,
       });
+      resetForm();
       fetchUserActivityData();
     } catch (error) {
       console.error(error);
