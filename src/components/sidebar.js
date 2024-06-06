@@ -3,12 +3,15 @@ import {
   FaFileDownload,
   FaRegChartBar,
   FaTable,
-  FaTags,
   FaSignOutAlt,
   FaRegQuestionCircle,
 } from "react-icons/fa";
 import { GrConfigure } from "react-icons/gr";
-import { MdDeleteForever, MdOutlinePlaylistAdd } from "react-icons/md";
+import {
+  MdDeleteForever,
+  MdOutlinePlaylistAdd,
+  MdAlarmOn,
+} from "react-icons/md";
 import SidebarButton from "../baseComponents/sidebarButton";
 import * as SDK from "../sdk_backend_fetch";
 
@@ -29,6 +32,9 @@ const Sidebar = ({
   };
   const navigateCategories = () => {
     window.location.href = `/members/${userId}/categories`;
+  };
+  const navigatePending = () => {
+    window.location.href = `/members/${userId}/pending`;
   };
 
   // OTHERS
@@ -56,6 +62,7 @@ const Sidebar = ({
           <SidebarButton onClick={navigateDashboard} icon={<FaRegChartBar />} />
           <SidebarButton onClick={navigateTally} icon={<FaTable />} />
           <SidebarButton onClick={navigateCategories} icon={<GrConfigure />} />
+          <SidebarButton icon={<MdAlarmOn />} bgColor={"bg-gray-400"} />
         </div>
         <div className="flex-grow space-y-4 mt-4 p-2">
           {isMobile && (

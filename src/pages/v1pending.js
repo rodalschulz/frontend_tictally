@@ -31,6 +31,9 @@ const Pending = () => {
   });
   const formRef = useRef(null);
 
+  const flexibleTasks = pendingTasks.filter((task) => !task.date && !task.time);
+  const appointmentTasks = pendingTasks.filter((task) => task.date);
+
   const resetForm = () => {
     setInput({
       date: null,
@@ -186,14 +189,15 @@ const Pending = () => {
               </table>
             </form>
           </div>
-          <div>
+          <h2 className="pl-2 mt-3 font-bold">Ad-hoc</h2>
+          <div className="h-24 overflow-y-auto mt-1">
             <table
               id="output-table-pending"
-              className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px] mr-5 mt-3"
+              className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
             >
               <tbody>
                 {pendingTasks &&
-                  pendingTasks.map((task) => (
+                  flexibleTasks.map((task) => (
                     <tr key={task.id}>
                       <td>{datetimeFnc.getWeekDay(task.date)}</td>
                       <td>
@@ -201,7 +205,36 @@ const Pending = () => {
                           ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
                           : ""}
                       </td>
-                      <td>{task.time ? task.time : "No time"}</td>
+                      <td>{task.time ? task.time : ""}</td>
+                      <td>{task.description}</td>
+                      <td>{task.relevance ? task.relevance : ""}</td>
+                      <td>{task.urgency}</td>
+                      <td>{task.recurring ? task.recurring : ""}</td>
+                      <td>{task.periodRecurrence}</td>
+                      <td>{task.completed ? task.completed : "Pending"}</td>
+                      <td></td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          <h2 className="pl-2 mt-3 font-bold">Commitments</h2>
+          <div>
+            <table
+              id="output-table-pending"
+              className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
+            >
+              <tbody>
+                {pendingTasks &&
+                  appointmentTasks.map((task) => (
+                    <tr key={task.id}>
+                      <td>{datetimeFnc.getWeekDay(task.date)}</td>
+                      <td>
+                        {task.date
+                          ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
+                          : ""}
+                      </td>
+                      <td>{task.time ? task.time : ""}</td>
                       <td>{task.description}</td>
                       <td>{task.relevance ? task.relevance : ""}</td>
                       <td>{task.urgency}</td>
