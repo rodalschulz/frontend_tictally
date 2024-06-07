@@ -112,7 +112,7 @@ const getDDMMYY = (date) => {
 
 const getWeekDay = (date) => {
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-  const day = new Date(date).getDay();
+  const day = new Date(date).getUTCDay();
   return days[day];
 };
 

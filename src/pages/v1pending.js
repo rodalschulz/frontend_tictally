@@ -33,44 +33,70 @@ const Pending = () => {
 
   const [input, setInput] = useState({
     date: null,
-    time: null,
-    description: null,
+    time: "",
+    description: "",
     relevance: "",
     urgency: "",
-    recurring: null,
+    recurring: "",
     periodRecurrence: "",
   });
   const formRef = useRef(null);
 
-  const adhoc = pendingTasks.filter(
+  const currentYear = new Date().getFullYear();
+  const pendingTasksMod = pendingTasks.map((task) => {
+    if (task.recurring) {
+      let date = new Date(task.date);
+      date.setFullYear(currentYear);
+      task.date = date.toISOString();
+    }
+    return task;
+  });
+  pendingTasksMod.sort((a, b) => {
+    if (a.date && b.date) {
+      return new Date(a.date) - new Date(b.date);
+    } else if (a.date && !b.date) {
+      return -1;
+    } else if (!a.date && b.date) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
+  const adhoc = pendingTasksMod.filter(
     (task) => !task.date && !task.time && !task.state
   );
-  const upcoming = pendingTasks.filter(
+  const upcoming = pendingTasksMod.filter(
     (task) =>
       task.date &&
       !task.state &&
       new Date(task.date) >= nowStart &&
       new Date(task.date) <= futureDate
   );
-  const recentDoneOrExpired = pendingTasks.filter((task) =>
+  const recentDoneOrExpired = pendingTasksMod.filter((task) =>
     task.date && task.state
       ? new Date(task.date) < now
-      : task.date
+      : task.date && !task.recurring
       ? new Date(task.date) < nowStart
       : task.state && new Date(task.updatedAt) <= now
   );
-  const farOff = pendingTasks.filter(
-    (task) => task.date && !task.state && new Date(task.date) > futureDate
+  const farOff = pendingTasksMod.filter(
+    (task) =>
+      task.date &&
+      !task.state &&
+      !task.recurring &&
+      new Date(task.date) > futureDate
   );
+  const allRecurring = pendingTasksMod.filter((task) => task.recurring);
 
   const resetForm = () => {
     setInput({
       date: null,
-      time: null,
-      description: null,
+      time: "",
+      description: "",
       relevance: "",
       urgency: "",
-      recurring: null,
+      recurring: "",
       periodRecurrence: "",
     });
     if (formRef.current) {
@@ -84,6 +110,7 @@ const Pending = () => {
       ...input,
       [name]: value,
     });
+    console.log(input);
   };
 
   const submitPatch = async (event) => {
@@ -110,7 +137,9 @@ const Pending = () => {
       await submitPatch(event);
     } else {
       try {
+        console.log(`Input: ${JSON.stringify(input)}`);
         const updatedInput = pendingValidation.pendingEntryValidation(input);
+        console.log(`Updated Input: ${JSON.stringify(updatedInput)}`);
         await SDK.postUserPendingTask(userId, updatedInput);
         fetchPendingTasks();
       } catch (error) {
@@ -250,8 +279,8 @@ const Pending = () => {
                         onChange={handleInputChange}
                       >
                         <option value="">Select</option>
-                        <option value={true}>YES</option>
-                        <option value={false}>NO</option>
+                        <option value={"true"}>YES</option>
+                        <option value={"false"}>NO</option>
                       </select>
                     </td>
                     <td>
@@ -262,7 +291,6 @@ const Pending = () => {
                         onChange={handleInputChange}
                       >
                         <option value="">Select</option>
-                        <option value="MONTHLY">MONTHLY</option>
                         <option value="YEARLY">YEARLY</option>
                       </select>
                     </td>
@@ -316,7 +344,7 @@ const Pending = () => {
                         <td>{task.description}</td>
                         <td>{task.relevance ? task.relevance : ""}</td>
                         <td>{task.urgency}</td>
-                        <td>{task.recurring ? task.recurring : ""}</td>
+                        <td>{task.recurring ? "TRUE" : ""}</td>
                         <td>{task.periodRecurrence}</td>
                         <td>{task.state ? "Done" : "Pending"}</td>
                         <td></td>
@@ -345,7 +373,9 @@ const Pending = () => {
                             : "transparent",
                           color: new Date(task.date) < now ? "cyan" : "white",
                           fontWeight:
-                            new Date(task.date) < now ? "bold" : "normal",
+                            new Date(task.date) < now && task.recurring
+                              ? "bold"
+                              : "normal",
                         }}
                       >
                         <td>{datetimeFnc.getWeekDay(task.date)}</td>
@@ -358,7 +388,7 @@ const Pending = () => {
                         <td>{task.description}</td>
                         <td>{task.relevance ? task.relevance : ""}</td>
                         <td>{task.urgency}</td>
-                        <td>{task.recurring ? task.recurring : ""}</td>
+                        <td>{task.recurring ? "TRUE" : ""}</td>
                         <td>{task.periodRecurrence}</td>
                         <td>{task.state ? "Done" : "Pending"}</td>
                         <td></td>
@@ -402,7 +432,7 @@ const Pending = () => {
                         <td>{task.description}</td>
                         <td>{task.relevance ? task.relevance : ""}</td>
                         <td>{task.urgency}</td>
-                        <td>{task.recurring ? task.recurring : ""}</td>
+                        <td>{task.recurring ? "TRUE" : ""}</td>
                         <td>{task.periodRecurrence}</td>
                         <td>{task.state ? "Done" : "Pending"}</td>
                         <td></td>
@@ -441,8 +471,54 @@ const Pending = () => {
                         <td>{task.description}</td>
                         <td>{task.relevance ? task.relevance : ""}</td>
                         <td>{task.urgency}</td>
-                        <td>{task.recurring ? task.recurring : ""}</td>
+                        <td>{task.recurring ? "TRUE" : ""}</td>
                         <td>{task.periodRecurrence}</td>
+                        <td>{task.state ? "Done" : "Pending"}</td>
+                        <td></td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p className="bg-secondary text-secondary mt-3 h-1 rounded-lg"> </p>
+          <div className="pt-2 pb-4 mt-3 rounded-md">
+            <h2 className="pl-2 font-bold text-gray-500">Recurring</h2>
+            <div className="mt-1">
+              <table
+                id="output-table-pending"
+                className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
+              >
+                <tbody>
+                  {pendingTasks &&
+                    allRecurring.map((task) => (
+                      <tr
+                        key={task.id}
+                        onClick={(event) =>
+                          handleRowClick(task.id, "", "", "", event)
+                        }
+                        style={{
+                          backgroundColor: selectedRows.includes(task.id)
+                            ? "#264653"
+                            : "transparent",
+                        }}
+                      >
+                        <td>
+                          {task.date && datetimeFnc.getWeekDay(task.date)}
+                        </td>
+                        <td>
+                          {task.date
+                            ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
+                            : ""}
+                        </td>
+                        <td>{task.time ? task.time : ""}</td>
+                        <td>{task.description}</td>
+                        <td>{task.relevance ? task.relevance : ""}</td>
+                        <td>{task.urgency}</td>
+                        <td>{task.recurring ? "TRUE" : ""}</td>
+                        <td>
+                          {task.periodRecurrence ? task.periodRecurrence : ""}
+                        </td>
                         <td>{task.state ? "Done" : "Pending"}</td>
                         <td></td>
                       </tr>
