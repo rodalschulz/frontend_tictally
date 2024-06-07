@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { FaSpinner } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa";
@@ -88,6 +88,15 @@ const Pending = () => {
       new Date(task.date) > futureDate
   );
   const allRecurring = pendingTasksMod.filter((task) => task.recurring);
+
+  const [upcomingActive, setUpcomingActive] = useState(false);
+  useEffect(() => {
+    if (upcoming.length > 0) {
+      setUpcomingActive(true);
+    } else {
+      setUpcomingActive(false);
+    }
+  }, []);
 
   const resetForm = () => {
     setInput({
@@ -190,6 +199,7 @@ const Pending = () => {
         // remove={deleteSelected}
         displayInstructions={displayInstructions}
         setDisplayInstructions={setDisplayInstructions}
+        upcomingActive={upcomingActive}
       />
 
       <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16 xs:max-w-full sm:max-w-[2000px]">
