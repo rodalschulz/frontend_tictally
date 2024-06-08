@@ -3,6 +3,9 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./index.html"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Poppins", "sans-serif"],
+      },
       height: {
         "10p": "10%",
         "20p": "20%",
@@ -16,13 +19,15 @@ module.exports = {
         "100p": "100%",
       },
       screens: {
-        xs: "100px", // Custom breakpoint at 500px
+        xs: "100px",
       },
       colors: {
         custom: {
           "18938A": "rgb(74, 194, 188)",
           grey: "rgb(38, 70, 83)",
           databg: "rgb(98, 121, 136)",
+          upcoming: "rgb(80, 210, 210)",
+          primaryDark: "rgb(80, 200, 200)",
           lightblue: "rgb(217, 237, 249)",
         },
       },

@@ -95,7 +95,7 @@ const Sidebar = ({
           <SidebarButton
             onClick={navigatePending}
             icon={<MdAlarmOn />}
-            borderColor={closeUpcoming.length > 0 ? "border-cyan-400" : null}
+            bgColor={closeUpcoming.length > 0 ? "bg-custom-upcoming" : null}
           />
         </div>
         <div className="flex-grow space-y-4 mt-4 p-2">
