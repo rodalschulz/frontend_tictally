@@ -1,54 +1,32 @@
 const Instructions = ({ pageName }) => {
   const tallyInstructions = (
-    <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
-      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[350px] max-w-[800px] bg-opacity-95 pointer-events-auto">
+    <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50 mt-12">
+      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         <h1 className="mb-2 font-bold text-center text-lg">WELCOME!</h1>
+        <p className="text-center">
+          *Click "?" to hide this guide & click the sidebar to hide it*
+        </p>
+        <br />
         <p>
-          This is your personal Tally page. It's where you make inputs of your
-          daily activities. Use the form above to add new entries. You can also
-          search for entries by using the search mode or modify existing ones by
-          selecting them and then entering new data.
+          This is your personal Tally page. Use the form above to add new
+          entries. You can also search for entries by using the search mode or
+          modify existing ones by selecting them and then entering new data.
         </p>
         <br />
         <p>
           For new entries, you MUST enter a category. If date or start time are
-          not defined, they will automatically be set to current date and time.
-          If you are in search mode, the total time of the search results will
-          be displayed in the TIME column. You can create your own custom
-          subcategories by visiting the Categories Configuration page.
+          not defined, they will automatically be set to current date-time. If
+          in search mode, the total time will be displayed in the TIME column.
+          You can create your own custom subcategories by visiting the
+          Categories Configuration page.
         </p>
-        <br />
-        <p>
-          You can navigate to different pages by using the vertical navigation
-          bar on the left. From top to bottom:
-        </p>
-        <br />
-        <ul>
-          - <strong>Dashboard</strong>: A visual representation of your activity
-          data
-        </ul>
-        <ul>
-          - <strong>My Tally</strong>: You are currently on it
-        </ul>
-        <ul>
-          - <strong>Configuration</strong>: Create your own custom subcategories
-          and core limits
-        </ul>
-        <ul>
-          - <strong>Question Mark</strong>: Make these guides pop up. Click
-          again to close
-        </ul>
-        <ul>
-          - <strong>Logout</strong>: Self explanatory. You will be redirected to
-          the home page
-        </ul>
       </div>
     </div>
   );
 
   const configInstructions = (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
-      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-95 pointer-events-auto">
+      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         {" "}
         <h1 className="mb-2 font-bold text-center text-lg">
           Welcome to your configuration page!
@@ -68,7 +46,7 @@ const Instructions = ({ pageName }) => {
 
   const dashboardInstructions = (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
-      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-95 pointer-events-auto">
+      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         <h1 className="mb-2 font-bold text-center text-lg">
           Welcome to your Dashboard!
         </h1>
@@ -84,7 +62,7 @@ const Instructions = ({ pageName }) => {
 
   const pendingTasksInstructions = (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
-      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-95 pointer-events-auto">
+      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         <h1 className="mb-2 font-bold text-center text-lg">
           Welcome to Pending Tasks!
         </h1>
