@@ -12,6 +12,7 @@ const Register = () => {
     email: "",
     username: "",
     password: "",
+    password2: "",
   });
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -27,6 +28,10 @@ const Register = () => {
     try {
       if (input.username.includes(" ")) {
         alert("Username cannot contain spaces.");
+        return;
+      }
+      if (input.password !== input.password2) {
+        alert("Passwords do not match.");
         return;
       }
       const response = await SDK.registerUser(
@@ -119,6 +124,23 @@ const Register = () => {
               id="password"
               name="password"
               value={input.password}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="password2"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password Confirmation
+            </label>
+            <input
+              type="password"
+              id="password2"
+              name="password2"
+              value={input.password2}
               onChange={handleInputChange}
               className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               required
