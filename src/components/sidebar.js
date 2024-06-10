@@ -23,6 +23,8 @@ const Sidebar = ({
   remove,
   displayInstructions,
   setDisplayInstructions,
+  showSidebar,
+  setShowSidebar,
 }) => {
   const [loading, setIsLoading] = useState(false);
 
@@ -85,49 +87,66 @@ const Sidebar = ({
     }
   };
 
+  const hideSidebar = () => {
+    setShowSidebar(false);
+  };
+
   return (
-    <div className="flex h-screen bg-gray-300 absolute">
-      <div className="sm:relative bg-custom-grey text-white flex flex-col">
-        <div className="flex-grow space-y-4 mt-4 p-2">
-          <SidebarButton onClick={navigateDashboard} icon={<FaRegChartBar />} />
-          <SidebarButton onClick={navigateTally} icon={<FaTable />} />
-          <SidebarButton onClick={navigateCategories} icon={<GrConfigure />} />
-          <SidebarButton
-            onClick={navigatePending}
-            icon={<MdAlarmOn />}
-            bgColor={closeUpcoming.length > 0 ? "bg-custom-upcoming" : null}
-          />
-        </div>
-        <div className="flex-grow space-y-4 mt-4 p-2">
-          {isMobile && (
-            <>
+    <>
+      {showSidebar && (
+        <div className="flex h-screen bg-gray-300 absolute">
+          <div
+            onClick={hideSidebar}
+            className="sm:relative bg-custom-grey text-white flex flex-col"
+          >
+            <div className="flex-grow space-y-4 mt-10 p-2">
               <SidebarButton
-                onClick={submit}
-                icon={<MdOutlinePlaylistAdd />}
-                bgColor={"bg-gray-700"}
+                onClick={navigateDashboard}
+                icon={<FaRegChartBar />}
+              />
+              <SidebarButton onClick={navigateTally} icon={<FaTable />} />
+              <SidebarButton
+                onClick={navigateCategories}
+                icon={<GrConfigure />}
               />
               <SidebarButton
-                onClick={remove}
-                icon={<MdDeleteForever />}
-                bgColor={"bg-gray-700"}
+                onClick={navigatePending}
+                icon={<MdAlarmOn />}
+                bgColor={closeUpcoming.length > 0 ? "bg-custom-upcoming" : null}
               />
+            </div>
+            <div className="flex-grow space-y-4 mt-4 p-2">
+              {isMobile && (
+                <>
+                  <SidebarButton
+                    onClick={submit}
+                    icon={<MdOutlinePlaylistAdd />}
+                    bgColor={"bg-gray-700"}
+                  />
+                  <SidebarButton
+                    onClick={remove}
+                    icon={<MdDeleteForever />}
+                    bgColor={"bg-gray-700"}
+                  />
+                  <SidebarButton
+                    onClick={downloadCSV}
+                    icon={<FaFileDownload />}
+                    bgColor={"bg-gray-700"}
+                  />
+                </>
+              )}
+            </div>
+            <div className="space-y-4 mt-auto p-2 xs:mb-20 sm:mb-0">
               <SidebarButton
-                onClick={downloadCSV}
-                icon={<FaFileDownload />}
-                bgColor={"bg-gray-700"}
+                onClick={displayInstructionsHandler}
+                icon={<FaRegQuestionCircle />}
               />
-            </>
-          )}
+              <SidebarButton onClick={logOut} icon={<FaSignOutAlt />} />
+            </div>
+          </div>
         </div>
-        <div className="space-y-4 mt-auto p-2 xs:mb-20 sm:mb-0">
-          <SidebarButton
-            onClick={displayInstructionsHandler}
-            icon={<FaRegQuestionCircle />}
-          />
-          <SidebarButton onClick={logOut} icon={<FaSignOutAlt />} />
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

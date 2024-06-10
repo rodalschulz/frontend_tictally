@@ -1,6 +1,7 @@
 import * as SDK from "../sdk_backend_fetch.js";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { MdMenuOpen } from "react-icons/md";
 
 import Sidebar from "../components/sidebar.js";
 import useFetchCategoryConfig from "../baseComponents/useFetchCategoryConfig.js";
@@ -10,6 +11,7 @@ import Instructions from "../components/instructions.js";
 
 const Categories = () => {
   const { userId } = useParams();
+  const [showSidebar, setShowSidebar] = useState(true);
   const {
     subcategories: fetchedSubcategories,
     coreLimits: fetchedCoreLimits,
@@ -100,15 +102,31 @@ const Categories = () => {
     }
   };
 
+  const openSidebar = () => {
+    setShowSidebar(true);
+  };
+
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
+      <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
+        {!showSidebar && (
+          <button className="ml-1 mt-1" onClick={openSidebar}>
+            <MdMenuOpen />
+          </button>
+        )}
+      </div>
       <Sidebar
         userId={userId}
         displayInstructions={displayInstructions}
         setDisplayInstructions={setDisplayInstructions}
+        showSidebar={showSidebar}
+        setShowSidebar={setShowSidebar}
       />
-
-      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16 w-full">
+      <main
+        className={`flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 xs:max-w-full sm:max-w-[2000px] ${
+          showSidebar && "ml-16"
+        }`}
+      >
         <div className="xs:w-[220vw] sm:w-full">
           <h1 className="w-[100%] text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white">
             Category Configuration

@@ -17,11 +17,12 @@ import useUserActivityData from "../baseComponents/useUserActivityData.js";
 import useRowNavigation from "../baseComponents/useRowNavigation.js";
 import Instructions from "../components/instructions.js";
 
-import { MdAccessTimeFilled } from "react-icons/md";
+import { MdAccessTimeFilled, MdMenuOpen } from "react-icons/md";
 
 const Members = () => {
   const { userId } = useParams();
 
+  const [showSidebar, setShowSidebar] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [showUTC, setShowUTC] = useState(false);
   const [queryTimeSum, setQueryTimeSum] = useState(0);
@@ -211,17 +212,36 @@ const Members = () => {
     };
   }, []);
 
+  const openSidebar = () => {
+    setShowSidebar(true);
+  };
+
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
-      <Sidebar
-        userId={userId}
-        isMobile={isMobile}
-        submit={submit}
-        remove={deleteSelected}
-        displayInstructions={displayInstructions}
-        setDisplayInstructions={setDisplayInstructions}
-      />
-      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16 xs:max-w-full sm:max-w-[2000px]">
+      <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
+        {!showSidebar && (
+          <button className="ml-1 mt-1" onClick={openSidebar}>
+            <MdMenuOpen />
+          </button>
+        )}
+      </div>
+      <div className="z-40">
+        <Sidebar
+          userId={userId}
+          isMobile={isMobile}
+          submit={submit}
+          remove={deleteSelected}
+          displayInstructions={displayInstructions}
+          setDisplayInstructions={setDisplayInstructions}
+          showSidebar={showSidebar}
+          setShowSidebar={setShowSidebar}
+        />
+      </div>
+      <main
+        className={`flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 xs:max-w-full sm:max-w-[2000px] ${
+          showSidebar && "ml-16"
+        }`}
+      >
         <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 flex justify-between items-center">
           My Tally
           <span className="text-sm flex">

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { FaSpinner } from "react-icons/fa";
+import { MdMenuOpen } from "react-icons/md";
 
 import StackedBarChart from "../components/stackedBarChart";
 import TrailingDataCard from "../components/trailingDataCard";
@@ -15,6 +16,7 @@ import Instructions from "../components/instructions.js";
 
 const Dashboard = () => {
   const { userId } = useParams();
+  const [showSidebar, setShowSidebar] = useState(true);
 
   const [isLoading, setIsLoading] = useState(false);
   const [displayInstructions, setDisplayInstructions] = useState(false);
@@ -45,14 +47,31 @@ const Dashboard = () => {
     userActivityData
   );
 
+  const openSidebar = () => {
+    setShowSidebar(true);
+  };
+
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
+      <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
+        {!showSidebar && (
+          <button className="ml-1 mt-1" onClick={openSidebar}>
+            <MdMenuOpen />
+          </button>
+        )}
+      </div>
       <Sidebar
         userId={userId}
         displayInstructions={displayInstructions}
         setDisplayInstructions={setDisplayInstructions}
+        showSidebar={showSidebar}
+        setShowSidebar={setShowSidebar}
       />
-      <main className="flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 ml-16">
+      <main
+        className={`flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 xs:max-w-full sm:max-w-[2000px] ${
+          showSidebar && "ml-16"
+        }`}
+      >
         <h1 className="sm:min-w-[1400px] xs:w-[1300px] sm:w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 justify-between items-center">
           Dashboard
         </h1>
