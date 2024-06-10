@@ -61,3 +61,21 @@
 #output-table-pending td:nth-child(9) {width: 5% ; text-align: center}
 #output-table-pending td:nth-child(10) {width: 9% ; text-align: center}
 #output-table-pending td:last-child {border-top-right-radius: 7px}
+
+
+@media (max-width: 500px) {
+    #input-table-pending th:nth-child(1) {width: 25%; text-align: center}
+    #input-table-pending th:nth-child(2) {width: 10% ; text-align: center}
+    #input-table-pending th:nth-child(3) {width: 45% ; text-align: center}
+    #input-table-pending th:nth-child(4) {width: 20% ; text-align: center}
+
+    #input-table-pending td:nth-child(1) {width: 25%; text-align: center}
+    #input-table-pending td:nth-child(2) {width: 10% ; text-align: center}
+    #input-table-pending td:nth-child(3) {width: 45% ; text-align: center}
+    #input-table-pending td:nth-child(4) {width: 20%; text-align: center}
+
+    #output-table-pending td:nth-child(1) {width: 25%; text-align: center}
+    #output-table-pending td:nth-child(2) {width: 10% ; text-align: center}
+    #output-table-pending td:nth-child(3) {width: 45% ; text-align: left; max-width: 50px}
+    #output-table-pending td:nth-child(4) {width: 20% ; text-align: center}
+}

@@ -97,7 +97,7 @@ const Dashboard = () => {
             />
           </div>
           {!showTable && !showTable30D && !showTable7D ? (
-            <div className="flex ml-2 w-[550px] max-h-[570px] overflow-y-scroll sm:w-full sm:min-h-[80vh]">
+            <div className="flex ml-2 w-[550px] max-h-[570px] overflow-y-scroll sm:w-full sm:min-h-[80vh] xs:h-[500px]">
               <div className="w-full" onClick={showTableHandler}>
                 <div className="bg-secondary rounded-lg mb-2 text-white font-bold text-center">
                   <h2>LAST 30 DAYS</h2>
@@ -220,7 +220,7 @@ const Dashboard = () => {
                 </div>
               ) : (
                 <div
-                  className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[570px] sm:min-h-[80vh] overflow-auto"
+                  className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[570px] sm:min-h-[80vh] overflow-auto xs:h-[500px]"
                   onClick={showTable7D ? showTableHandler2 : showTableHandler}
                 >
                   <PeriodTimesTable

@@ -223,21 +223,20 @@ const Pending = () => {
               >
                 <thead>
                   <tr>
-                    <th>Day</th>
+                    {!isMobile && <th></th>}
                     <th>Date</th>
                     <th>Time</th>
                     <th>Description</th>
-                    <th>Relevance</th>
-                    <th>Urgency</th>
-                    <th>Recurring</th>
-                    <th>Period</th>
+                    {!isMobile && <th>Relevance</th>}
+                    {!isMobile && <th>Urgency</th>}
+                    {!isMobile && <th>Recurring</th>}
+                    {!isMobile && <th>Period</th>}
                     <th>State</th>
-                    <th>Buttons</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td></td>
+                    {!isMobile && <td></td>}
                     <td>
                       <input
                         name="date"
@@ -262,55 +261,63 @@ const Pending = () => {
                         onChange={handleInputChange}
                       />
                     </td>
-                    <td>
-                      <select
-                        name="relevance"
-                        className="data-input"
-                        value={input.relevance}
-                        onChange={handleInputChange}
-                      >
-                        <option value="">Select</option>
-                        <option value="HIGH">HIGH</option>
-                        <option value="AVG">AVG</option>
-                        <option value="LOW">LOW</option>
-                      </select>
-                    </td>
-                    <td>
-                      <select
-                        name="urgency"
-                        className="data-input"
-                        value={input.urgency}
-                        onChange={handleInputChange}
-                      >
-                        <option value="">Select</option>
-                        <option value="HIGH">HIGH</option>
-                        <option value="AVG">AVG</option>
-                        <option value="LOW">LOW</option>
-                      </select>
-                    </td>
-                    <td>
-                      <select
-                        name="recurring"
-                        className="data-input"
-                        value={input.recurring}
-                        onChange={handleInputChange}
-                      >
-                        <option value="">Select</option>
-                        <option value={"true"}>YES</option>
-                        <option value={"false"}>NO</option>
-                      </select>
-                    </td>
-                    <td>
-                      <select
-                        name="periodRecurrence"
-                        className="data-input"
-                        value={input.periodRecurrence}
-                        onChange={handleInputChange}
-                      >
-                        <option value="">Select</option>
-                        <option value="YEARLY">YEARLY</option>
-                      </select>
-                    </td>
+                    {!isMobile && (
+                      <td>
+                        <select
+                          name="relevance"
+                          className="data-input"
+                          value={input.relevance}
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select</option>
+                          <option value="HIGH">HIGH</option>
+                          <option value="AVG">AVG</option>
+                          <option value="LOW">LOW</option>
+                        </select>
+                      </td>
+                    )}
+                    {!isMobile && (
+                      <td>
+                        <select
+                          name="urgency"
+                          className="data-input"
+                          value={input.urgency}
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select</option>
+                          <option value="HIGH">HIGH</option>
+                          <option value="AVG">AVG</option>
+                          <option value="LOW">LOW</option>
+                        </select>
+                      </td>
+                    )}
+                    {!isMobile && (
+                      <td>
+                        <select
+                          name="recurring"
+                          className="data-input"
+                          value={input.recurring}
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select</option>
+                          <option value={"true"}>YES</option>
+                          <option value={"false"}>NO</option>
+                        </select>
+                      </td>
+                    )}
+                    {!isMobile && (
+                      <td>
+                        <select
+                          name="periodRecurrence"
+                          className="data-input"
+                          value={input.periodRecurrence}
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select</option>
+                          <option value="YEARLY">YEARLY</option>
+                        </select>
+                      </td>
+                    )}
                     <td>
                       <button
                         onClick={submitDonePatch}
@@ -355,16 +362,18 @@ const Pending = () => {
                             : "transparent",
                         }}
                       >
-                        <td className=""></td>
+                        {!isMobile && <td className=""></td>}
                         <td className=""></td>
                         <td className=""></td>
                         <td>{task.description}</td>
-                        <td>{task.relevance ? task.relevance : ""}</td>
-                        <td>{task.urgency}</td>
-                        <td>{task.recurring ? "TRUE" : ""}</td>
-                        <td>{task.periodRecurrence}</td>
+                        {!isMobile && (
+                          <td>{task.relevance ? task.relevance : ""}</td>
+                        )}
+                        {!isMobile && <td>{task.urgency}</td>}
+                        {!isMobile && <td>{task.recurring ? "TRUE" : ""}</td>}
+                        {!isMobile && <td>{task.periodRecurrence}</td>}
+
                         <td>{task.state ? "Done" : "Pending"}</td>
-                        <td></td>
                       </tr>
                     ))}
                 </tbody>
@@ -395,7 +404,9 @@ const Pending = () => {
                               : "normal",
                         }}
                       >
-                        <td>{datetimeFnc.getWeekDay(task.date)}</td>
+                        {!isMobile && (
+                          <td>{datetimeFnc.getWeekDay(task.date)}</td>
+                        )}
                         <td>
                           {task.date
                             ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
@@ -403,12 +414,13 @@ const Pending = () => {
                         </td>
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
-                        <td>{task.relevance ? task.relevance : ""}</td>
-                        <td>{task.urgency}</td>
-                        <td>{task.recurring ? "TRUE" : ""}</td>
-                        <td>{task.periodRecurrence}</td>
+                        {!isMobile && (
+                          <td>{task.relevance ? task.relevance : ""}</td>
+                        )}
+                        {!isMobile && <td>{task.urgency}</td>}
+                        {!isMobile && <td>{task.recurring ? "TRUE" : ""}</td>}
+                        {!isMobile && <td>{task.periodRecurrence}</td>}
                         <td>{task.state ? "Done" : "Pending"}</td>
-                        <td></td>
                       </tr>
                     ))}
                 </tbody>
@@ -437,9 +449,11 @@ const Pending = () => {
                             : "transparent",
                         }}
                       >
-                        <td>
-                          {task.date && datetimeFnc.getWeekDay(task.date)}
-                        </td>
+                        {!isMobile && (
+                          <td>
+                            {task.date && datetimeFnc.getWeekDay(task.date)}
+                          </td>
+                        )}
                         <td>
                           {task.date
                             ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
@@ -447,12 +461,13 @@ const Pending = () => {
                         </td>
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
-                        <td>{task.relevance ? task.relevance : ""}</td>
-                        <td>{task.urgency}</td>
-                        <td>{task.recurring ? "TRUE" : ""}</td>
-                        <td>{task.periodRecurrence}</td>
+                        {!isMobile && (
+                          <td>{task.relevance ? task.relevance : ""}</td>
+                        )}
+                        {!isMobile && <td>{task.urgency}</td>}
+                        {!isMobile && <td>{task.recurring ? "TRUE" : ""}</td>}
+                        {!isMobile && <td>{task.periodRecurrence}</td>}
                         <td>{task.state ? "Done" : "Pending"}</td>
-                        <td></td>
                       </tr>
                     ))}
                 </tbody>
@@ -478,7 +493,9 @@ const Pending = () => {
                             : "transparent",
                         }}
                       >
-                        <td>{datetimeFnc.getWeekDay(task.date)}</td>
+                        {!isMobile && (
+                          <td>{datetimeFnc.getWeekDay(task.date)}</td>
+                        )}
                         <td>
                           {task.date
                             ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
@@ -486,12 +503,13 @@ const Pending = () => {
                         </td>
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
-                        <td>{task.relevance ? task.relevance : ""}</td>
-                        <td>{task.urgency}</td>
-                        <td>{task.recurring ? "TRUE" : ""}</td>
-                        <td>{task.periodRecurrence}</td>
+                        {!isMobile && (
+                          <td>{task.relevance ? task.relevance : ""}</td>
+                        )}
+                        {!isMobile && <td>{task.urgency}</td>}
+                        {!isMobile && <td>{task.recurring ? "TRUE" : ""}</td>}
+                        {!isMobile && <td>{task.periodRecurrence}</td>}
                         <td>{task.state ? "Done" : "Pending"}</td>
-                        <td></td>
                       </tr>
                     ))}
                 </tbody>
@@ -520,9 +538,11 @@ const Pending = () => {
                             : "transparent",
                         }}
                       >
-                        <td>
-                          {task.date && datetimeFnc.getWeekDay(task.date)}
-                        </td>
+                        {!isMobile && (
+                          <td>
+                            {task.date && datetimeFnc.getWeekDay(task.date)}
+                          </td>
+                        )}
                         <td>
                           {task.date
                             ? datetimeFnc.getDDMMYYYY(task.date.slice(0, 10))
@@ -530,14 +550,17 @@ const Pending = () => {
                         </td>
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
-                        <td>{task.relevance ? task.relevance : ""}</td>
-                        <td>{task.urgency}</td>
-                        <td>{task.recurring ? "TRUE" : ""}</td>
-                        <td>
-                          {task.periodRecurrence ? task.periodRecurrence : ""}
-                        </td>
+                        {!isMobile && (
+                          <td>{task.relevance ? task.relevance : ""}</td>
+                        )}
+                        {!isMobile && <td>{task.urgency}</td>}
+                        {!isMobile && <td>{task.recurring ? "TRUE" : ""}</td>}
+                        {!isMobile && (
+                          <td>
+                            {task.periodRecurrence ? task.periodRecurrence : ""}
+                          </td>
+                        )}
                         <td>{task.state ? "Done" : "Pending"}</td>
-                        <td></td>
                       </tr>
                     ))}
                 </tbody>

@@ -154,6 +154,7 @@ const Members = () => {
   };
 
   const submit = async (event) => {
+    event.stopPropagation();
     event.preventDefault();
     setIsLoading(true);
     if (isSearchMode) {

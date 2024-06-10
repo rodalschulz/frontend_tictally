@@ -56,30 +56,37 @@ const Sidebar = ({
   const closeUpcoming = upcoming.filter((task) => new Date(task.date) < now);
 
   // NAVIGATION
-  const navigateDashboard = () => {
+  const navigateDashboard = (e) => {
+    e.stopPropagation();
     window.location.href = `/members/${userId}/dashboard`;
   };
-  const navigateTally = () => {
+  const navigateTally = (e) => {
+    e.stopPropagation();
     window.location.href = `/members/${userId}/tally`;
   };
-  const navigateCategories = () => {
+  const navigateCategories = (e) => {
+    e.stopPropagation();
     window.location.href = `/members/${userId}/categories`;
   };
-  const navigatePending = () => {
+  const navigatePending = (e) => {
+    e.stopPropagation();
     window.location.href = `/members/${userId}/pending`;
   };
 
   // OTHERS
-  const displayInstructionsHandler = () => {
+  const displayInstructionsHandler = (e) => {
+    e.stopPropagation();
     setDisplayInstructions(!displayInstructions);
   };
 
-  const logOut = async () => {
+  const logOut = async (e) => {
+    e.stopPropagation();
     localStorage.removeItem("token");
     window.location.href = "/";
   };
 
-  const downloadCSV = async () => {
+  const downloadCSV = async (e) => {
+    e.stopPropagation();
     try {
       await SDK.downloadCSV(userId);
     } catch (error) {
@@ -99,7 +106,7 @@ const Sidebar = ({
             onClick={hideSidebar}
             className="sm:relative bg-custom-grey text-white flex flex-col"
           >
-            <div className="flex-grow space-y-4 mt-10 p-2">
+            <div className="flex-grow space-y-4 mt-4 p-2">
               <SidebarButton
                 onClick={navigateDashboard}
                 icon={<FaRegChartBar />}
@@ -136,7 +143,7 @@ const Sidebar = ({
                 </>
               )}
             </div>
-            <div className="space-y-4 mt-auto p-2 xs:mb-20 sm:mb-0">
+            <div className="space-y-4 mt-auto p-2 xs:mb-20 sm:mb-4">
               <SidebarButton
                 onClick={displayInstructionsHandler}
                 icon={<FaRegQuestionCircle />}
