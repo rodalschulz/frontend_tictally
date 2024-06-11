@@ -217,6 +217,11 @@ const Members = () => {
     setShowSidebar(true);
   };
 
+  function timeStringToMinutes(time) {
+    const [hours, minutes] = time.split(":").map(Number);
+    return hours * 60 + minutes;
+  }
+
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
@@ -461,64 +466,83 @@ const Members = () => {
               className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px] mr-5 mt-3"
             >
               <tbody>
-                {userActivityData.map((activity) => (
-                  <tr
-                    key={activity.id}
-                    onClick={(event) =>
-                      handleRowClick(
-                        activity.id,
-                        activity.startTime,
-                        activity.endTime,
-                        activity.adjustment,
-                        event
-                      )
-                    }
-                    style={{
-                      backgroundColor: selectedRows.includes(activity.id)
-                        ? "#264653"
-                        : "transparent",
-                    }}
-                  >
-                    {!isMobile && (
-                      <td>{datetimeFnc.getWeekDay(activity.date)}</td>
-                    )}
-                    {!isMobile && (
+                {userActivityData.map((activity, index, array) => {
+                  const currentStartTime = timeStringToMinutes(
+                    activity.startTime
+                  );
+                  const nextEndTime =
+                    index < array.length - 1 &&
+                    activity.date === array[index + 1].date
+                      ? timeStringToMinutes(array[index + 1].endTime)
+                      : null;
+
+                  return (
+                    <tr
+                      key={activity.id}
+                      onClick={(event) =>
+                        handleRowClick(
+                          activity.id,
+                          activity.startTime,
+                          activity.endTime,
+                          activity.adjustment,
+                          event
+                        )
+                      }
+                      style={{
+                        backgroundColor: selectedRows.includes(activity.id)
+                          ? "#264653"
+                          : "transparent",
+                        color:
+                          nextEndTime !== null && currentStartTime < nextEndTime
+                            ? "red"
+                            : "inherit",
+                      }}
+                    >
+                      {!isMobile && (
+                        <td>{datetimeFnc.getWeekDay(activity.date)}</td>
+                      )}
+                      {!isMobile && (
+                        <td>
+                          {datetimeFnc.getDDMMYYYY(activity.date.slice(0, 10))}
+                        </td>
+                      )}
+                      {!isMobile && <td>{activity.description}</td>}
+                      <td>{activity.category}</td>
+                      <td>{activity.subcategory}</td>
+                      <td>{activity.startTime}</td>
+                      <td>{activity.endTime}</td>
+                      {!isMobile && (
+                        <td>
+                          {activity.adjustment === 0
+                            ? "-"
+                            : activity.adjustment}
+                        </td>
+                      )}
                       <td>
-                        {datetimeFnc.getDDMMYYYY(activity.date.slice(0, 10))}
+                        {datetimeFnc.convertMinutesToHHMM(
+                          activity.totalTimeMin
+                        )}
                       </td>
-                    )}
-                    {!isMobile && <td>{activity.description}</td>}
-                    <td>{activity.category}</td>
-                    <td>{activity.subcategory}</td>
-                    <td>{activity.startTime}</td>
-                    <td>{activity.endTime}</td>
-                    {!isMobile && (
-                      <td>
-                        {activity.adjustment === 0 ? "-" : activity.adjustment}
-                      </td>
-                    )}
-                    <td>
-                      {datetimeFnc.convertMinutesToHHMM(activity.totalTimeMin)}
-                    </td>
-                    {showUTC && !isMobile && (
-                      <>
-                        <td>{activity.timezone}</td>
-                        <td>{`${activity.createdAt.slice(
-                          11,
-                          16
-                        )} ${datetimeFnc.getDDMMYY(
-                          activity.createdAt.slice(0, 10)
-                        )}`}</td>
-                        <td>{`${activity.updatedAt.slice(
-                          11,
-                          16
-                        )} ${datetimeFnc.getDDMMYY(
-                          activity.updatedAt.slice(0, 10)
-                        )}`}</td>
-                      </>
-                    )}
-                  </tr>
-                ))}
+                      {showUTC && !isMobile && (
+                        <>
+                          <td>{activity.timezone}</td>
+                          <td>{`${activity.createdAt.slice(
+                            11,
+                            16
+                          )} ${datetimeFnc.getDDMMYY(
+                            activity.createdAt.slice(0, 10)
+                          )}`}</td>
+                          <td>{`${activity.updatedAt.slice(
+                            11,
+                            16
+                          )} ${datetimeFnc.getDDMMYY(
+                            activity.updatedAt.slice(0, 10)
+                          )}`}</td>
+                        </>
+                      )}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
