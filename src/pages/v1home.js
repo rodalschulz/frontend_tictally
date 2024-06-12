@@ -127,8 +127,8 @@ const Home = () => {
                 Cris Seoane
               </h3>
               <p className="text-gray-500 italic">
-                "TicTally has transformed the way I manage my tasks. Highly
-                recommend!"
+                "TicTally is a great tool for tracking how much time I spend on
+                my projects!"
               </p>
             </div>
             <div className="max-w-md bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105">
@@ -141,7 +141,8 @@ const Home = () => {
                 Rod Schulz
               </h3>
               <p className="text-gray-500 italic">
-                "A fantastic tool for productivity and goal tracking. Love it!"
+                "It's a minimalistic and easy-to-use app that helps me focus on
+                one task at a time."
               </p>
             </div>
           </div>
