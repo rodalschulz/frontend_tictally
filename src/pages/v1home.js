@@ -124,7 +124,7 @@ const Home = () => {
                 className="mx-auto rounded-full mb-4 w-24"
               />
               <h3 className="text-2xl font-semibold text-gray-700 mb-2">
-                John Doe
+                Cris Seoane
               </h3>
               <p className="text-gray-500 italic">
                 "TicTally has transformed the way I manage my tasks. Highly

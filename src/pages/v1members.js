@@ -19,6 +19,9 @@ import Instructions from "../components/instructions.js";
 
 import { MdAccessTimeFilled, MdMenuOpen } from "react-icons/md";
 
+import PopupInstructions from "../components/popupInstructions.js";
+import HoverableRowGuide from "../components/hoverableRow.js";
+
 const Members = () => {
   const { userId } = useParams();
 
@@ -217,10 +220,13 @@ const Members = () => {
     setShowSidebar(true);
   };
 
-  function timeStringToMinutes(time) {
+  const timeStringToMinutes = (time) => {
     const [hours, minutes] = time.split(":").map(Number);
     return hours * 60 + minutes;
-  }
+  };
+
+  const [hoveredHeader, setHoveredHeader] = useState(null);
+  const [popupText, setPopupText] = useState("");
 
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
@@ -273,16 +279,67 @@ const Members = () => {
                   className="sm:min-w-[1400px] w-full text-white text-sm mr-5 rounded-[7px] bg-gray-800"
                 >
                   <thead>
-                    <tr>
-                      {!isMobile && <th>Entry/Search</th>}
-                      {!isMobile && <th>DATE</th>}
-                      {!isMobile && <th>DESCRIPTION</th>}
-                      <th>CATEG</th>
-                      <th>SUBCAT</th>
-                      <th>START</th>
+                    <HoverableRowGuide
+                      setPopupText={setPopupText}
+                      setHoveredHeader={setHoveredHeader}
+                    >
+                      {!isMobile && (
+                        <th>
+                          ENT/SRCH
+                          {hoveredHeader === "ENT/SRCH" && (
+                            <PopupInstructions text={popupText} />
+                          )}
+                        </th>
+                      )}
+                      {!isMobile && (
+                        <th>
+                          DATE
+                          {hoveredHeader === "DATE" && (
+                            <PopupInstructions text={popupText} />
+                          )}
+                        </th>
+                      )}
+                      {!isMobile && (
+                        <th>
+                          DESCRIPTION
+                          {hoveredHeader === "DESCRIPTION" && (
+                            <PopupInstructions text={popupText} />
+                          )}
+                        </th>
+                      )}
+                      <th>
+                        CATEG
+                        {hoveredHeader === "CATEG" && (
+                          <PopupInstructions text={popupText} />
+                        )}
+                      </th>
+                      <th>
+                        SUBCAT
+                        {hoveredHeader === "SUBCAT" && (
+                          <PopupInstructions text={popupText} />
+                        )}
+                      </th>
+                      <th>
+                        START
+                        {hoveredHeader === "START" && (
+                          <PopupInstructions text={popupText} />
+                        )}
+                      </th>
                       <th>END</th>
-                      {!isMobile && <th>ADJ</th>}
-                      <th>TIME</th>
+                      {!isMobile && (
+                        <th>
+                          ADJ
+                          {hoveredHeader === "ADJ" && (
+                            <PopupInstructions text={popupText} />
+                          )}
+                        </th>
+                      )}
+                      <th>
+                        TIME
+                        {hoveredHeader === "TIME" && (
+                          <PopupInstructions text={popupText} />
+                        )}
+                      </th>
                       {showUTC && !isMobile && (
                         <>
                           <th>UTC</th>
@@ -290,7 +347,7 @@ const Members = () => {
                           <th>UPDATED UTC</th>
                         </>
                       )}
-                    </tr>
+                    </HoverableRowGuide>
                   </thead>
                   <tbody>
                     <tr>
