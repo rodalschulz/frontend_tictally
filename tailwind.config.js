@@ -29,6 +29,7 @@ module.exports = {
           upcoming: "rgb(80, 210, 210)",
           primaryDark: "rgb(80, 200, 200)",
           lightblue: "rgb(217, 237, 249)",
+          yellow: "rgb(220, 185, 20)",
         },
       },
       transitionProperty: {

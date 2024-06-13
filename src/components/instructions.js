@@ -1,7 +1,7 @@
 const Instructions = ({ pageName }) => {
   const tallyInstructions = (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50 mt-12">
-      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
+      <div className="bg-custom-yellow rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         <h1 className="mb-2 font-bold text-center text-lg">WELCOME!</h1>
         <p className="text-center">
           This is your personal Tally page, where you track your daily
@@ -13,7 +13,8 @@ const Instructions = ({ pageName }) => {
         </p>
         <br />
         <p className="text-center text-xs">
-          *Click sidebar's "?" symbol to hide this guide*
+          *Click sidebar's "?" symbol to open/hide this guide, after making an
+          entry*
         </p>
         <p className="text-center mt-1 text-xs">
           *Navigate the entry form easily with TAB, SHIFT+TAB, and SPACE for
@@ -28,7 +29,7 @@ const Instructions = ({ pageName }) => {
 
   const configInstructions = (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
-      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
+      <div className="bg-custom-yellow rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         {" "}
         <h1 className="mb-2 font-bold text-center text-lg">
           Welcome to your configuration page!
@@ -48,7 +49,7 @@ const Instructions = ({ pageName }) => {
 
   const dashboardInstructions = (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
-      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
+      <div className="bg-custom-yellow rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         <h1 className="mb-2 font-bold text-center text-lg">
           Welcome to your Dashboard!
         </h1>
@@ -64,7 +65,7 @@ const Instructions = ({ pageName }) => {
 
   const pendingTasksInstructions = (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
-      <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
+      <div className="bg-custom-yellow rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         <h1 className="mb-2 font-bold text-center text-lg">
           Welcome to Pending Tasks!
         </h1>

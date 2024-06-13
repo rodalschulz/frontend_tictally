@@ -104,14 +104,14 @@ const Sidebar = ({
         <div className="flex h-screen bg-gray-300 absolute">
           <div
             onClick={hideSidebar}
-            className="sm:relative bg-custom-grey text-white flex flex-col"
+            className="sm:relative bg-secondary text-white flex flex-col"
           >
             <div className="flex-grow space-y-4 mt-4 p-2">
+              <SidebarButton onClick={navigateTally} icon={<FaTable />} />
               <SidebarButton
                 onClick={navigateDashboard}
                 icon={<FaRegChartBar />}
               />
-              <SidebarButton onClick={navigateTally} icon={<FaTable />} />
               <SidebarButton
                 onClick={navigateCategories}
                 icon={<GrConfigure />}
@@ -146,7 +146,7 @@ const Sidebar = ({
             <div className="space-y-4 mt-auto p-2 xs:mb-20 sm:mb-4">
               <SidebarButton
                 onClick={displayInstructionsHandler}
-                icon={<FaRegQuestionCircle />}
+                icon={<FaRegQuestionCircle className="text-yellow-200" />}
               />
               <SidebarButton onClick={logOut} icon={<FaSignOutAlt />} />
             </div>

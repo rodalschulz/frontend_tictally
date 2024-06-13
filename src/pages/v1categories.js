@@ -131,7 +131,11 @@ const Categories = () => {
           <h1 className="w-[100%] text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white">
             Category Configuration
           </h1>
-          {displayInstructions && <Instructions pageName="config" />}
+          {subcategories ? (
+            <Instructions pageName="config" />
+          ) : (
+            displayInstructions && <Instructions pageName="config" />
+          )}
           <div className="w-[100%] overflow-x-auto">
             <form className="flex">
               <table className="rounded-lg bg-secondary shadow-md">

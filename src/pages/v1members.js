@@ -273,6 +273,10 @@ const Members = () => {
     }
   }, [userActivityData, displayInstructions, instructionSteps, showSidebar]);
 
+  const refreshTally = () => {
+    window.location.href = `/members/${userId}/tally`;
+  };
+
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
@@ -295,15 +299,15 @@ const Members = () => {
         />
         <div className=""></div>
         {userActivityData.length === 0 && instructionSteps === 1 && (
-          <div className="absolute mt-[40vh] ml-[70px] bg-primary rounded-lg p-6 text-white flex items-center">
+          <div className="absolute mt-[40vh] ml-[70px] bg-custom-yellow rounded-lg p-6 text-white flex items-center">
             <FaArrowAltCircleLeft className="text-[32px]" />
-                Click the sidebar to hide it!
+            <span className="ml-4">Click the sidebar to hide it!</span>
           </div>
         )}
         {instructionSteps === 2 && (
-          <div className="absolute mt-[48vh] ml-[27px] bg-primary rounded-lg p-6 text-white flex items-center">
-            <FaArrowAltCircleLeft className="text-[32px]" />     Now click this
-            button to show it!
+          <div className="absolute mt-[48vh] ml-[27px] bg-custom-yellow rounded-lg p-6 text-white flex items-center">
+            <FaArrowAltCircleLeft className="text-[32px]" />
+            <span className="ml-4">Now click this button to show it!</span>
           </div>
         )}
       </div>
@@ -313,7 +317,9 @@ const Members = () => {
         }`}
       >
         <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 flex justify-between items-center">
-          My Tally
+          <span onClick={refreshTally}>
+            <button>My Tally</button>
+          </span>
           <span className="text-sm flex">
             {!isMobile && (
               <button
@@ -565,7 +571,7 @@ const Members = () => {
             </section>
           </div>
           {instructionSteps === 3 && (
-            <div className="flex flex-col items-center justify-center absolute mt-2 ml-10 bg-primary rounded-lg p-6 text-white mr-5">
+            <div className="flex flex-col items-center justify-center absolute mt-2 ml-10 bg-custom-yellow rounded-lg p-6 text-white mr-5">
               <p className="text-[32px]">
                 <FaArrowAltCircleUp />
               </p>
@@ -581,15 +587,13 @@ const Members = () => {
             </div>
           )}
           {instructionSteps === 4 && (
-            <div className="flex flex-col items-center justify-center absolute mt-12 ml-10 bg-primary rounded-lg p-6 text-white mr-5">
+            <div className="flex flex-col items-center justify-center absolute mt-12 ml-10 bg-custom-yellow rounded-lg p-6 text-white mr-5">
               <p className="text-[32px]">
                 <FaArrowAltCircleUp />
               </p>
+              <p className="mt-2">Your first entry! Lets modify it!</p>
               <br />
-              <p>
-                Your first entry! As you can see, it auto filled the DATE and
-                START time.
-              </p>
+              <p>As you can see, it auto filled the DATE and START time.</p>
               <br />
               <p>
                 Now, select the entry, pick a DIFFERENT category and press ENTER
@@ -598,13 +602,13 @@ const Members = () => {
             </div>
           )}
           {instructionSteps === 5 && (
-            <div className="flex flex-col items-center justify-center absolute mt-12 ml-10 bg-primary rounded-lg p-6 text-white mr-5">
+            <div className="flex flex-col items-center justify-center absolute mt-12 ml-10 bg-custom-yellow rounded-lg p-6 text-white mr-5">
               <p className="text-[32px]">
                 <FaArrowAltCircleUp />
               </p>
               <p className="mt-2">You modified it! Well done!</p>
               <br />
-              <p>Now select the entry and press DELETE.</p>
+              <p>Now select the entry and press DELETE on your keyboard.</p>
               <br />
               <p>
                 If on mobile, instead of DELETE, click the sidebar's darkest
