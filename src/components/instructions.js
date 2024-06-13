@@ -4,21 +4,23 @@ const Instructions = ({ pageName }) => {
       <div className="bg-primary rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         <h1 className="mb-2 font-bold text-center text-lg">WELCOME!</h1>
         <p className="text-center">
-          *Click "?" to hide this guide & click the sidebar to hide it*
+          This is your personal Tally page, where you track your daily
+          activities!
+        </p>
+        <p className="text-center">
+          Hover the mouse over the form's titles to see a brief guide on how to
+          make successful entries.
         </p>
         <br />
-        <p>
-          This is your personal Tally page. Use the form above to add new
-          entries. You can also search for entries by using the search mode or
-          modify existing ones by selecting them and then entering new data.
+        <p className="text-center text-xs">
+          *Click sidebar's "?" symbol to hide this guide*
         </p>
-        <br />
-        <p>
-          For new entries, you MUST enter a category. If date or start time are
-          not defined, they will automatically be set to current date-time. If
-          in search mode, the total time will be displayed in the TIME column.
-          You can create your own custom subcategories by visiting the
-          Categories Configuration page.
+        <p className="text-center mt-1 text-xs">
+          *Navigate the entry form easily with TAB, SHIFT+TAB, and SPACE for
+          dropdowns*
+        </p>
+        <p className="text-center mt-1 text-xs">
+          *CTRL+Click and SHIFT+Click to select more than 1 row*
         </p>
       </div>
     </div>

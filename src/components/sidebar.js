@@ -128,12 +128,12 @@ const Sidebar = ({
                   <SidebarButton
                     onClick={submit}
                     icon={<MdOutlinePlaylistAdd />}
-                    bgColor={"bg-gray-700"}
+                    bgColor={"bg-gray-400"}
                   />
                   <SidebarButton
                     onClick={remove}
                     icon={<MdDeleteForever />}
-                    bgColor={"bg-gray-700"}
+                    bgColor={"bg-gray-900"}
                   />
                   <SidebarButton
                     onClick={downloadCSV}

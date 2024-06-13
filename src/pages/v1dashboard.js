@@ -144,7 +144,7 @@ const Dashboard = () => {
                     categories={["CORE"]}
                   />
                 </div>
-                <div className="mb-2">
+                <div className="mb-2" onClick={console.log()}>
                   <TrailingDataCard
                     periodTimes={periodTimes30D}
                     categories={["WASTE"]}

@@ -1,6 +1,6 @@
 {
-  "short_name": "Dummy app",
-  "name": "Dummy App",
+  "short_name": "tictally",
+  "name": "tictally",
   "icons": [],
   "start_url": ".",
   "display": "standalone",

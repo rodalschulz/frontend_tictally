@@ -18,6 +18,7 @@ import useRowNavigation from "../baseComponents/useRowNavigation.js";
 import Instructions from "../components/instructions.js";
 
 import { MdAccessTimeFilled, MdMenuOpen } from "react-icons/md";
+import { FaArrowAltCircleUp, FaArrowAltCircleLeft } from "react-icons/fa";
 
 import PopupInstructions from "../components/popupInstructions.js";
 import HoverableRowGuide from "../components/hoverableRow.js";
@@ -32,9 +33,16 @@ const Members = () => {
   const [displayInstructions, setDisplayInstructions] = useState(false);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const { subcategories } = useFetchCategoryConfig(userId);
-  const { userActivityData, setUserActivityData, fetchUserActivityData } =
-    useUserActivityData(userId, 32, setIsLoading);
+  const {
+    userActivityData,
+    setUserActivityData,
+    fetchUserActivityData,
+    activityDataFetched,
+  } = useUserActivityData(userId, 32, setIsLoading);
   const isMobile = useWindowSize();
+
+  const [hoveredHeader, setHoveredHeader] = useState(null);
+  const [popupText, setPopupText] = useState("");
 
   // SEARCH MODE
   const handleToggleClick = () => {
@@ -156,6 +164,8 @@ const Members = () => {
     setIsLoading(false);
   };
 
+  const [patchSubmitted, setPatchSubmitted] = useState(false);
+
   const submit = async (event) => {
     event.stopPropagation();
     event.preventDefault();
@@ -164,6 +174,7 @@ const Members = () => {
       await submitSearch(event);
     } else if (selectedRows.length > 0 && !isSearchMode) {
       await submitPatch(event);
+      setPatchSubmitted(true); // only for instruction purposes
     } else {
       try {
         const updatedInput = activityData.activityEntryValidation(input);
@@ -221,12 +232,46 @@ const Members = () => {
   };
 
   const timeStringToMinutes = (time) => {
-    const [hours, minutes] = time.split(":").map(Number);
-    return hours * 60 + minutes;
+    try {
+      const [hours, minutes] = time.split(":").map(Number);
+      return hours * 60 + minutes;
+    } catch (error) {
+      console.error("Error converting time string to minutes:", error);
+    }
   };
 
-  const [hoveredHeader, setHoveredHeader] = useState(null);
-  const [popupText, setPopupText] = useState("");
+  const [instructionSteps, setInstructionSteps] = useState(0);
+
+  useEffect(() => {
+    if (
+      activityDataFetched &&
+      userActivityData.length === 0 &&
+      instructionSteps === 0
+    ) {
+      setInstructionSteps(1);
+      return;
+    }
+
+    if (instructionSteps === 1 && !showSidebar) {
+      setInstructionSteps(2);
+    } else if (instructionSteps === 2 && showSidebar) {
+      setInstructionSteps(3);
+    } else if (
+      activityDataFetched &&
+      userActivityData.length > 0 &&
+      instructionSteps === 3
+    ) {
+      setInstructionSteps(4);
+    } else if (instructionSteps === 4 && patchSubmitted) {
+      setInstructionSteps(5);
+    } else if (
+      activityDataFetched &&
+      userActivityData.length === 0 &&
+      instructionSteps === 5
+    ) {
+      setInstructionSteps(null);
+    }
+  }, [userActivityData, displayInstructions, instructionSteps, showSidebar]);
 
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
@@ -248,6 +293,19 @@ const Members = () => {
           showSidebar={showSidebar}
           setShowSidebar={setShowSidebar}
         />
+        <div className=""></div>
+        {userActivityData.length === 0 && instructionSteps === 1 && (
+          <div className="absolute mt-[40vh] ml-[70px] bg-primary rounded-lg p-6 text-white flex items-center">
+            <FaArrowAltCircleLeft className="text-[32px]" />
+                Click the sidebar to hide it!
+          </div>
+        )}
+        {instructionSteps === 2 && (
+          <div className="absolute mt-[48vh] ml-[27px] bg-primary rounded-lg p-6 text-white flex items-center">
+            <FaArrowAltCircleLeft className="text-[32px]" />     Now click this
+            button to show it!
+          </div>
+        )}
       </div>
       <main
         className={`flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 xs:max-w-full sm:max-w-[2000px] ${
@@ -506,6 +564,54 @@ const Members = () => {
               </form>
             </section>
           </div>
+          {instructionSteps === 3 && (
+            <div className="flex flex-col items-center justify-center absolute mt-2 ml-10 bg-primary rounded-lg p-6 text-white mr-5">
+              <p className="text-[32px]">
+                <FaArrowAltCircleUp />
+              </p>
+              <p className="mt-2">Make a TEST entry!</p>
+              <br />
+              <p>Select a random CATEGORY and press ENTER</p>
+              <p></p>
+              <br />
+              <p>
+                If on mobile, instead of ENTER, press the sidebar's light gray
+                button!
+              </p>
+            </div>
+          )}
+          {instructionSteps === 4 && (
+            <div className="flex flex-col items-center justify-center absolute mt-12 ml-10 bg-primary rounded-lg p-6 text-white mr-5">
+              <p className="text-[32px]">
+                <FaArrowAltCircleUp />
+              </p>
+              <br />
+              <p>
+                Your first entry! As you can see, it auto filled the DATE and
+                START time.
+              </p>
+              <br />
+              <p>
+                Now, select the entry, pick a DIFFERENT category and press ENTER
+                again.
+              </p>
+            </div>
+          )}
+          {instructionSteps === 5 && (
+            <div className="flex flex-col items-center justify-center absolute mt-12 ml-10 bg-primary rounded-lg p-6 text-white mr-5">
+              <p className="text-[32px]">
+                <FaArrowAltCircleUp />
+              </p>
+              <p className="mt-2">You modified it! Well done!</p>
+              <br />
+              <p>Now select the entry and press DELETE.</p>
+              <br />
+              <p>
+                If on mobile, instead of DELETE, click the sidebar's darkest
+                button!
+              </p>
+            </div>
+          )}
           {isLoading && (
             <div className="fixed inset-0 flex items-center justify-center z-50">
               <div className="bg-gray-100 p-4 rounded-lg shadow-lg flex items-center justify-center">
@@ -514,9 +620,8 @@ const Members = () => {
             </div>
           )}
           {!isLoading &&
-            (userActivityData.length === 0 || displayInstructions) && (
-              <Instructions pageName="tally" />
-            )}
+            ((userActivityData.length === 0 && instructionSteps === null) ||
+              displayInstructions) && <Instructions pageName="tally" />}
           <div>
             <table
               id="data"
