@@ -21,19 +21,26 @@ const Home = () => {
         </nav>
 
         {/* Hero Section */}
-        <section className="flex flex-col items-center justify-center py-20 space-y-8 animate-fade-in h-[60vh]">
-          <h2 className="text-6xl font-bold text-secondary mb-4 animate-slide-up">
-            tictally
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl text-center animate-slide-up delay-200">
-            Track your activities. Stay productive.
-          </p>
-          <Link to="/register">
-            <button className="px-8 py-4 bg-primary text-white rounded-full shadow-lg hover:bg-custom-primaryDark transition duration-300 transform hover:scale-105">
-              Get Started Now
-            </button>
-          </Link>
-        </section>
+        <div className="hero-section relative w-full h-60vh">
+          <img
+            src="/images/tictally-background.png"
+            alt="Background"
+            className="hero-background w-full h-full object-cover"
+          />
+          <div className="hero-content flex flex-col items-center justify-center bg-white bg-opacity-75 w-full py-64 absolute top-0 left-0">
+            <h2 className="text-6xl font-bold text-secondary mb-4 animate-slide-up">
+              tictally
+            </h2>
+            <p className="text-xl text-gray-600 mb-8 max-w-2xl text-center animate-slide-up delay-200">
+              Track your activities. Stay productive.
+            </p>
+            <Link to="/register">
+              <button className="px-8 py-4 bg-primary text-white rounded-full shadow-lg hover:bg-custom-primaryDark transition duration-300 transform hover:scale-105">
+                Get Started Now
+              </button>
+            </Link>
+          </div>
+        </div>
 
         {/* Features Section */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-8 px-10 py-10 animate-fade-in delay-500">
