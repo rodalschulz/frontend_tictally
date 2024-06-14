@@ -15,8 +15,7 @@ const Categories = () => {
   const {
     subcategories: fetchedSubcategories,
     coreLimits: fetchedCoreLimits,
-    setCoreLimits,
-    setSubcategories,
+    dataFetched: dataFetched,
   } = useFetchCategoryConfig(userId);
   const isMobile = useWindowSize();
   const [displayInstructions, setDisplayInstructions] = useState(false);
@@ -106,6 +105,16 @@ const Categories = () => {
     setShowSidebar(true);
   };
 
+  useEffect(() => {
+    if (dataFetched) {
+      console.log("Data fetched", subcategories, coreLimits);
+      if (subcategories.GENERAL[0] === "" && coreLimits.SLEEP === "") {
+        setDisplayInstructions(true);
+        console.log("No data fetched");
+      }
+    }
+  }, [dataFetched]);
+
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
@@ -131,11 +140,7 @@ const Categories = () => {
           <h1 className="w-[100%] text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white">
             Category Configuration
           </h1>
-          {subcategories ? (
-            <Instructions pageName="config" />
-          ) : (
-            displayInstructions && <Instructions pageName="config" />
-          )}
+          {displayInstructions && <Instructions pageName="config" />}
           <div className="w-[100%] overflow-x-auto">
             <form className="flex">
               <table className="rounded-lg bg-secondary shadow-md">

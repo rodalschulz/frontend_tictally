@@ -13,8 +13,8 @@ const Instructions = ({ pageName }) => {
         </p>
         <br />
         <p className="text-center text-xs">
-          *Click sidebar's "?" symbol to open/hide this guide, after making an
-          entry*
+          *Click sidebar's "?" symbol to open/hide this guide, after making your
+          first entry*
         </p>
         <p className="text-center mt-1 text-xs">
           *Navigate the entry form easily with TAB, SHIFT+TAB, and SPACE for

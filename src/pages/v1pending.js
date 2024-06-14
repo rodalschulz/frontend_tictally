@@ -27,7 +27,7 @@ const Pending = () => {
   const futureDate = new Date(now);
   futureDate.setDate(now.getDate() + daysForward);
 
-  const { pendingTasks, setPendingTasks, fetchPendingTasks } =
+  const { pendingTasks, setPendingTasks, fetchPendingTasks, dataFetched } =
     useFetchPendingTasks(userId, 365, setIsLoading);
   const isMobile = useWindowSize();
   const [displayInstructions, setDisplayInstructions] = useState(false);
@@ -186,6 +186,14 @@ const Pending = () => {
     setShowSidebar(true);
   };
 
+  useEffect(() => {
+    if (dataFetched) {
+      if (pendingTasks.length === 0) {
+        setDisplayInstructions(true);
+      }
+    }
+  }, [dataFetched]);
+
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
@@ -198,7 +206,7 @@ const Pending = () => {
       <Sidebar
         userId={userId}
         isMobile={isMobile}
-        // submit={submit}
+        submit={submit}
         // remove={deleteSelected}
         displayInstructions={displayInstructions}
         setDisplayInstructions={setDisplayInstructions}
@@ -338,7 +346,7 @@ const Pending = () => {
               </div>
             </div>
           )}
-          {!isLoading && (pendingTasks.length === 0 || displayInstructions) && (
+          {!isLoading && displayInstructions && (
             <Instructions pageName="pendingTasks" />
           )}
           <div className="pt-2 pb-4 mt-3 rounded-md">

@@ -3,12 +3,14 @@ import * as SDK from "../sdk_backend_fetch.js";
 
 const useFetchPendingTasks = (userId, daysTotal, setIsLoading) => {
   const [pendingTasks, setPendingTasks] = useState([]);
+  const [dataFetched, setDataFetched] = useState(false);
 
   const fetchPendingTasks = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await SDK.getUserPendingTasks(userId, daysTotal);
       setPendingTasks(data);
+      setDataFetched(true);
     } catch (error) {
       console.error(error);
     }
@@ -19,7 +21,7 @@ const useFetchPendingTasks = (userId, daysTotal, setIsLoading) => {
     fetchPendingTasks();
   }, []);
 
-  return { pendingTasks, setPendingTasks, fetchPendingTasks };
+  return { pendingTasks, setPendingTasks, fetchPendingTasks, dataFetched };
 };
 
 export default useFetchPendingTasks;
