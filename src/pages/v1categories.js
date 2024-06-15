@@ -9,6 +9,9 @@ import useWindowSize from "../baseComponents/useWindowSize.js";
 import configValidation from "../functions/configValidation.js";
 import Instructions from "../components/instructions.js";
 
+import PopupInstructions from "../components/popupInstructions.js";
+import HoverableRowGuide from "../components/hoverableRow.js";
+
 const Categories = () => {
   const { userId } = useParams();
   const [showSidebar, setShowSidebar] = useState(true);
@@ -19,6 +22,9 @@ const Categories = () => {
   } = useFetchCategoryConfig(userId);
   const isMobile = useWindowSize();
   const [displayInstructions, setDisplayInstructions] = useState(false);
+
+  const [hoveredHeader, setHoveredHeader] = useState(null);
+  const [popupText, setPopupText] = useState("");
 
   const defaultCoreLimits = {
     SLEEP: "",
@@ -145,11 +151,17 @@ const Categories = () => {
             <form className="flex">
               <table className="rounded-lg bg-secondary shadow-md">
                 <thead className="bg-secondary text-white">
-                  <tr>
+                  <HoverableRowGuide
+                    setHoveredHeader={setHoveredHeader}
+                    setPopupText={setPopupText}
+                  >
                     <th className="px-7 py-2" colSpan={2}>
-                      CORE LIMITS
+                      CORE LIMITS{" "}
+                      {hoveredHeader === "CORE LIMITS" && (
+                        <PopupInstructions text={popupText} />
+                      )}
                     </th>
-                  </tr>
+                  </HoverableRowGuide>
                 </thead>
                 <tbody className="text-[13px] bg-gray-200">
                   {Object.keys(coreLimits).map((limit, index) => (
@@ -170,13 +182,41 @@ const Categories = () => {
               </table>
               <table className="ml-2 rounded-lg shadow-md">
                 <thead className="bg-secondary text-white">
-                  <tr>
-                    <th className="px-7 py-2">GENERAL</th>
-                    <th className="px-7 py-2">WORK</th>
-                    <th className="px-7 py-2">LEARN</th>
-                    <th className="px-7 py-2">BUILD</th>
-                    <th className="px-7 py-2">RECOVERY</th>
-                  </tr>
+                  <HoverableRowGuide
+                    setHoveredHeader={setHoveredHeader}
+                    setPopupText={setPopupText}
+                  >
+                    <th className="px-7 py-2">
+                      GENERAL{" "}
+                      {hoveredHeader === "GENERAL" && (
+                        <PopupInstructions text={popupText} />
+                      )}
+                    </th>
+                    <th className="px-7 py-2">
+                      WORK{" "}
+                      {hoveredHeader === "WORK" && (
+                        <PopupInstructions text={popupText} />
+                      )}
+                    </th>
+                    <th className="px-7 py-2">
+                      LEARN{" "}
+                      {hoveredHeader === "LEARN" && (
+                        <PopupInstructions text={popupText} />
+                      )}
+                    </th>
+                    <th className="px-7 py-2">
+                      BUILD{" "}
+                      {hoveredHeader === "BUILD" && (
+                        <PopupInstructions text={popupText} />
+                      )}
+                    </th>
+                    <th className="px-7 py-2">
+                      RECOVERY{" "}
+                      {hoveredHeader === "RECOVERY" && (
+                        <PopupInstructions text={popupText} />
+                      )}
+                    </th>
+                  </HoverableRowGuide>
                 </thead>
                 <tbody className="text-[13px] bg-gray-200">
                   {Array.from({ length: 10 }).map((_, rowIndex) => (

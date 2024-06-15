@@ -146,7 +146,7 @@ const Sidebar = ({
             <div className="space-y-4 mt-auto p-2 xs:mb-20 sm:mb-4">
               <SidebarButton
                 onClick={displayInstructionsHandler}
-                icon={<FaRegQuestionCircle className="text-yellow-200" />}
+                icon={<FaRegQuestionCircle className="text-cyan-200" />}
               />
               <SidebarButton onClick={logOut} icon={<FaSignOutAlt />} />
             </div>

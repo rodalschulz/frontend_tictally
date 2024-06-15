@@ -35,7 +35,32 @@ const HoverableRowGuide = ({ children, setPopupText, setHoveredHeader }) => {
       setPopupText(
         `Time:\nThis field is automatically calculated\nbased on the start time, end time\nand the adjustment time.`
       );
+    } else if (event.target.textContent.trim() === "CORE LIMITS") {
+      setPopupText(
+        `Core Limits:\nThese are limits in minutes for each\nCORE subcategory.`
+      );
+    } else if (event.target.textContent.trim() === "GENERAL") {
+      setPopupText(
+        `General:\nThe General category is for activities\nthat don't fit into any other category.`
+      );
+    } else if (event.target.textContent.trim() === "WORK") {
+      setPopupText(
+        `Work:\nThe Work category is for activities\nrelated to your job or career.`
+      );
+    } else if (event.target.textContent.trim() === "LEARN") {
+      setPopupText(
+        `Learn:\nThe Learn category is for activities\nrelated to gaining knowledge.`
+      );
+    } else if (event.target.textContent.trim() === "BUILD") {
+      setPopupText(
+        `Build:\nThe Build category is for activities\nrelated to creating or building something.`
+      );
+    } else if (event.target.textContent.trim() === "RECOVERY") {
+      setPopupText(
+        `Recovery:\nThe Recovery category is for activities\nrelated to rest and relaxation.`
+      );
     }
+
     const headerText = event.target.textContent.trim();
     setHoveredHeader(headerText);
   };
