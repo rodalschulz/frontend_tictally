@@ -12,12 +12,18 @@ import useFetchPendingTasks from "../baseComponents/useFetchPendingTasks.js";
 import datetimeFnc from "../functions/datetimeFnc.js";
 import useRowNavigation from "../baseComponents/useRowNavigation.js";
 
+import PopupInstructions from "../components/popupInstructions.js";
+import HoverableRowGuide from "../components/hoverableRow.js";
+
 import "../styles/v1pending.css";
 
 const Pending = () => {
   const { userId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
+
+  const [hoveredHeader, setHoveredHeader] = useState(null);
+  const [popupText, setPopupText] = useState("");
 
   const daysForward = 14;
   const nowStart = new Date();
@@ -230,17 +236,44 @@ const Pending = () => {
                 className="sm:min-w-[1400px] w-full text-white text-sm mr-5 rounded-[7px] bg-gray-800"
               >
                 <thead>
-                  <tr>
+                  <HoverableRowGuide
+                    setHoveredHeader={setHoveredHeader}
+                    setPopupText={setPopupText}
+                  >
                     {!isMobile && <th></th>}
-                    <th>Date</th>
-                    <th>Time</th>
+                    <th>
+                      Date{" "}
+                      {hoveredHeader === "Date" && (
+                        <PopupInstructions text={popupText} />
+                      )}
+                    </th>
+                    <th>
+                      Time{" "}
+                      {hoveredHeader === "Time" && (
+                        <PopupInstructions text={popupText} />
+                      )}
+                    </th>
                     <th>Description</th>
-                    {!isMobile && <th>Relevance</th>}
+                    {!isMobile && (
+                      <th>
+                        Relevance{" "}
+                        {hoveredHeader === "Relevance" && (
+                          <PopupInstructions text={popupText} />
+                        )}
+                      </th>
+                    )}
                     {!isMobile && <th>Urgency</th>}
-                    {!isMobile && <th>Recurring</th>}
+                    {!isMobile && (
+                      <th>
+                        Recurring{" "}
+                        {hoveredHeader === "Recurring" && (
+                          <PopupInstructions text={popupText} />
+                        )}
+                      </th>
+                    )}
                     {!isMobile && <th>Period</th>}
                     <th>State</th>
-                  </tr>
+                  </HoverableRowGuide>
                 </thead>
                 <tbody>
                   <tr>

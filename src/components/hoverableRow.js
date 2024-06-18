@@ -59,6 +59,22 @@ const HoverableRowGuide = ({ children, setPopupText, setHoveredHeader }) => {
       setPopupText(
         `Recovery:\nThe Recovery category is for activities\nrelated to rest and relaxation.`
       );
+    } else if (event.target.textContent.trim() === "Date") {
+      setPopupText(
+        `Date:\nIf no date is given, it will create an\nad-hoc task (task with no specified date).\nInput a date with your keyboard or by\nselecting it in the drop down calendar.`
+      );
+    } else if (event.target.textContent.trim() === "Time") {
+      setPopupText(
+        `Time:\nTime must go with a date. Leave it blank\nfor ad-hoc tasks.`
+      );
+    } else if (event.target.textContent.trim() === "Relevance") {
+      setPopupText(
+        `Relevance:\nOnly for ad-hoc tasks (dateless tasks).\nIt will just affect the order in which\ntasks are displayed.`
+      );
+    } else if (event.target.textContent.trim() === "Recurring") {
+      setPopupText(
+        `Recurring:\nIf a task is recurring, it will be\nautomatically created again after\ncompletion.`
+      );
     }
 
     const headerText = event.target.textContent.trim();
