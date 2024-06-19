@@ -20,15 +20,16 @@ const Home = () => {
 
   const submit = async (e) => {
     e.preventDefault();
-    const response = await SDK.visitorEmail(
-      visitorData.email,
-      visitorData.name,
-      visitorData.message
-    );
-    if (response.status === 200) {
-      alert("Message sent successfully!");
-    } else {
-      alert("Message failed to send. Please try again.");
+    try {
+      const response = await SDK.visitorEmail(
+        visitorData.email,
+        visitorData.name,
+        visitorData.message
+      );
+      alert(response.response);
+    } catch (error) {
+      console.log(error);
+      alert("Email failed to send");
     }
   };
 
