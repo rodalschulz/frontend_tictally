@@ -356,6 +356,24 @@ export const passwordRecoveryEmail = async (email) => {
   }
 };
 
+export const visitorEmail = async (visitorEmail, name, message) => {
+  try {
+    const response = await fetch(`${baseURL}/${version}/visitor-email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+      },
+      body: JSON.stringify({ visitorEmail, name, message }),
+    });
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error sending visitor email:", error);
+    throw error;
+  }
+};
+
 // PENDING TASKS
 export const postUserPendingTask = async (userId, data) => {
   try {

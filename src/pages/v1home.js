@@ -1,7 +1,37 @@
 import { Link } from "react-router-dom";
 import "../styles/v1home.css";
+import { useState } from "react";
+import * as SDK from "../sdk_backend_fetch.js";
 
 const Home = () => {
+  const [visitorData, setVisitorData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setVisitorData({
+      ...visitorData,
+      [name]: value,
+    });
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+    const response = await SDK.visitorEmail(
+      visitorData.email,
+      visitorData.name,
+      visitorData.message
+    );
+    if (response.status === 200) {
+      alert("Message sent successfully!");
+    } else {
+      alert("Message failed to send. Please try again.");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 font-sans">
       <div className="max-w-7xl w-full bg-white shadow-lg overflow-hidden">
@@ -160,7 +190,10 @@ const Home = () => {
           <h2 className="text-4xl font-bold text-secondary mb-10 animate-slide-up">
             Contact Us
           </h2>
-          <form className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+          <form
+            onSubmit={submit}
+            className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md"
+          >
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-left mb-2"
@@ -173,6 +206,9 @@ const Home = () => {
                 type="text"
                 id="name"
                 placeholder="Your Name"
+                name="name"
+                value={visitorData.name}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mb-4">
@@ -187,6 +223,9 @@ const Home = () => {
                 type="email"
                 id="email"
                 placeholder="Your Email"
+                name="email"
+                value={visitorData.email}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mb-4">
@@ -201,10 +240,13 @@ const Home = () => {
                 id="message"
                 rows="4"
                 placeholder="Your Message"
+                name="message"
+                value={visitorData.message}
+                onChange={handleInputChange}
               ></textarea>
             </div>
             <button
-              type=""
+              type="submit"
               className="px-8 py-4 bg-primary text-white rounded-full shadow-lg hover:bg-custom-primaryDark transition duration-300 transform hover:scale-105"
             >
               Send Message
