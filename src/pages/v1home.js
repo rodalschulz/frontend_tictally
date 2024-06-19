@@ -10,6 +10,14 @@ const Home = () => {
     message: "",
   });
 
+  const resetForm = () => {
+    setVisitorData({
+      name: "",
+      email: "",
+      message: "",
+    });
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setVisitorData({
@@ -27,6 +35,7 @@ const Home = () => {
         visitorData.message
       );
       alert(response.response);
+      resetForm();
     } catch (error) {
       console.log(error);
       alert("Email failed to send");

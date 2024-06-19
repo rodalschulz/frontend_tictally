@@ -1,27 +1,24 @@
-import { useEffect, useState } from "react";
-import * as SDK from "../sdk_backend_fetch.js";
-import { useParams } from "react-router-dom";
 import datetimeFnc from "../functions/datetimeFnc.js";
 
-const useUserActivityData = () => {
-  const { userId } = useParams();
-  const [userActivityData, setUserActivityData] = useState([]);
+// const useUserActivityData = () => {
+//   const { userId } = useParams();
+//   const [userActivityData, setUserActivityData] = useState([]);
 
-  const fetchUserActivityData = async () => {
-    try {
-      const data = await SDK.getUserActivityData(userId);
-      setUserActivityData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+//   const fetchUserActivityData = async () => {
+//     try {
+//       const data = await SDK.getUserActivityData(userId);
+//       setUserActivityData(data);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
 
-  useEffect(() => {
-    fetchUserActivityData();
-  }, [userId]); // Fetch data only when userId changes
+//   useEffect(() => {
+//     fetchUserActivityData();
+//   }, [userId]); // Fetch data only when userId changes
 
-  return userActivityData;
-};
+//   return userActivityData;
+// };
 
 const activityEntryValidation = (input) => {
   if (!input.date) {
@@ -108,15 +105,9 @@ const activityPatchValidation = (input, startTime, endTime, adjustment) => {
     updatedInput.endTime ||
     updatedInput.adjustment
   ) {
-    console.log(
-      updatedInput.startTime,
-      updatedInput.endTime,
-      updatedInput.adjustment
-    );
     const relevantStartTime = updatedInput.startTime || startTime;
     const relevantEndTime = updatedInput.endTime || endTime;
     const relevantAdjustment = updatedInput.adjustment || adjustment;
-    console.log(relevantStartTime, relevantEndTime, relevantAdjustment);
     const totalTime = datetimeFnc.calculateTotalTimeMin(
       relevantEndTime,
       relevantStartTime
@@ -135,7 +126,6 @@ const activityPatchValidation = (input, startTime, endTime, adjustment) => {
 };
 
 export default {
-  useUserActivityData,
   activityEntryValidation,
   activityPatchValidation,
 };

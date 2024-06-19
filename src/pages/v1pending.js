@@ -213,7 +213,7 @@ const Pending = () => {
         userId={userId}
         isMobile={isMobile}
         submit={submit}
-        // remove={deleteSelected}
+        remove={deleteSelected}
         displayInstructions={displayInstructions}
         setDisplayInstructions={setDisplayInstructions}
         showSidebar={showSidebar}

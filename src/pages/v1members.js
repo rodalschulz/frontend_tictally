@@ -180,16 +180,20 @@ const Members = () => {
         const updatedInput = activityData.activityEntryValidation(input);
         if (!input.category) {
           alert("Mandatory field: Category");
-          resetForm();
           setIsLoading(false);
           return;
         }
         await SDK.postUserActivityData(userId, updatedInput);
         fetchUserActivityData();
+        resetForm();
       } catch (error) {
         console.error(error);
+        if (error.message === "End time can't be lower than start time.") {
+          console.log("Please, fix the time error.");
+        } else {
+          resetForm();
+        }
       }
-      resetForm();
     }
     setIsLoading(false);
   };
