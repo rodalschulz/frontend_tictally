@@ -261,6 +261,34 @@ export const queryUserActivityData = async (userId, queryParams) => {
   }
 };
 
+export const querySubcatsToTrack = async (userId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/subcats-to-track`,
+      {
+        headers: headers,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch subcategories to track");
+    }
+
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error fetching subcategories to track:", error);
+    throw error;
+  }
+};
+
 // USER CATEGORY CONFIG
 export const getUserCategoryConfig = async (userId) => {
   try {

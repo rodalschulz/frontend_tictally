@@ -7,17 +7,18 @@ import StackedBarChart from "../components/stackedBarChart";
 import TrailingDataCard from "../components/trailingDataCard";
 import useFetchCategoryConfig from "../baseComponents/useFetchCategoryConfig.js";
 import useUserActivityData from "../baseComponents/useUserActivityData.js";
+import useFetchSubcatResults from "../baseComponents/useFetchSubcatResults.js";
 
 import PeriodTimesTable from "../components/periodTimesTable";
 
 import Sidebar from "../components/sidebar.js";
 import useCalculatePeriodTimes from "../baseComponents/useCalculatePeriodTimes.js";
 import Instructions from "../components/instructions.js";
+import ProgressBar from "../components/progressBar.js";
 
 const Dashboard = () => {
   const { userId } = useParams();
   const [showSidebar, setShowSidebar] = useState(true);
-
   const [isLoading, setIsLoading] = useState(false);
   const [displayInstructions, setDisplayInstructions] = useState(false);
   const { coreLimits } = useFetchCategoryConfig(userId);
@@ -25,6 +26,7 @@ const Dashboard = () => {
   const [showTable, setShowTable] = useState(false);
   const [showTable7D, setShowTable7D] = useState(false);
   const [showTable30D, setShowTable30D] = useState(false);
+  const { subcatResults } = useFetchSubcatResults(userId);
 
   const showTableHandler = () => {
     setShowTable(!showTable);
@@ -86,7 +88,7 @@ const Dashboard = () => {
           (userActivityData.length === 0 || displayInstructions) && (
             <Instructions pageName="dashboard" />
           )}
-        <div className="flex flex-grow xs:w-[1300px] sm:w-full sm:h-full">
+        <div className="flex flex-grow xs:w-[1300px] sm:w-full">
           <div
             className="w-full bg-custom-grey rounded-lg xs:h-[570px] sm:h-[80vh] xs:min-w-[800px] sm:min-w-[70vw] p-1.5"
             style={{ minHeight: "500px" }}
@@ -232,6 +234,12 @@ const Dashboard = () => {
               )),
             }
           )}
+        </div>
+        <div className="mt-3 py-2">
+          {subcatResults &&
+            Object.entries(subcatResults).map(([subcat, minutes]) => (
+              <ProgressBar key={subcat} subcat={subcat} minutes={minutes} />
+            ))}
         </div>
       </main>
     </div>

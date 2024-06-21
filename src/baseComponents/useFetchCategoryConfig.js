@@ -4,6 +4,7 @@ import * as SDK from "../sdk_backend_fetch.js";
 const useFetchCategoryConfig = (userId) => {
   const [subcategories, setSubcategories] = useState({});
   const [coreLimits, setCoreLimits] = useState({});
+  const [subcatsToTrack, setSubcatsToTrack] = useState({});
   const [dataFetched, setDataFetched] = useState(false);
 
   useEffect(() => {
@@ -12,6 +13,7 @@ const useFetchCategoryConfig = (userId) => {
         const response = await SDK.getUserCategoryConfig(userId);
         setCoreLimits(response.user.categConfig.coreLimits);
         setSubcategories(response.user.categConfig.subcategories);
+        setSubcatsToTrack(response.user.categConfig.subcatsToTrack);
       } catch (error) {
         console.error("Error fetching user category config:", error);
         setDataFetched(true);
@@ -23,9 +25,11 @@ const useFetchCategoryConfig = (userId) => {
 
   return {
     coreLimits,
+    setCoreLimits,
     subcategories,
     setSubcategories,
-    setCoreLimits,
+    subcatsToTrack,
+    setSubcatsToTrack,
     dataFetched,
   };
 };

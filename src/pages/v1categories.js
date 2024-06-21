@@ -18,6 +18,7 @@ const Categories = () => {
   const {
     subcategories: fetchedSubcategories,
     coreLimits: fetchedCoreLimits,
+    subcatsToTrack: fetchedSubcatsToTrack,
     dataFetched: dataFetched,
   } = useFetchCategoryConfig(userId);
   const isMobile = useWindowSize();
@@ -45,6 +46,7 @@ const Categories = () => {
 
   const [coreLimits, setCoreLimitsState] = useState(defaultCoreLimits);
   const [subcategories, setSubcategoriesState] = useState(defaultSubcategories);
+  const [subcatsToTrack, setSubcatsToTrack] = useState({});
 
   useEffect(() => {
     if (fetchedCoreLimits && Object.keys(fetchedCoreLimits).length > 0) {
@@ -57,6 +59,12 @@ const Categories = () => {
       setSubcategoriesState(fetchedSubcategories);
     }
   }, [fetchedSubcategories]);
+
+  useEffect(() => {
+    if (fetchedSubcatsToTrack && fetchedSubcatsToTrack.length > 0) {
+      setSubcatsToTrack(fetchedSubcatsToTrack);
+    }
+  }, [fetchedSubcatsToTrack]);
 
   const handleInputChange = (event, rowIndex, columnIndex, category) => {
     const { value } = event.target;
@@ -96,6 +104,9 @@ const Categories = () => {
     const data = {
       coreLimits: cleanedCoreLimits,
       subcategories: cleanSubcategoriesUpper,
+      subcatsToTrack: Object.values(subcatsToTrack).filter(
+        (subcat) => subcat.subcat !== ""
+      ),
     };
 
     try {
@@ -240,6 +251,52 @@ const Categories = () => {
                           </td>
                         )
                       )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <table className="ml-2 rounded-lg shadow-md">
+                <thead className="bg-secondary text-white">
+                  <tr>
+                    <th className="px-7 py-2">SUBCAT</th>
+                    <th className="px-7 py-2">START DATE</th>
+                  </tr>
+                </thead>
+                <tbody className="text-[13px] bg-gray-200">
+                  {Array.from({ length: 3 }).map((_, rowIndex) => (
+                    <tr key={rowIndex}>
+                      <td className="px-2 py-2">
+                        <input
+                          type="text"
+                          className="w-32 pl-2 bg-white rounded-lg"
+                          value={subcatsToTrack[rowIndex]?.subcat || ""}
+                          onChange={(e) =>
+                            setSubcatsToTrack((prev) => ({
+                              ...prev,
+                              [rowIndex]: {
+                                ...prev[rowIndex],
+                                subcat: e.target.value,
+                              },
+                            }))
+                          }
+                        />
+                      </td>
+                      <td className="px-2 py-2">
+                        <input
+                          type="date"
+                          className="w-32 pl-2 bg-white rounded-lg"
+                          value={subcatsToTrack[rowIndex]?.startDate || ""}
+                          onChange={(e) =>
+                            setSubcatsToTrack((prev) => ({
+                              ...prev,
+                              [rowIndex]: {
+                                ...prev[rowIndex],
+                                startDate: e.target.value,
+                              },
+                            }))
+                          }
+                        />
+                      </td>
                     </tr>
                   ))}
                 </tbody>
