@@ -101,7 +101,7 @@ const Sidebar = ({
   return (
     <>
       {showSidebar && (
-        <div className="flex h-screen bg-gray-300 absolute">
+        <div className="flex h-screen bg-gray-300 absolute z-50">
           <div
             onClick={hideSidebar}
             className="sm:relative bg-secondary text-white flex flex-col"
