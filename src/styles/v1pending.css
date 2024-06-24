@@ -25,41 +25,35 @@
 
 #input-table-pending th:first-child {border-top-left-radius: 7px}
 #input-table-pending th:nth-child(1) {width: 3%; text-align: center}
-#input-table-pending th:nth-child(2) {width: 8% ; text-align: center}
+#input-table-pending th:nth-child(2) {width: 7% ; text-align: center}
 #input-table-pending th:nth-child(3) {width: 6% ; text-align: center}
-#input-table-pending th:nth-child(4) {width: 45% ; text-align: center; max-width: 500px}
+#input-table-pending th:nth-child(4) {width: 60% ; text-align: center; max-width: 500px}
 #input-table-pending th:nth-child(5) {width: 7% ; text-align: center}
 #input-table-pending th:nth-child(6) {width: 7% ; text-align: center}
 #input-table-pending th:nth-child(7) {width: 5% ; text-align: center}
 #input-table-pending th:nth-child(8) {width: 5% ; text-align: center}
-#input-table-pending th:nth-child(9) {width: 5% ; text-align: center}
-#input-table-pending th:nth-child(10) {width: 9% ; text-align: center}
 #input-table-pending th:last-child {border-top-right-radius: 7px}
 
 #input-table-pending td:first-child {border-top-left-radius: 7px}
 #input-table-pending td:nth-child(1) {width: 3%; text-align: center}
-#input-table-pending td:nth-child(2) {width: 8% ; text-align: center}
+#input-table-pending td:nth-child(2) {width: 7% ; text-align: center}
 #input-table-pending td:nth-child(3) {width: 6% ; text-align: center}
-#input-table-pending td:nth-child(4) {width: 45%; text-align: center; max-width: 500px}
+#input-table-pending td:nth-child(4) {width: 60%; text-align: center; max-width: 500px}
 #input-table-pending td:nth-child(5) {width: 7% ; text-align: center}
 #input-table-pending td:nth-child(6) {width: 7% ; text-align: center}
 #input-table-pending td:nth-child(7) {width: 5% ; text-align: center}
 #input-table-pending td:nth-child(8) {width: 5% ; text-align: center}
-#input-table-pending td:nth-child(9) {width: 5% ; text-align: center}
-#input-table-pending td:nth-child(10) {width: 9% ; text-align: center}
 #input-table-pending td:last-child {border-top-right-radius: 7px}
 
 #output-table-pending td:first-child {border-top-left-radius: 7px}
 #output-table-pending td:nth-child(1) {width: 3%; text-align: center}
-#output-table-pending td:nth-child(2) {width: 8% ; text-align: center}
+#output-table-pending td:nth-child(2) {width: 7% ; text-align: center}
 #output-table-pending td:nth-child(3) {width: 6% ; text-align: center}
-#output-table-pending td:nth-child(4) {width: 45% ; text-align: left; max-width: 500px}
+#output-table-pending td:nth-child(4) {width: 60% ; text-align: left; max-width: 500px}
 #output-table-pending td:nth-child(5) {width: 7% ; text-align: center}
 #output-table-pending td:nth-child(6) {width: 7% ; text-align: center}
 #output-table-pending td:nth-child(7) {width: 5% ; text-align: center}
 #output-table-pending td:nth-child(8) {width: 5% ; text-align: center}
-#output-table-pending td:nth-child(9) {width: 5% ; text-align: center}
-#output-table-pending td:nth-child(10) {width: 9% ; text-align: center}
 #output-table-pending td:last-child {border-top-right-radius: 7px}
 
 

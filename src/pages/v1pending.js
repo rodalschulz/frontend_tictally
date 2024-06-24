@@ -11,6 +11,7 @@ import pendingValidation from "../functions/pendingValidation.js";
 import useFetchPendingTasks from "../baseComponents/useFetchPendingTasks.js";
 import datetimeFnc from "../functions/datetimeFnc.js";
 import useRowNavigation from "../baseComponents/useRowNavigation.js";
+import CategDropdown from "../components/categDropdown.js";
 
 import PopupInstructions from "../components/popupInstructions.js";
 import HoverableRowGuide from "../components/hoverableRow.js";
@@ -24,6 +25,9 @@ const Pending = () => {
 
   const [hoveredHeader, setHoveredHeader] = useState(null);
   const [popupText, setPopupText] = useState("");
+
+  const categories = ["GENERAL", "WORK", "LEARN", "BUILD", "CORE", "RECOVERY"];
+  const [selectedCategories, setSelectedCategories] = useState(categories);
 
   const daysForward = 14;
   const nowStart = new Date();
@@ -42,23 +46,29 @@ const Pending = () => {
     date: null,
     time: "",
     description: "",
-    relevance: "",
-    urgency: "",
-    recurring: "",
+    category: "",
+    relevUrgen: "",
     periodRecurrence: "",
   });
   const formRef = useRef(null);
 
   const currentYear = new Date().getFullYear();
-  const pendingTasksMod = pendingTasks.map((task) => {
-    if (task.recurring) {
+  const currentMonth = new Date().getMonth();
+  const tasksMod = pendingTasks.map((task) => {
+    if (task.periodRecurrence === "YEARLY") {
       let date = new Date(task.date);
       date.setFullYear(currentYear);
       task.date = date.toISOString();
     }
+    if (task.periodRecurrence === "MONTHLY") {
+      let date = new Date(task.date);
+      date.setFullYear(currentYear);
+      date.setMonth(currentMonth);
+      task.date = date.toISOString();
+    }
     return task;
   });
-  pendingTasksMod.sort((a, b) => {
+  tasksMod.sort((a, b) => {
     if (a.date && b.date) {
       return new Date(a.date) - new Date(b.date);
     } else if (a.date && !b.date) {
@@ -70,40 +80,61 @@ const Pending = () => {
     }
   });
 
-  const adhoc = pendingTasksMod.filter(
+  const tasksModCategFiltered = tasksMod.filter((task) =>
+    selectedCategories.includes(task.category)
+  );
+
+  const adhoc = tasksModCategFiltered.filter(
     (task) => !task.date && !task.time && !task.state
   );
-  const upcoming = pendingTasksMod.filter(
+  const upcoming = tasksModCategFiltered.filter(
     (task) =>
       task.date &&
       !task.state &&
       new Date(task.date) >= nowStart &&
       new Date(task.date) <= futureDate
   );
-  const recentDoneOrExpired = pendingTasksMod.filter((task) =>
+  const recentDoneOrExpired = tasksModCategFiltered.filter((task) =>
     task.date && task.state
       ? new Date(task.date) < now
-      : task.date && !task.recurring
+      : task.date && !task.periodRecurrence
       ? new Date(task.date) < nowStart
       : task.state && new Date(task.updatedAt) <= now
   );
-  const farOff = pendingTasksMod.filter(
+  const farOff = tasksModCategFiltered.filter(
     (task) =>
       task.date &&
       !task.state &&
-      !task.recurring &&
+      !task.periodRecurrence &&
       new Date(task.date) > futureDate
   );
-  const allRecurring = pendingTasksMod.filter((task) => task.recurring);
+  const allRecurring = tasksModCategFiltered.filter(
+    (task) => task.periodRecurrence
+  );
+
+  const recurringDoneCheck = async () => {
+    let recurringDoneIds = [];
+    for (const task of allRecurring) {
+      if (task.state) {
+        if (new Date(task.updatedAt) < nowStart) {
+          recurringDoneIds.push(task.id);
+        }
+      }
+    }
+    try {
+      const updatedInput = { state: false };
+      await SDK.patchUserPendingTask(userId, recurringDoneIds, updatedInput);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const resetForm = () => {
     setInput({
       date: null,
       time: "",
       description: "",
-      relevance: "",
-      urgency: "",
-      recurring: "",
+      relevUrgen: "",
       periodRecurrence: "",
     });
     if (formRef.current) {
@@ -149,10 +180,10 @@ const Pending = () => {
         console.log(`Updated Input: ${JSON.stringify(updatedInput)}`);
         await SDK.postUserPendingTask(userId, updatedInput);
         fetchPendingTasks();
+        resetForm();
       } catch (error) {
         console.error(error);
       } finally {
-        resetForm();
         setIsLoading(false);
       }
     }
@@ -196,6 +227,8 @@ const Pending = () => {
     if (dataFetched) {
       if (pendingTasks.length === 0) {
         setDisplayInstructions(true);
+      } else {
+        recurringDoneCheck();
       }
     }
   }, [dataFetched]);
@@ -256,21 +289,13 @@ const Pending = () => {
                     <th>Description</th>
                     {!isMobile && (
                       <th>
-                        Relevance{" "}
-                        {hoveredHeader === "Relevance" && (
+                        Category{" "}
+                        {hoveredHeader === "Category" && (
                           <PopupInstructions text={popupText} />
                         )}
                       </th>
                     )}
-                    {!isMobile && <th>Urgency</th>}
-                    {!isMobile && (
-                      <th>
-                        Recurring{" "}
-                        {hoveredHeader === "Recurring" && (
-                          <PopupInstructions text={popupText} />
-                        )}
-                      </th>
-                    )}
+                    {!isMobile && <th>Relev | Urgen</th>}
                     {!isMobile && <th>Period</th>}
                     <th>State</th>
                   </HoverableRowGuide>
@@ -305,44 +330,39 @@ const Pending = () => {
                     {!isMobile && (
                       <td>
                         <select
-                          name="relevance"
+                          name="category"
                           className="data-input"
-                          value={input.relevance}
+                          value={input.category}
                           onChange={handleInputChange}
                         >
                           <option value="">Select</option>
-                          <option value="HIGH">HIGH</option>
-                          <option value="AVG">AVG</option>
-                          <option value="LOW">LOW</option>
+                          <option value="GENERAL">GENERAL</option>
+                          <option value="WORK">WORK</option>
+                          <option value="CORE">CORE</option>
+                          <option value="LEARN">LEARN</option>
+                          <option value="BUILD">BUILD</option>
+                          <option value="RECOVERY">RECOVERY</option>
                         </select>
                       </td>
                     )}
                     {!isMobile && (
                       <td>
                         <select
-                          name="urgency"
+                          name="relevUrgen"
                           className="data-input"
-                          value={input.urgency}
+                          value={input.relevUrgen}
                           onChange={handleInputChange}
                         >
                           <option value="">Select</option>
-                          <option value="HIGH">HIGH</option>
-                          <option value="AVG">AVG</option>
-                          <option value="LOW">LOW</option>
-                        </select>
-                      </td>
-                    )}
-                    {!isMobile && (
-                      <td>
-                        <select
-                          name="recurring"
-                          className="data-input"
-                          value={input.recurring}
-                          onChange={handleInputChange}
-                        >
-                          <option value="">Select</option>
-                          <option value={"true"}>YES</option>
-                          <option value={"false"}>NO</option>
+                          <option value="HIGH | HIGH">HIGH | HIGH</option>
+                          <option value="HIGH | AVG">HIGH | AVG</option>
+                          <option value="HIGH | LOW">HIGH | LOW</option>
+                          <option value="AVG | HIGH">AVG | HIGH</option>
+                          <option value="AVG | AVG">AVG | AVG</option>
+                          <option value="AVG | LOW">AVG | LOW</option>
+                          <option value="LOW | HIGH">LOW | HIGH</option>
+                          <option value="LOW | AVG">LOW | AVG</option>
+                          <option value="LOW | LOW">LOW | LOW</option>
                         </select>
                       </td>
                     )}
@@ -356,6 +376,7 @@ const Pending = () => {
                         >
                           <option value="">Select</option>
                           <option value="YEARLY">YEARLY</option>
+                          <option value="MONTHLY">MONTHLY</option>
                         </select>
                       </td>
                     )}
@@ -382,7 +403,13 @@ const Pending = () => {
           {!isLoading && displayInstructions && (
             <Instructions pageName="pendingTasks" />
           )}
-          <div className="pt-2 pb-4 mt-3 rounded-md">
+          <div className="pt-2 pb-4 rounded-md">
+            <div className="mt-1 mb-3 w-fit">
+              <CategDropdown
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
+              />
+            </div>
             <h2 className="pl-2 font-bold text-gray-500">Ad-hoc</h2>
             <div className="mt-1">
               <table
@@ -408,10 +435,9 @@ const Pending = () => {
                         <td className=""></td>
                         <td>{task.description}</td>
                         {!isMobile && (
-                          <td>{task.relevance ? task.relevance : ""}</td>
+                          <td>{task.category ? task.category : ""}</td>
                         )}
-                        {!isMobile && <td>{task.urgency}</td>}
-                        {!isMobile && <td>{task.recurring ? "TRUE" : ""}</td>}
+                        {!isMobile && <td>{task.relevUrgen}</td>}
                         {!isMobile && <td>{task.periodRecurrence}</td>}
 
                         <td>{task.state ? "Done" : "Pending"}</td>
@@ -440,7 +466,7 @@ const Pending = () => {
                             : "transparent",
                           color: new Date(task.date) < now ? "cyan" : "white",
                           fontWeight:
-                            new Date(task.date) < now && task.recurring
+                            new Date(task.date) < now && task.periodRecurrence
                               ? "bold"
                               : "normal",
                         }}
@@ -456,10 +482,9 @@ const Pending = () => {
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
                         {!isMobile && (
-                          <td>{task.relevance ? task.relevance : ""}</td>
+                          <td>{task.category ? task.category : ""}</td>
                         )}
-                        {!isMobile && <td>{task.urgency}</td>}
-                        {!isMobile && <td>{task.recurring ? "TRUE" : ""}</td>}
+                        {!isMobile && <td></td>}
                         {!isMobile && <td>{task.periodRecurrence}</td>}
                         <td>{task.state ? "Done" : "Pending"}</td>
                       </tr>
@@ -502,11 +527,10 @@ const Pending = () => {
                         </td>
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
+                        {!isMobile && <td>{task.category}</td>}
                         {!isMobile && (
-                          <td>{task.relevance ? task.relevance : ""}</td>
+                          <td>{task.relevUrgen ? task.relevUrgen : ""}</td>
                         )}
-                        {!isMobile && <td>{task.urgency}</td>}
-                        {!isMobile && <td>{task.recurring ? "TRUE" : ""}</td>}
                         {!isMobile && <td>{task.periodRecurrence}</td>}
                         <td>{task.state ? "Done" : "Pending"}</td>
                       </tr>
@@ -544,11 +568,8 @@ const Pending = () => {
                         </td>
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
-                        {!isMobile && (
-                          <td>{task.relevance ? task.relevance : ""}</td>
-                        )}
-                        {!isMobile && <td>{task.urgency}</td>}
-                        {!isMobile && <td>{task.recurring ? "TRUE" : ""}</td>}
+                        {!isMobile && <td>{task.category}</td>}
+                        {!isMobile && <td></td>}
                         {!isMobile && <td>{task.periodRecurrence}</td>}
                         <td>{task.state ? "Done" : "Pending"}</td>
                       </tr>
@@ -591,11 +612,8 @@ const Pending = () => {
                         </td>
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
-                        {!isMobile && (
-                          <td>{task.relevance ? task.relevance : ""}</td>
-                        )}
-                        {!isMobile && <td>{task.urgency}</td>}
-                        {!isMobile && <td>{task.recurring ? "TRUE" : ""}</td>}
+                        {!isMobile && <td>{task.category}</td>}
+                        {!isMobile && <td></td>}
                         {!isMobile && (
                           <td>
                             {task.periodRecurrence ? task.periodRecurrence : ""}

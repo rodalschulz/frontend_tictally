@@ -1,15 +1,14 @@
 const pendingEntryValidation = (input) => {
-  if (!input.description) {
-    alert("Description is required.");
-    throw new Error("Description is required.");
+  if (!input.description || !input.category) {
+    alert("Description and Category are required.");
+    throw new Error("Description and Category are required.");
   }
 
   if (input.date) {
     console.log(`Date: ${input.date}`);
     input.date = new Date(input.date);
-    if (input.relevance || input.urgency) {
-      input.relevance = "";
-      input.urgency = "";
+    if (input.relevUrgen) {
+      input.relevUrgen = "";
     }
   }
 
@@ -18,19 +17,15 @@ const pendingEntryValidation = (input) => {
     throw new Error("Time must have a date.");
   }
 
-  if (!input.date) {
-    input.relevance = "AVG";
-    input.urgency = "AVG";
+  if (!input.date && !input.relevUrgen) {
+    input.relevUrgen = "AVG | AVG";
   }
 
-  if (input.recurring === "true") {
-    console.log(`Recurring: ${input.recurring}`);
+  if (input.periodRecurrence) {
     if (!input.date) {
       alert("Recurring tasks must have a date.");
       throw new Error("Recurring tasks must have a date.");
     }
-    input.recurring = true;
-    input.periodRecurrence = input.periodRecurrence || "YEARLY";
   }
 
   const updatedInput = {
@@ -47,18 +42,11 @@ const pendingPatchValidation = (input) => {
     }
   }
 
-  if (
-    input.date ||
-    input.time ||
-    input.relevance ||
-    input.urgency ||
-    input.recurring ||
-    input.periodRecurrence
-  ) {
+  if (input.date || input.time || input.relevUrgen || input.periodRecurrence) {
     alert(
-      "You can only update the description. Otherwise just make a new entry."
+      "You can only update the description or category. Otherwise just make a new entry."
     );
-    throw new Error("You can only update the description.");
+    throw new Error("You can only update the description or category.");
   }
 
   const updatedInput = {
