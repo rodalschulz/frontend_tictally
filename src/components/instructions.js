@@ -59,6 +59,11 @@ const Instructions = ({ pageName }) => {
           click the data cards to see a more in depth table view of your
           activity data.
         </p>
+        <br />
+        <p>
+          If you have set subcategory goals on your config page, the progress
+          will be shown below.
+        </p>
       </div>
     </div>
   );
