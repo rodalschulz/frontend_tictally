@@ -4,7 +4,11 @@ import { FaSpinner } from "react-icons/fa";
 import { MdAccessTimeFilled, MdMenuOpen } from "react-icons/md";
 import { FaArrowAltCircleUp, FaArrowAltCircleLeft } from "react-icons/fa";
 
-import * as SDK from "../sdk_backend_fetch.js";
+import {
+  postUserActivityData,
+  patchUserActivityData,
+  queryUserActivityData,
+} from "../sdk_backend_fetch.js";
 import DownloadCSV from "../components/downloadCSVbtn.js";
 import UploadCSVbtn from "../components/uploadCSVbtn.js";
 import Sidebar from "../components/sidebar.js";
@@ -14,21 +18,26 @@ import HoverableRowGuide from "../components/hoverableRow.js";
 import EntrySearchToggleButton from "../components/entrySearchModebtn.js";
 import useFetchCategoryConfig from "../hooks/useFetchCategoryConfig.js";
 import useWindowSize from "../hooks/useWindowSize.js";
-import useUserActivityData from "../hooks/useUserActivityData.js";
+import useUserActivityData from "../hooks/useFetchActivityData.js";
 import useRowNavigation from "../hooks/useRowNavigation.js";
-import datetimeFnc from "../utils/datetimeFnc.js";
-import activityData from "../utils/activityDataFnc.js";
+import datetimeFnc from "../utils/datetimeUtl.js";
+import activityData from "../utils/tallyValidation.js";
 import "../styles/v1members.css";
 
 const Tally = () => {
   const { userId } = useParams();
-
-  const [showSidebar, setShowSidebar] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
+  const [displayInstructions, setDisplayInstructions] = useState(false);
+  const isMobile = useWindowSize();
+  const [hoveredHeader, setHoveredHeader] = useState(null);
+  const [popupText, setPopupText] = useState("");
+
+  const [isSearchMode, setIsSearchMode] = useState(false);
   const [showUTC, setShowUTC] = useState(false);
   const [queryTimeSum, setQueryTimeSum] = useState(0);
-  const [displayInstructions, setDisplayInstructions] = useState(false);
-  const [isSearchMode, setIsSearchMode] = useState(false);
+  const [patchSubmitted, setPatchSubmitted] = useState(false);
+
   const { subcategories } = useFetchCategoryConfig(userId);
   const {
     userActivityData,
@@ -36,15 +45,6 @@ const Tally = () => {
     fetchUserActivityData,
     activityDataFetched,
   } = useUserActivityData(userId, 32, setIsLoading);
-  const isMobile = useWindowSize();
-
-  const [hoveredHeader, setHoveredHeader] = useState(null);
-  const [popupText, setPopupText] = useState("");
-
-  // SEARCH MODE
-  const handleToggleClick = () => {
-    setIsSearchMode((prevMode) => !prevMode);
-  };
 
   const [input, setInput] = useState({
     date: null,
@@ -64,8 +64,6 @@ const Tally = () => {
       ...input,
       [name]: value,
     });
-
-    // Clear subcategory when category changes
     if (name === "category") {
       setInput((prevInput) => ({
         ...prevInput,
@@ -101,7 +99,7 @@ const Tally = () => {
 
     resetForm();
     try {
-      const data = await SDK.queryUserActivityData(userId, queryParams);
+      const data = await queryUserActivityData(userId, queryParams);
       setUserActivityData(data.userActivityData);
       setQueryTimeSum(data.totalSum);
       console.log("Query finished");
@@ -139,7 +137,7 @@ const Tally = () => {
         setIsLoading(false);
         return;
       }
-      await SDK.patchUserActivityData(userId, idsToPatch, updatedInput);
+      await patchUserActivityData(userId, idsToPatch, updatedInput);
       setSelectedRows([]);
       setSelectedRowTimeValues({
         startTime: "",
@@ -161,8 +159,6 @@ const Tally = () => {
     setIsLoading(false);
   };
 
-  const [patchSubmitted, setPatchSubmitted] = useState(false);
-
   const submit = async (event) => {
     event.stopPropagation();
     event.preventDefault();
@@ -180,7 +176,7 @@ const Tally = () => {
           setIsLoading(false);
           return;
         }
-        await SDK.postUserActivityData(userId, updatedInput);
+        await postUserActivityData(userId, updatedInput);
         fetchUserActivityData();
         resetForm();
       } catch (error) {
@@ -228,21 +224,20 @@ const Tally = () => {
     };
   }, []);
 
+  const handleSearchToggle = () => {
+    setIsSearchMode((prevMode) => !prevMode);
+  };
+
+  const refreshTally = () => {
+    window.location.href = `/members/${userId}/tally`;
+  };
+
   const openSidebar = () => {
     setShowSidebar(true);
   };
 
-  const timeStringToMinutes = (time) => {
-    try {
-      const [hours, minutes] = time.split(":").map(Number);
-      return hours * 60 + minutes;
-    } catch (error) {
-      console.error("Error converting time string to minutes:", error);
-    }
-  };
-
+  // Instructions for new users
   const [instructionSteps, setInstructionSteps] = useState(0);
-
   useEffect(() => {
     if (
       activityDataFetched &&
@@ -273,10 +268,6 @@ const Tally = () => {
       setInstructionSteps(null);
     }
   }, [userActivityData, displayInstructions, instructionSteps, showSidebar]);
-
-  const refreshTally = () => {
-    window.location.href = `/members/${userId}/tally`;
-  };
 
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
@@ -421,7 +412,7 @@ const Tally = () => {
                           {" "}
                           <EntrySearchToggleButton
                             isSearchMode={isSearchMode}
-                            handleClick={handleToggleClick}
+                            handleClick={handleSearchToggle}
                           />
                         </td>
                       )}
@@ -634,13 +625,15 @@ const Tally = () => {
             >
               <tbody>
                 {userActivityData.map((activity, index, array) => {
-                  const currentStartTime = timeStringToMinutes(
+                  const currentStartTime = datetimeFnc.timeStringToMinutes(
                     activity.startTime
                   );
                   const nextEndTime =
                     index < array.length - 1 &&
                     activity.date === array[index + 1].date
-                      ? timeStringToMinutes(array[index + 1].endTime)
+                      ? datetimeFnc.timeStringToMinutes(
+                          array[index + 1].endTime
+                        )
                       : null;
 
                   return (

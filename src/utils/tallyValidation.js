@@ -1,4 +1,4 @@
-import datetimeFnc from "./datetimeFnc.js";
+import datetimeFnc from "./datetimeUtl.js";
 
 const activityEntryValidation = (input) => {
   if (!input.date) {

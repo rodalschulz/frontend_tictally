@@ -1,6 +1,6 @@
 import React from "react";
 
-import datetimeFnc from "../utils/datetimeFnc.js";
+import datetimeFnc from "../utils/datetimeUtl.js";
 
 const PeriodTimesTable = ({ periodTimes, timeframe, title }) => {
   return (

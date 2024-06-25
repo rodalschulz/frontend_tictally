@@ -3,7 +3,10 @@ import { useParams } from "react-router-dom";
 import { FaSpinner, FaCheck } from "react-icons/fa";
 import { MdMenuOpen } from "react-icons/md";
 
-import * as SDK from "../sdk_backend_fetch.js";
+import {
+  postUserPendingTask,
+  patchUserPendingTask,
+} from "../sdk_backend_fetch.js";
 import Sidebar from "../components/sidebar.js";
 import Instructions from "../components/instructions.js";
 import CategDropdown from "../components/categDropdown.js";
@@ -12,33 +15,29 @@ import HoverableRowGuide from "../components/hoverableRow.js";
 import useWindowSize from "../hooks/useWindowSize.js";
 import useFetchPendingTasks from "../hooks/useFetchPendingTasks.js";
 import useRowNavigation from "../hooks/useRowNavigation.js";
+import useCurrTimeData from "../hooks/useCurrTimeData.js";
 import pendingValidation from "../utils/pendingValidation.js";
-import datetimeFnc from "../utils/datetimeFnc.js";
+import datetimeFnc from "../utils/datetimeUtl.js";
 import "../styles/v1pending.css";
 
 const Pending = () => {
   const { userId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
-
+  const [displayInstructions, setDisplayInstructions] = useState(false);
+  const isMobile = useWindowSize();
   const [hoveredHeader, setHoveredHeader] = useState(null);
   const [popupText, setPopupText] = useState("");
 
+  const { pendingTasks, fetchPendingTasks, dataFetched } = useFetchPendingTasks(
+    userId,
+    365,
+    setIsLoading
+  );
+  const { currentYear, currentMonth, nowStart, now, futureDate } =
+    useCurrTimeData();
   const categories = ["GENERAL", "WORK", "LEARN", "BUILD", "CORE", "RECOVERY"];
   const [selectedCategories, setSelectedCategories] = useState(categories);
-
-  const daysForward = 14;
-  const nowStart = new Date();
-  nowStart.setDate(nowStart.getDate() - 1);
-  const now = new Date();
-  now.setHours(23, 59, 59, 999);
-  const futureDate = new Date(now);
-  futureDate.setDate(now.getDate() + daysForward);
-
-  const { pendingTasks, setPendingTasks, fetchPendingTasks, dataFetched } =
-    useFetchPendingTasks(userId, 365, setIsLoading);
-  const isMobile = useWindowSize();
-  const [displayInstructions, setDisplayInstructions] = useState(false);
 
   const [input, setInput] = useState({
     date: null,
@@ -50,35 +49,28 @@ const Pending = () => {
   });
   const formRef = useRef(null);
 
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth();
-  const tasksMod = pendingTasks.map((task) => {
-    if (task.periodRecurrence === "YEARLY") {
-      let date = new Date(task.date);
-      date.setFullYear(currentYear);
-      task.date = date.toISOString();
-    }
-    if (task.periodRecurrence === "MONTHLY") {
-      let date = new Date(task.date);
-      date.setFullYear(currentYear);
-      date.setMonth(currentMonth);
-      task.date = date.toISOString();
-    }
-    return task;
-  });
-  tasksMod.sort((a, b) => {
-    if (a.date && b.date) {
-      return new Date(a.date) - new Date(b.date);
-    } else if (a.date && !b.date) {
-      return -1;
-    } else if (!a.date && b.date) {
-      return 1;
-    } else {
-      return 0;
-    }
-  });
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setInput({
+      ...input,
+      [name]: value,
+    });
+  };
 
-  const tasksModCategFiltered = tasksMod.filter((task) =>
+  const resetForm = () => {
+    setInput({
+      date: null,
+      time: "",
+      description: "",
+      relevUrgen: "",
+      periodRecurrence: "",
+    });
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+  };
+
+  const tasksModCategFiltered = pendingTasks.filter((task) =>
     selectedCategories.includes(task.category)
   );
 
@@ -110,6 +102,7 @@ const Pending = () => {
     (task) => task.periodRecurrence
   );
 
+  // Check for recurring tasks that are done and update state to "Pending"
   const recurringDoneCheck = async () => {
     let recurringDoneIds = [];
     for (const task of allRecurring) {
@@ -121,32 +114,10 @@ const Pending = () => {
     }
     try {
       const updatedInput = { state: false };
-      await SDK.patchUserPendingTask(userId, recurringDoneIds, updatedInput);
+      await patchUserPendingTask(userId, recurringDoneIds, updatedInput);
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const resetForm = () => {
-    setInput({
-      date: null,
-      time: "",
-      description: "",
-      relevUrgen: "",
-      periodRecurrence: "",
-    });
-    if (formRef.current) {
-      formRef.current.reset();
-    }
-  };
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setInput({
-      ...input,
-      [name]: value,
-    });
-    console.log(input);
   };
 
   const submitPatch = async (event) => {
@@ -154,7 +125,7 @@ const Pending = () => {
     try {
       const updatedInput = pendingValidation.pendingPatchValidation(input);
       console.log(`Updated Input: ${JSON.stringify(updatedInput)}`);
-      await SDK.patchUserPendingTask(userId, selectedRows, updatedInput);
+      await patchUserPendingTask(userId, selectedRows, updatedInput);
       fetchPendingTasks();
     } catch (error) {
       console.error(error);
@@ -176,7 +147,7 @@ const Pending = () => {
         console.log(`Input: ${JSON.stringify(input)}`);
         const updatedInput = pendingValidation.pendingEntryValidation(input);
         console.log(`Updated Input: ${JSON.stringify(updatedInput)}`);
-        await SDK.postUserPendingTask(userId, updatedInput);
+        await postUserPendingTask(userId, updatedInput);
         fetchPendingTasks();
         resetForm();
       } catch (error) {
@@ -197,7 +168,7 @@ const Pending = () => {
     } else {
       try {
         const updatedInput = { state: true };
-        await SDK.patchUserPendingTask(userId, selectedRows, updatedInput);
+        await patchUserPendingTask(userId, selectedRows, updatedInput);
         fetchPendingTasks();
       } catch (error) {
         console.error(error);
@@ -221,6 +192,7 @@ const Pending = () => {
     setShowSidebar(true);
   };
 
+  // Instructions for first-time users
   useEffect(() => {
     if (dataFetched) {
       if (pendingTasks.length === 0) {

@@ -1,26 +1,29 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
-import * as SDK from "../sdk_backend_fetch.js";
+import { getUserActivityData } from "../sdk_backend_fetch.js";
 
 const useUserActivityData = (userId, daysTotal, setIsLoading) => {
   const [userActivityData, setUserActivityData] = useState([]);
   const [activityDataFetched, setActivityDataFetched] = useState(false);
+  const hasFetched = useRef(false);
 
-  const fetchUserActivityData = useCallback(async () => {
+  const fetchUserActivityData = async () => {
     setIsLoading(true);
     try {
-      const data = await SDK.getUserActivityData(userId, daysTotal);
+      const data = await getUserActivityData(userId, daysTotal);
       setUserActivityData(data);
       setActivityDataFetched(true);
     } catch (error) {
       console.error(error);
     }
     setIsLoading(false);
-  }, [userId, daysTotal]);
+  };
 
   useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
     fetchUserActivityData();
-  }, [fetchUserActivityData]);
+  }, [userId]);
 
   return {
     userActivityData,

@@ -16,6 +16,7 @@ import {
 import * as SDK from "../sdk_backend_fetch";
 import SidebarButton from "../hooks/sidebarButton.js";
 import useFetchPendingTasks from "../hooks/useFetchPendingTasks.js";
+import useCurrTimeData from "../hooks/useCurrTimeData.js";
 
 const Sidebar = ({
   userId,
@@ -31,23 +32,9 @@ const Sidebar = ({
 
   // PENDING TASKS
   const { pendingTasks } = useFetchPendingTasks(userId, 365, setIsLoading);
-  const currentYear = new Date().getFullYear();
-  const daysForward = 14;
-  const nowStart = new Date();
-  nowStart.setDate(nowStart.getDate() - 1);
-  const now = new Date();
-  now.setHours(23, 59, 59, 999);
-  const futureDate = new Date(now);
-  futureDate.setDate(now.getDate() + daysForward);
-  const pendingTasksMod = pendingTasks.map((task) => {
-    if (task.recurring) {
-      let date = new Date(task.date);
-      date.setFullYear(currentYear);
-      task.date = date.toISOString();
-    }
-    return task;
-  });
-  const upcoming = pendingTasksMod.filter(
+  const { nowStart, now, futureDate } = useCurrTimeData();
+
+  const upcoming = pendingTasks.filter(
     (task) =>
       task.date &&
       !task.state &&

@@ -10,21 +10,23 @@ import Sidebar from "../components/sidebar.js";
 import Instructions from "../components/instructions.js";
 import ProgressBar from "../components/progressBar.js";
 import useFetchCategoryConfig from "../hooks/useFetchCategoryConfig.js";
-import useUserActivityData from "../hooks/useUserActivityData.js";
+import useUserActivityData from "../hooks/useFetchActivityData.js";
 import useFetchSubcatResults from "../hooks/useFetchSubcatResults.js";
 import useCalculatePeriodTimes from "../hooks/useCalculatePeriodTimes.js";
 
 const Dashboard = () => {
   const { userId } = useParams();
-  const [showSidebar, setShowSidebar] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
   const [displayInstructions, setDisplayInstructions] = useState(false);
+
   const { coreLimits } = useFetchCategoryConfig(userId);
   const { userActivityData } = useUserActivityData(userId, 185, setIsLoading);
+  const { subcatResults } = useFetchSubcatResults(userId);
+
   const [showTable, setShowTable] = useState(false);
   const [showTable7D, setShowTable7D] = useState(false);
   const [showTable30D, setShowTable30D] = useState(false);
-  const { subcatResults } = useFetchSubcatResults(userId);
 
   const showTableHandler = () => {
     setShowTable(!showTable);

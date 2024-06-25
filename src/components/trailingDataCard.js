@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import datetimeFnc from "../utils/datetimeFnc.js";
+import datetimeFnc from "../utils/datetimeUtl.js";
 
 const TrailingDataCard = ({
   periodTimes,

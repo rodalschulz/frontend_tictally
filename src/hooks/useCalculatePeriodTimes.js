@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import datetimeFnc from "../utils/datetimeFnc";
+import datetimeFnc from "../utils/datetimeUtl";
 
 const useCalculatePeriodTimes = (timeframe, coreLimits, userActivityData) => {
   const [periodTimes, setPeriodTimes] = useState({});

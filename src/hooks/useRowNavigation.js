@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 
-import * as SDK from "../sdk_backend_fetch.js";
+import {
+  deleteUserActivityData,
+  deleteUserPendingTasks,
+} from "../sdk_backend_fetch";
 
 const useRowNavigation = (
   userId,
@@ -81,11 +84,11 @@ const useRowNavigation = (
     try {
       setIsLoading(true);
       if (selectedRows.length > 0) {
-        // check for adjustment property to determine if we are deleting activities or pending tasks
+        // Check for adjustment property to determine if we are deleting activities or pending tasks
         if (userData[0].hasOwnProperty("adjustment")) {
-          await SDK.deleteUserActivityData(userId, selectedRows);
+          await deleteUserActivityData(userId, selectedRows);
         } else {
-          await SDK.deleteUserPendingTasks(userId, selectedRows);
+          await deleteUserPendingTasks(userId, selectedRows);
         }
         fetchUserData();
         setSelectedRows([]);

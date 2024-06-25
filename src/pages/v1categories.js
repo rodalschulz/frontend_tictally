@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { MdMenuOpen } from "react-icons/md";
 
-import * as SDK from "../sdk_backend_fetch.js";
+import { updateUserCategoryConfig } from "../sdk_backend_fetch.js";
 import Sidebar from "../components/sidebar.js";
 import Instructions from "../components/instructions.js";
 import HoverableRowGuide from "../components/hoverableRow.js";
@@ -14,17 +14,17 @@ import configValidation from "../utils/configValidation.js";
 const Categories = () => {
   const { userId } = useParams();
   const [showSidebar, setShowSidebar] = useState(true);
+  const [displayInstructions, setDisplayInstructions] = useState(false);
+  const isMobile = useWindowSize();
+  const [hoveredHeader, setHoveredHeader] = useState(null);
+  const [popupText, setPopupText] = useState("");
+
   const {
     subcategories: fetchedSubcategories,
     coreLimits: fetchedCoreLimits,
     subcatsToTrack: fetchedSubcatsToTrack,
     dataFetched: dataFetched,
   } = useFetchCategoryConfig(userId);
-  const isMobile = useWindowSize();
-  const [displayInstructions, setDisplayInstructions] = useState(false);
-
-  const [hoveredHeader, setHoveredHeader] = useState(null);
-  const [popupText, setPopupText] = useState("");
 
   const defaultCoreLimits = {
     SLEEP: "",
@@ -34,7 +34,6 @@ const Categories = () => {
     RELIEF: "",
     INFORM: "",
   };
-
   const defaultSubcategories = {
     GENERAL: Array(10).fill(""),
     WORK: Array(10).fill(""),
@@ -42,7 +41,6 @@ const Categories = () => {
     BUILD: Array(10).fill(""),
     RECOVERY: Array(10).fill(""),
   };
-
   const [coreLimits, setCoreLimitsState] = useState(defaultCoreLimits);
   const [subcategories, setSubcategoriesState] = useState(defaultSubcategories);
   const [subcatsToTrack, setSubcatsToTrack] = useState({});
@@ -109,7 +107,7 @@ const Categories = () => {
     };
 
     try {
-      await SDK.updateUserCategoryConfig(userId, data);
+      await updateUserCategoryConfig(userId, data);
       alert("Configuration updated successfully!");
     } catch (error) {
       console.error("Error updating configuration:", error);
@@ -123,7 +121,6 @@ const Categories = () => {
 
   useEffect(() => {
     if (dataFetched) {
-      console.log("Data fetched", subcategories, coreLimits);
       if (subcategories.GENERAL[0] === "" && coreLimits.SLEEP === "") {
         setDisplayInstructions(true);
         console.log("No data fetched");

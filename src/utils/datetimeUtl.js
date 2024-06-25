@@ -1,3 +1,12 @@
+const timeStringToMinutes = (time) => {
+  try {
+    const [hours, minutes] = time.split(":").map(Number);
+    return hours * 60 + minutes;
+  } catch (error) {
+    console.error("Error converting time string to minutes:", error);
+  }
+};
+
 const calculateTotalTimeMin = (endTimeStr, startTimeStr) => {
   if (!endTimeStr || !startTimeStr) {
     return null;
@@ -129,4 +138,5 @@ export default {
   calculateTotalTimeMin,
   timeDateTimeToInputDateTime,
   getLocalDateObject,
+  timeStringToMinutes,
 };

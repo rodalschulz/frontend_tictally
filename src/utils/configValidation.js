@@ -5,7 +5,7 @@ const cleanAndValidateCoreLimits = (limits) => {
     if (!isNaN(numberValue)) {
       cleanedLimits[key] = numberValue;
     } else {
-      cleanedLimits[key] = 0; // or handle invalid input as needed
+      cleanedLimits[key] = 0;
     }
   }
   return cleanedLimits;
