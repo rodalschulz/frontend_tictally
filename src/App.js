@@ -1,18 +1,18 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import * as SDK from "./sdk_backend_fetch.js";
 import Home from "./pages/v1home.js";
 import Register from "./pages/v1register.js";
 import Login from "./pages/v1login.js";
-import Members from "./pages/v1members.js";
+import Tally from "./pages/v1tally.js";
 import Categories from "./pages/v1categories.js";
 import Dashboard from "./pages/v1dashboard.js";
-import * as SDK from "./sdk_backend_fetch.js";
-import "./index.css";
 import EmailVerification from "./components/emailVerification.js";
 import PasswordRecovery from "./pages/v1passwordRecovery.js";
 import PasswordReset from "./pages/v1passwordReset.js";
 import Pending from "./pages/v1pending.js";
-
-import { useEffect, useState } from "react";
+import "./index.css";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -63,7 +63,7 @@ function App() {
       <Route
         path="/members/:userId/tally"
         element={
-          loading ? null : isAuthenticated ? <Members /> : <Navigate to="/" />
+          loading ? null : isAuthenticated ? <Tally /> : <Navigate to="/" />
         }
       />
       <Route

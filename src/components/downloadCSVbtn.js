@@ -1,6 +1,7 @@
 import React from "react";
-import * as SDK from "../sdk_backend_fetch.js";
 import { FaCloudDownloadAlt } from "react-icons/fa";
+
+import * as SDK from "../sdk_backend_fetch.js";
 
 const DownloadCSV = ({ userId }) => {
   const downloadCSV = async () => {

@@ -1,24 +1,4 @@
-import datetimeFnc from "../functions/datetimeFnc.js";
-
-// const useUserActivityData = () => {
-//   const { userId } = useParams();
-//   const [userActivityData, setUserActivityData] = useState([]);
-
-//   const fetchUserActivityData = async () => {
-//     try {
-//       const data = await SDK.getUserActivityData(userId);
-//       setUserActivityData(data);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchUserActivityData();
-//   }, [userId]); // Fetch data only when userId changes
-
-//   return userActivityData;
-// };
+import datetimeFnc from "./datetimeFnc.js";
 
 const activityEntryValidation = (input) => {
   if (!input.date) {

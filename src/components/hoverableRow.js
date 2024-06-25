@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import PopupInstructions from "../components/popupInstructions";
+import React from "react";
 
 const HoverableRowGuide = ({ children, setPopupText, setHoveredHeader }) => {
   const handleMouseEnter = (event) => {

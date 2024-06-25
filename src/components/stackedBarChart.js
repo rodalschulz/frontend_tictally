@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
 import {
@@ -10,9 +10,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-
-import { useParams } from "react-router-dom";
-import * as SDK from "../sdk_backend_fetch.js";
 
 ChartJS.register(
   CategoryScale,

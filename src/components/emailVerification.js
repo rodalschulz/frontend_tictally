@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import * as SDK from "../sdk_backend_fetch.js";
-
+import { useLocation } from "react-router-dom";
 import { FaSpinner } from "react-icons/fa";
 
+import * as SDK from "../sdk_backend_fetch.js";
+
 const EmailVerification = () => {
-  const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);

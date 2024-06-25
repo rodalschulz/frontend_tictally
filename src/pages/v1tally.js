@@ -1,29 +1,26 @@
 import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { FaSpinner } from "react-icons/fa";
-
-import "../styles/v1members.css";
-import * as SDK from "../sdk_backend_fetch.js";
-import activityData from "../functions/activityDataFnc.js";
-import datetimeFnc from "../functions/datetimeFnc.js";
-
-import DownloadCSV from "../components/downloadCSVbtn.js";
-import UploadCSVbtn from "../components/uploadCSVbtn.js";
-import EntrySearchToggleButton from "../components/entrySearchModebtn.js";
-import Sidebar from "../components/sidebar.js";
-import useFetchCategoryConfig from "../baseComponents/useFetchCategoryConfig.js";
-import useWindowSize from "../baseComponents/useWindowSize.js";
-import useUserActivityData from "../baseComponents/useUserActivityData.js";
-import useRowNavigation from "../baseComponents/useRowNavigation.js";
-import Instructions from "../components/instructions.js";
-
 import { MdAccessTimeFilled, MdMenuOpen } from "react-icons/md";
 import { FaArrowAltCircleUp, FaArrowAltCircleLeft } from "react-icons/fa";
 
+import * as SDK from "../sdk_backend_fetch.js";
+import DownloadCSV from "../components/downloadCSVbtn.js";
+import UploadCSVbtn from "../components/uploadCSVbtn.js";
+import Sidebar from "../components/sidebar.js";
+import Instructions from "../components/instructions.js";
 import PopupInstructions from "../components/popupInstructions.js";
 import HoverableRowGuide from "../components/hoverableRow.js";
+import EntrySearchToggleButton from "../components/entrySearchModebtn.js";
+import useFetchCategoryConfig from "../hooks/useFetchCategoryConfig.js";
+import useWindowSize from "../hooks/useWindowSize.js";
+import useUserActivityData from "../hooks/useUserActivityData.js";
+import useRowNavigation from "../hooks/useRowNavigation.js";
+import datetimeFnc from "../utils/datetimeFnc.js";
+import activityData from "../utils/activityDataFnc.js";
+import "../styles/v1members.css";
 
-const Members = () => {
+const Tally = () => {
   const { userId } = useParams();
 
   const [showSidebar, setShowSidebar] = useState(true);
@@ -722,4 +719,4 @@ const Members = () => {
   );
 };
 
-export default Members;
+export default Tally;

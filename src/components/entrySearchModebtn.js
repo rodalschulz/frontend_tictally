@@ -6,7 +6,7 @@ const EntrySearchToggleButton = ({ isSearchMode, handleClick }) => {
           isSearchMode ? "bg-gray-200 text-gray-800" : "bg-primary text-white"
         } rounded-l h-5`}
         onClick={(e) => {
-          e.preventDefault(); // Prevent the default form submission behavior
+          e.preventDefault();
           handleClick();
         }}
       >
@@ -17,7 +17,7 @@ const EntrySearchToggleButton = ({ isSearchMode, handleClick }) => {
           isSearchMode ? "bg-primary text-white" : "bg-gray-200 text-gray-800"
         } rounded-r h-5`}
         onClick={(e) => {
-          e.preventDefault(); // Prevent the default form submission behavior
+          e.preventDefault();
           handleClick();
         }}
       >

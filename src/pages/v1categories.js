@@ -1,16 +1,15 @@
-import * as SDK from "../sdk_backend_fetch.js";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { MdMenuOpen } from "react-icons/md";
 
+import * as SDK from "../sdk_backend_fetch.js";
 import Sidebar from "../components/sidebar.js";
-import useFetchCategoryConfig from "../baseComponents/useFetchCategoryConfig.js";
-import useWindowSize from "../baseComponents/useWindowSize.js";
-import configValidation from "../functions/configValidation.js";
 import Instructions from "../components/instructions.js";
-
-import PopupInstructions from "../components/popupInstructions.js";
 import HoverableRowGuide from "../components/hoverableRow.js";
+import PopupInstructions from "../components/popupInstructions.js";
+import useFetchCategoryConfig from "../hooks/useFetchCategoryConfig.js";
+import useWindowSize from "../hooks/useWindowSize.js";
+import configValidation from "../utils/configValidation.js";
 
 const Categories = () => {
   const { userId } = useParams();

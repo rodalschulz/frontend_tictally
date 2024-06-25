@@ -1,8 +1,8 @@
-import * as SDK from "../sdk_backend_fetch.js";
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSpinner } from "react-icons/fa";
+
+import * as SDK from "../sdk_backend_fetch.js";
 
 const Register = () => {
   const navigate = useNavigate();

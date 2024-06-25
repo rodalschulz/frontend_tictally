@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import * as SDK from "../sdk_backend_fetch.js";
 import { useParams } from "react-router-dom";
+
+import * as SDK from "../sdk_backend_fetch.js";
 
 const UploadCSV = () => {
   const { userId } = useParams();

@@ -3,19 +3,17 @@ import { useParams } from "react-router-dom";
 import { FaSpinner, FaCheck } from "react-icons/fa";
 import { MdMenuOpen } from "react-icons/md";
 
-import Sidebar from "../components/sidebar.js";
-import useWindowSize from "../baseComponents/useWindowSize.js";
-import Instructions from "../components/instructions.js";
 import * as SDK from "../sdk_backend_fetch.js";
-import pendingValidation from "../functions/pendingValidation.js";
-import useFetchPendingTasks from "../baseComponents/useFetchPendingTasks.js";
-import datetimeFnc from "../functions/datetimeFnc.js";
-import useRowNavigation from "../baseComponents/useRowNavigation.js";
+import Sidebar from "../components/sidebar.js";
+import Instructions from "../components/instructions.js";
 import CategDropdown from "../components/categDropdown.js";
-
 import PopupInstructions from "../components/popupInstructions.js";
 import HoverableRowGuide from "../components/hoverableRow.js";
-
+import useWindowSize from "../hooks/useWindowSize.js";
+import useFetchPendingTasks from "../hooks/useFetchPendingTasks.js";
+import useRowNavigation from "../hooks/useRowNavigation.js";
+import pendingValidation from "../utils/pendingValidation.js";
+import datetimeFnc from "../utils/datetimeFnc.js";
 import "../styles/v1pending.css";
 
 const Pending = () => {

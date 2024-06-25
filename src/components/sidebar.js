@@ -12,9 +12,10 @@ import {
   MdOutlinePlaylistAdd,
   MdAlarmOn,
 } from "react-icons/md";
-import SidebarButton from "../baseComponents/sidebarButton";
+
 import * as SDK from "../sdk_backend_fetch";
-import useFetchPendingTasks from "../baseComponents/useFetchPendingTasks.js";
+import SidebarButton from "../hooks/sidebarButton.js";
+import useFetchPendingTasks from "../hooks/useFetchPendingTasks.js";
 
 const Sidebar = ({
   userId,

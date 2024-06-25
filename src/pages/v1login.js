@@ -1,6 +1,7 @@
-import * as SDK from "../sdk_backend_fetch.js";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import * as SDK from "../sdk_backend_fetch.js";
 
 const Login = ({ onLogin }) => {
   const [input, setInput] = useState({

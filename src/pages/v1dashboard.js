@@ -5,16 +5,14 @@ import { MdMenuOpen } from "react-icons/md";
 
 import StackedBarChart from "../components/stackedBarChart";
 import TrailingDataCard from "../components/trailingDataCard";
-import useFetchCategoryConfig from "../baseComponents/useFetchCategoryConfig.js";
-import useUserActivityData from "../baseComponents/useUserActivityData.js";
-import useFetchSubcatResults from "../baseComponents/useFetchSubcatResults.js";
-
 import PeriodTimesTable from "../components/periodTimesTable";
-
 import Sidebar from "../components/sidebar.js";
-import useCalculatePeriodTimes from "../baseComponents/useCalculatePeriodTimes.js";
 import Instructions from "../components/instructions.js";
 import ProgressBar from "../components/progressBar.js";
+import useFetchCategoryConfig from "../hooks/useFetchCategoryConfig.js";
+import useUserActivityData from "../hooks/useUserActivityData.js";
+import useFetchSubcatResults from "../hooks/useFetchSubcatResults.js";
+import useCalculatePeriodTimes from "../hooks/useCalculatePeriodTimes.js";
 
 const Dashboard = () => {
   const { userId } = useParams();

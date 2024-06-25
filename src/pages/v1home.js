@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import "../styles/v1home.css";
 import { useState } from "react";
+
 import * as SDK from "../sdk_backend_fetch.js";
+import "../styles/v1home.css";
 
 const Home = () => {
   const [visitorData, setVisitorData] = useState({
