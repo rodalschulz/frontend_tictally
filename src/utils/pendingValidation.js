@@ -49,6 +49,10 @@ const pendingPatchValidation = (input) => {
     throw new Error("You can only update the description or category.");
   }
 
+  if (Object.keys(input).length === 0) {
+    input = { state: true };
+  }
+
   const updatedInput = {
     ...input,
   };

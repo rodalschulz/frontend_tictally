@@ -118,7 +118,8 @@ const Tally = () => {
         input,
         startTime,
         endTime,
-        adjustment
+        adjustment,
+        event
       );
       if (
         (updatedInput.startTime ||
@@ -170,7 +171,12 @@ const Tally = () => {
       setPatchSubmitted(true); // only for instruction purposes
     } else {
       try {
-        const updatedInput = activityData.activityEntryValidation(input);
+        const lastEndTime = userActivityData[0]?.endTime;
+        const updatedInput = activityData.activityEntryValidation(
+          input,
+          event,
+          lastEndTime
+        );
         if (!input.category) {
           alert("Mandatory field: Category");
           setIsLoading(false);
@@ -205,24 +211,6 @@ const Tally = () => {
     submit,
     setIsLoading
   );
-
-  useEffect(() => {
-    const handleEscapePress = (e) => {
-      if (e.key === "Escape") {
-        setSelectedRows([]);
-        setSelectedRowTimeValues({
-          startTime: "",
-          endTime: "",
-          adjustment: 0,
-        });
-      }
-    };
-
-    window.addEventListener("keydown", handleEscapePress);
-    return () => {
-      window.removeEventListener("keydown", handleEscapePress);
-    };
-  }, []);
 
   const handleSearchToggle = () => {
     setIsSearchMode((prevMode) => !prevMode);

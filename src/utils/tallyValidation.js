@@ -1,6 +1,6 @@
 import datetimeFnc from "./datetimeUtl.js";
 
-const activityEntryValidation = (input) => {
+const activityEntryValidation = (input, event, lastEndTime) => {
   if (!input.date) {
     input.date = datetimeFnc.currentLocalDate();
   } else {
@@ -19,9 +19,27 @@ const activityEntryValidation = (input) => {
   if (input.subcategory) {
     input.subcategory = input.subcategory.toUpperCase();
   }
-  if (!input.startTime) {
-    input.startTime = datetimeFnc.currentLocalTime();
+
+  if (event.key === "Enter" && event.altKey) {
+    if (!input.startTime) {
+      input.startTime = datetimeFnc.currentLocalTime();
+      input.endTime = datetimeFnc.currentLocalTime();
+    }
+  } else if (event.key === "Enter" && event.shiftKey) {
+    if (!input.startTime) {
+      input.startTime = lastEndTime;
+      input.endTime = datetimeFnc.currentLocalTime();
+    }
+  } else if (event.key === "Enter" && event.ctrlKey) {
+    if (!input.startTime) {
+      input.startTime = lastEndTime;
+    }
+  } else if (event.key === "Enter") {
+    if (!input.startTime) {
+      input.startTime = datetimeFnc.currentLocalTime();
+    }
   }
+
   if (input.startTime && input.endTime) {
     const totalTime = datetimeFnc.calculateTotalTimeMin(
       input.endTime,
@@ -51,7 +69,13 @@ const activityEntryValidation = (input) => {
   return updatedInput;
 };
 
-const activityPatchValidation = (input, startTime, endTime, adjustment) => {
+const activityPatchValidation = (
+  input,
+  startTime,
+  endTime,
+  adjustment,
+  event
+) => {
   const updatedInput = { ...input };
 
   for (const key in updatedInput) {
@@ -78,6 +102,12 @@ const activityPatchValidation = (input, startTime, endTime, adjustment) => {
   }
   if (updatedInput.date) {
     updatedInput.date = new Date(updatedInput.date);
+  }
+
+  if (Object.keys(updatedInput).length === 0) {
+    if (event.key === "Enter" && event.ctrlKey) {
+      updatedInput.endTime = datetimeFnc.currentLocalTime();
+    }
   }
 
   if (
