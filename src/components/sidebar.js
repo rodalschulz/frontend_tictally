@@ -95,18 +95,25 @@ const Sidebar = ({
             className="sm:relative bg-secondary text-white flex flex-col"
           >
             <div className="flex-grow space-y-4 mt-4 p-2">
-              <SidebarButton onClick={navigateTally} icon={<FaTable />} />
+              <SidebarButton
+                onClick={navigateTally}
+                icon={<FaTable />}
+                label={"Tally"}
+              />
               <SidebarButton
                 onClick={navigateDashboard}
                 icon={<FaRegChartBar />}
+                label={"Dashboard"}
               />
               <SidebarButton
                 onClick={navigateCategories}
                 icon={<GrConfigure />}
+                label={"Configuration"}
               />
               <SidebarButton
                 onClick={navigatePending}
                 icon={<MdAlarmOn />}
+                label={"Pending"}
                 bgColor={closeUpcoming.length > 0 ? "bg-custom-upcoming" : null}
               />
             </div>
@@ -135,8 +142,13 @@ const Sidebar = ({
               <SidebarButton
                 onClick={displayInstructionsHandler}
                 icon={<FaRegQuestionCircle className="text-cyan-200" />}
+                label={"Instructions"}
               />
-              <SidebarButton onClick={logOut} icon={<FaSignOutAlt />} />
+              <SidebarButton
+                onClick={logOut}
+                icon={<FaSignOutAlt />}
+                label={"Log out"}
+              />
             </div>
           </div>
         </div>
