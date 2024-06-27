@@ -40,6 +40,10 @@ const activityEntryValidation = (input, event, lastEndTime) => {
     }
   }
 
+  if (input.description && input.description.includes("|")) {
+    input.description = input.description.replace(/\|/g, "/");
+  }
+
   if (input.startTime && input.endTime) {
     const totalTime = datetimeFnc.calculateTotalTimeMin(
       input.endTime,
@@ -108,6 +112,10 @@ const activityPatchValidation = (
     if (event.key === "Enter" && event.ctrlKey) {
       updatedInput.endTime = datetimeFnc.currentLocalTime();
     }
+  }
+
+  if (updatedInput.description && updatedInput.description.includes("|")) {
+    updatedInput.description = updatedInput.description.replace(/\|/g, "/");
   }
 
   if (

@@ -204,6 +204,7 @@ const Tally = () => {
     deleteSelected,
     setSelectedRows,
     setSelectedRowTimeValues,
+    newInput,
   } = useRowNavigation(
     userId,
     userActivityData,
@@ -211,6 +212,12 @@ const Tally = () => {
     submit,
     setIsLoading
   );
+
+  useEffect(() => {
+    if (newInput) {
+      setInput(newInput);
+    }
+  }, [newInput]);
 
   const handleSearchToggle = () => {
     setIsSearchMode((prevMode) => !prevMode);
@@ -344,11 +351,31 @@ const Tally = () => {
                         </th>
                       )}
                       {!isMobile && (
-                        <th>
-                          DESCRIPTION
-                          {hoveredHeader === "DESCRIPTION" && (
-                            <PopupInstructions text={popupText} />
-                          )}
+                        <th className="relative">
+                          <div className="flex items-center justify-center relative">
+                            <span className="absolute left-1/2 transform -translate-x-1/2">
+                              DESCRIPTION
+                            </span>
+                            {isSearchMode ? (
+                              <span className="text-yellow-300 absolute left-2 text-[11px]">
+                                {" "}
+                                Search Mode
+                              </span>
+                            ) : selectedRows.length > 0 ? (
+                              <span className="text-custom-editMode absolute left-2 text-[11px]">
+                                {" "}
+                                Edit Mode
+                              </span>
+                            ) : (
+                              <span className="text-gray-400 absolute left-2 text-[11px]">
+                                {" "}
+                                Entry Mode
+                              </span>
+                            )}
+                            {hoveredHeader === "DESCRIPTION" && (
+                              <PopupInstructions text={popupText} />
+                            )}
+                          </div>
                         </th>
                       )}
                       <th>
@@ -419,19 +446,9 @@ const Tally = () => {
                           <input
                             name="description"
                             type="text"
-                            className={`data-input description-input ${
-                              selectedRows.length > 0
-                                ? "description-editMode"
-                                : ""
-                            } ${isSearchMode ? "description-searchMode" : ""}`}
+                            value={input.description || ""}
+                            className={`data-input description-input`}
                             onChange={handleInputChange}
-                            placeholder={
-                              selectedRows.length > 0
-                                ? "Edit Mode"
-                                : isSearchMode
-                                ? "Search Mode"
-                                : "Entry Mode"
-                            }
                           />
                         </td>
                       )}
@@ -633,6 +650,8 @@ const Tally = () => {
                           activity.startTime,
                           activity.endTime,
                           activity.adjustment,
+                          activity.description,
+                          input,
                           event
                         )
                       }

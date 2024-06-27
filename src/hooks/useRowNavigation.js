@@ -18,9 +18,18 @@ const useRowNavigation = (
     endTime: "",
     adjustment: 0,
   });
+  const [newInput, setNewInput] = useState({});
   const [firstSelectedRow, setFirstSelectedRow] = useState(null);
 
-  const handleRowClick = (id, startTime, endTime, adjustment, event) => {
+  const handleRowClick = (
+    id,
+    startTime,
+    endTime,
+    adjustment,
+    description,
+    input,
+    event
+  ) => {
     if (event.shiftKey && firstSelectedRow !== null) {
       // Find the indexes of the first selected row and the current row
       const firstIndex = userData.findIndex(
@@ -47,6 +56,10 @@ const useRowNavigation = (
         endTime,
         adjustment,
       });
+      setNewInput({
+        ...input,
+        description: description,
+      });
     } else {
       if (selectedRows.length === 1 && selectedRows.includes(id)) {
         setSelectedRows([]);
@@ -54,6 +67,10 @@ const useRowNavigation = (
           startTime: "",
           endTime: "",
           adjustment: 0,
+        });
+        setNewInput({
+          ...input,
+          description: description,
         });
       } else if (event.ctrlKey) {
         setSelectedRows((prevSelectedRows) => {
@@ -68,12 +85,20 @@ const useRowNavigation = (
           endTime,
           adjustment,
         });
+        setNewInput({
+          ...input,
+          description: description,
+        });
       } else {
         setSelectedRows([id]);
         setSelectedRowTimeValues({
           startTime,
           endTime,
           adjustment,
+        });
+        setNewInput({
+          ...input,
+          description: description,
         });
       }
       setFirstSelectedRow(id);
@@ -188,6 +213,7 @@ const useRowNavigation = (
     deleteSelected,
     setSelectedRows,
     setSelectedRowTimeValues,
+    newInput,
   };
 };
 

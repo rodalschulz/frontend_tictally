@@ -30,6 +30,7 @@ module.exports = {
           primaryDark: "rgb(80, 200, 200)",
           lightblue: "rgb(217, 237, 249)",
           yellow: "rgb(220, 185, 20)",
+          editMode: "rgb(107, 245, 255)",
         },
       },
       transitionProperty: {
