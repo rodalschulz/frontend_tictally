@@ -87,6 +87,7 @@ const CategDropdown = ({ selectedCategories, setSelectedCategories }) => {
   const handleChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setSelectedCategories(selectedValues);
+    localStorage.setItem("selectedCategories", JSON.stringify(selectedValues));
   };
 
   return (

@@ -34,9 +34,12 @@ const Pending = () => {
     365,
     setIsLoading
   );
-  const { currentYear, currentMonth, nowStart, now, futureDate } =
-    useCurrTimeData();
-  const categories = ["GENERAL", "WORK", "LEARN", "BUILD", "CORE", "RECOVERY"];
+  const { nowStart, now, futureDate } = useCurrTimeData();
+  const storedCats = JSON.parse(localStorage.getItem("selectedCategories"));
+  const categories =
+    storedCats && storedCats.length > 0
+      ? localStorage.getItem("selectedCategories")
+      : ["GENERAL", "WORK", "CORE", "LEARN", "BUILD", "RECOVERY"];
   const [selectedCategories, setSelectedCategories] = useState(categories);
 
   const [input, setInput] = useState({
@@ -191,17 +194,6 @@ const Pending = () => {
   const openSidebar = () => {
     setShowSidebar(true);
   };
-
-  // Instructions for first-time users
-  useEffect(() => {
-    if (dataFetched) {
-      if (pendingTasks.length === 0) {
-        setDisplayInstructions(true);
-      } else {
-        recurringDoneCheck();
-      }
-    }
-  }, [dataFetched]);
 
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
@@ -392,7 +384,7 @@ const Pending = () => {
                       <tr
                         key={task.id}
                         onClick={(event) =>
-                          handleRowClick(task.id, "", "", "", event)
+                          handleRowClick(task.id, "", "", "", "", input, event)
                         }
                         style={{
                           backgroundColor: selectedRows.includes(task.id)
@@ -428,7 +420,7 @@ const Pending = () => {
                       <tr
                         key={task.id}
                         onClick={(event) =>
-                          handleRowClick(task.id, "", "", "", event)
+                          handleRowClick(task.id, "", "", "", "", input, event)
                         }
                         style={{
                           backgroundColor: selectedRows.includes(task.id)
@@ -477,7 +469,7 @@ const Pending = () => {
                       <tr
                         key={task.id}
                         onClick={(event) =>
-                          handleRowClick(task.id, "", "", "", event)
+                          handleRowClick(task.id, "", "", "", "", input, event)
                         }
                         style={{
                           backgroundColor: selectedRows.includes(task.id)
@@ -520,7 +512,7 @@ const Pending = () => {
                       <tr
                         key={task.id}
                         onClick={(event) =>
-                          handleRowClick(task.id, "", "", "", event)
+                          handleRowClick(task.id, "", "", "", "", input, event)
                         }
                         style={{
                           backgroundColor: selectedRows.includes(task.id)
@@ -562,7 +554,7 @@ const Pending = () => {
                       <tr
                         key={task.id}
                         onClick={(event) =>
-                          handleRowClick(task.id, "", "", "", event)
+                          handleRowClick(task.id, "", "", "", "", input, event)
                         }
                         style={{
                           backgroundColor: selectedRows.includes(task.id)

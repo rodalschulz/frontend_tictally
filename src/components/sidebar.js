@@ -70,6 +70,7 @@ const Sidebar = ({
   const logOut = async (e) => {
     e.stopPropagation();
     localStorage.removeItem("token");
+    localStorage.removeItem("selectedCategories");
     window.location.href = "/";
   };
 
