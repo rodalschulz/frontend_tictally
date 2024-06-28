@@ -108,14 +108,14 @@ const activityPatchValidation = (
     updatedInput.date = new Date(updatedInput.date);
   }
 
-  if (Object.keys(updatedInput).length === 0) {
+  if (updatedInput.description && updatedInput.description.includes("|")) {
+    updatedInput.description = updatedInput.description.replace(/\|/g, "/");
+  }
+
+  if (Object.keys(updatedInput).length === 1) {
     if (event.key === "Enter" && event.ctrlKey) {
       updatedInput.endTime = datetimeFnc.currentLocalTime();
     }
-  }
-
-  if (updatedInput.description && updatedInput.description.includes("|")) {
-    updatedInput.description = updatedInput.description.replace(/\|/g, "/");
   }
 
   if (
