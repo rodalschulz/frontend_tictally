@@ -4,13 +4,18 @@ const PopupInstructions = ({ text }) => {
   return text.includes("Start/End:") ||
     text.includes("Adjust:") ||
     text.includes("Time:") ||
-    text.includes("Recurring:") ? (
-    <div className="absolute z-50 bg-primary p-4 border rounded shadow-lg mt-2 ml-[-14rem] w-fit text-left">
-      <pre>{text}</pre>
+    text.includes("Recurring:") ||
+    text.includes("Relevance") ? (
+    <div className="absolute z-50 bg-primary py-2 pl-3 pr-2 border rounded shadow-lg mt-2 ml-[-16rem] w-80 text-left text-xs">
+      <div>{text}</div>
+    </div>
+  ) : text.includes("description") ? (
+    <div className="absolute z-50 bg-primary py-2 pl-3 pr-2 border rounded shadow-lg mt-24 ml-2 w-80 text-left text-xs">
+      <div>{text}</div>
     </div>
   ) : (
-    <div className="absolute z-50 bg-primary p-4 border rounded shadow-lg mt-2 ml-2 w-fit text-left text-sm">
-      <pre>{text}</pre>
+    <div className="absolute z-50 bg-primary py-2 pl-3 pr-2 border rounded shadow-lg mt-2 ml-2 w-80 text-left text-xs">
+      <div>{text}</div>
     </div>
   );
 };

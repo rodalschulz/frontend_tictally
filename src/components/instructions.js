@@ -74,16 +74,25 @@ const Instructions = ({ pageName }) => {
         <h1 className="mb-2 font-bold text-center text-lg">
           Welcome to Pending Tasks!
         </h1>
-        <p>
-          We categorize your tasks into 4 categories. Ad-hoc tasks are tasks
-          that don't have a scheduled date. Upcoming tasks are scheduled tasks
-          from the next 14 days. Recent tasks are tasks that have been completed
-          recently or that have expired. Far-Off tasks are tasks that are
-          scheduled for more than 14 days in the future, with a maximum of 365
-          days.
-        </p>
         <br />
-        <p>You can click the check button to mark a task as completed.</p>
+        <p>We categorize your tasks into 5 categories:</p>
+        <br />
+        <ul>- Ad-hoc tasks are tasks that don't have a scheduled date.</ul>
+        <ul>- Upcoming tasks are scheduled tasks from the next 14 days.</ul>
+        <ul>
+          - Recent tasks are tasks that have been completed recently or that
+          have expired.
+        </ul>
+        <ul>
+          - Far-Off tasks are tasks that are scheduled for more than 14 days in
+          the future, with a maximum of 365 days.
+        </ul>
+        <ul>- Recurring tasks are tasks that repeat each period.</ul>
+        <br />
+        <p>
+          After selecting a task, you can click the check button to mark a task
+          as completed.
+        </p>
       </div>
     </div>
   );

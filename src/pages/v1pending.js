@@ -257,7 +257,14 @@ const Pending = () => {
                         )}
                       </th>
                     )}
-                    {!isMobile && <th>Relev | Urgen</th>}
+                    {!isMobile && (
+                      <th>
+                        Relev | Urgen{" "}
+                        {hoveredHeader === "Relev | Urgen" && (
+                          <PopupInstructions text={popupText} />
+                        )}
+                      </th>
+                    )}
                     {!isMobile && <th>Period</th>}
                     <th>State</th>
                   </HoverableRowGuide>

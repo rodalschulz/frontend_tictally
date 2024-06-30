@@ -338,7 +338,10 @@ const Tally = () => {
                         <th>
                           ENT/SRCH
                           {hoveredHeader === "ENT/SRCH" && (
-                            <PopupInstructions text={popupText} />
+                            <PopupInstructions
+                              text={popupText}
+                              className="text-red-500"
+                            />
                           )}
                         </th>
                       )}
@@ -372,7 +375,7 @@ const Tally = () => {
                                 Entry Mode
                               </span>
                             )}
-                            {hoveredHeader === "DESCRIPTION" && (
+                            {hoveredHeader === "DESCRIPTION Entry Mode" && (
                               <PopupInstructions text={popupText} />
                             )}
                           </div>
