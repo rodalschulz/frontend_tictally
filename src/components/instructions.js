@@ -28,48 +28,65 @@ const Instructions = ({ pageName }) => {
   );
 
   const configInstructions = (
-    <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
+    <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
       <div className="bg-cyan-500 rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         {" "}
         <h1 className="mb-2 font-bold text-center text-lg">
           Welcome to your configuration page!
         </h1>
         <p>
-          Here you can create your own custom subcategories and core limits.
-          Your subcategories will be saved and will be reflected in your Tally.
-          You can also modify your core subcategory limits here. They will help
-          determine the total time spent in CORE activities; as an example, if
-          you set a core limit of 7 hours for SLEEP, but you input 8 hours of
-          sleep, only 7 of those will be counted towards your total core time
-          and the rest will be classified as WASTE.
+          Here you can set 3 things: core limits, subcategories, and
+          subcategory-tracking to establish a 10,000 hour challenge.
+        </p>
+        <br />
+        <p>
+          ♦ Core Limits: Determine Core subcategory limits to correctly
+          calculate your Core daily total. Example: if you set a limit of 7
+          hours for SLEEP, but you input 8 hours of sleep in a day, only 7 hours
+          will count towards your total Core time and the rest will be
+          classified as WASTE.
+        </p>
+        <p>
+          ♦ Subcategories: Create your custom subcategories for each category.
+        </p>
+        <p>
+          ♦ Tracking: Set already used subcategories to track your progress in
+          the 10,000 hour challenge. You'll be able to visualize your progress
+          on the Dashboard.
         </p>
       </div>
     </div>
   );
 
   const dashboardInstructions = (
-    <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
+    <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
       <div className="bg-cyan-500 rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         <h1 className="mb-2 font-bold text-center text-lg">
           Welcome to your Dashboard!
         </h1>
         <p>
-          Here you can see a visual representation of your activity data. The
-          stacked bar chart will show the last 6 months of data. You can also
-          click the data cards to see a more in depth table view of your
-          activity data.
+          Here you can see a visual representation of your activity data: a
+          stacked bar chart, data cards/tables, and progress bars.
         </p>
         <br />
         <p>
-          If you have set subcategory goals on your config page, the progress
-          will be shown below.
+          ♦ The stacked bar chart shows your daily activity data for the last 6
+          months
+        </p>
+        <p>
+          ♦ The data cards/tables show your trailing 7 and 30 days. You can
+          click on the cards to show a detailed table
+        </p>
+        <p>
+          ♦ If you have set subcategory-tracking goals on your config page, the
+          progress will be shown below
         </p>
       </div>
     </div>
   );
 
   const pendingTasksInstructions = (
-    <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
+    <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
       <div className="bg-cyan-500 rounded-lg px-5 py-4 text-white w-[50%] min-w-[300px] max-w-[800px] bg-opacity-80 pointer-events-auto">
         <h1 className="mb-2 font-bold text-center text-lg">
           Welcome to Pending Tasks!
@@ -77,21 +94,21 @@ const Instructions = ({ pageName }) => {
         <br />
         <p>We categorize your tasks into 5 categories:</p>
         <br />
-        <ul>- Ad-hoc tasks are tasks that don't have a scheduled date.</ul>
-        <ul>- Upcoming tasks are scheduled tasks from the next 14 days.</ul>
+        <ul>- Ad-hoc tasks are tasks that don't have a scheduled date</ul>
+        <ul>- Upcoming tasks are scheduled tasks from the next 14 days</ul>
         <ul>
           - Recent tasks are tasks that have been completed recently or that
-          have expired.
+          have expired
         </ul>
         <ul>
           - Far-Off tasks are tasks that are scheduled for more than 14 days in
-          the future, with a maximum of 365 days.
+          the future, with a maximum of 365 days
         </ul>
-        <ul>- Recurring tasks are tasks that repeat each period.</ul>
+        <ul>- Recurring tasks are tasks that repeat each period</ul>
         <br />
         <p>
           After selecting a task, you can click the check button to mark a task
-          as completed.
+          as 'done'.
         </p>
       </div>
     </div>
