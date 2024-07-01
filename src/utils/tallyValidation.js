@@ -24,6 +24,8 @@ const activityEntryValidation = (input, event, lastEndTime) => {
     if (!input.startTime) {
       input.startTime = datetimeFnc.currentLocalTime();
       input.endTime = datetimeFnc.currentLocalTime();
+      input.category = "GENERAL";
+      input.subcategory = "NOTE";
     }
   } else if (event.key === "Enter" && event.shiftKey) {
     if (!input.startTime) {

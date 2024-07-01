@@ -72,7 +72,7 @@ const HoverableRowGuide = ({ children, setPopupText, setHoveredHeader }) => {
       );
     } else if (event.target.textContent.trim() === "Relev | Urgen") {
       setPopupText(
-        `Relevance and Urgency are used to prioritize your tasks; it will just affect the sorting order.`
+        `Relevance and Urgency are used to prioritize your tasks; it will just affect the sorting order of your ad-hoc tasks.`
       );
     }
 

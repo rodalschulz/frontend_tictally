@@ -14,7 +14,7 @@ const SidebarButton = ({ onClick, icon, bgColor, label }) => {
   return (
     <button
       className={`btn w-full flex items-center justify-center  ${
-        bgColor ? bgColor : "btn-primary"
+        bgColor ? `${bgColor} hover:bg-custom-editMode` : "btn-primary"
       }`}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}

@@ -42,9 +42,9 @@ const pendingPatchValidation = (input) => {
     }
   }
 
-  if (input.date || input.time || input.relevUrgen || input.periodRecurrence) {
+  if (input.date || input.time || input.periodRecurrence) {
     alert(
-      "You can only update the description or category. Otherwise just make a new entry."
+      "You can only update the description, category or relev/urgen. Otherwise just make a new entry."
     );
     throw new Error("You can only update the description or category.");
   }
