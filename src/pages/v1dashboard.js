@@ -9,6 +9,7 @@ import PeriodTimesTable from "../components/periodTimesTable";
 import Sidebar from "../components/sidebar.js";
 import Instructions from "../components/instructions.js";
 import ProgressBar from "../components/progressBar.js";
+import VitalsBars from "../components/vitalsBars.js";
 import useFetchCategoryConfig from "../hooks/useFetchCategoryConfig.js";
 import useUserActivityData from "../hooks/useFetchActivityData.js";
 import useFetchSubcatResults from "../hooks/useFetchSubcatResults.js";
@@ -48,6 +49,7 @@ const Dashboard = () => {
     coreLimits,
     userActivityData
   );
+  console.log("periodTimes7D", periodTimes7D);
 
   const openSidebar = () => {
     setShowSidebar(true);
@@ -240,6 +242,9 @@ const Dashboard = () => {
             Object.entries(subcatResults).map(([subcat, minutes]) => (
               <ProgressBar key={subcat} subcat={subcat} minutes={minutes} />
             ))}
+        </div>
+        <div className="w-fit">
+          <VitalsBars periodTimes={periodTimes7D} />
         </div>
       </main>
     </div>

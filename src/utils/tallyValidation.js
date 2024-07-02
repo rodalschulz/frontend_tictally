@@ -1,6 +1,6 @@
 import datetimeFnc from "./datetimeUtl.js";
 
-const activityEntryValidation = (input, event, lastEndTime) => {
+const activityEntryValidation = (input, event, lastEndTime, fetch) => {
   if (!input.date) {
     input.date = datetimeFnc.currentLocalDate();
   } else {
@@ -29,6 +29,7 @@ const activityEntryValidation = (input, event, lastEndTime) => {
     }
   } else if (event.key === "Enter" && event.shiftKey) {
     if (!input.startTime) {
+      fetch();
       input.startTime = lastEndTime;
       input.endTime = datetimeFnc.currentLocalTime();
     }

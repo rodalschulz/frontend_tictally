@@ -1,3 +1,5 @@
+import datetimeFnc from "../utils/datetimeUtl.js";
+
 const pendingEntryValidation = (input) => {
   if (!input.description || !input.category) {
     alert("Description and Category are required.");
@@ -5,10 +7,16 @@ const pendingEntryValidation = (input) => {
   }
 
   if (input.date) {
-    console.log(`Date: ${input.date}`);
     input.date = new Date(input.date);
     if (input.relevUrgen) {
       input.relevUrgen = "";
+    }
+    if (
+      !input.periodRecurrence &&
+      input.date < new Date(datetimeFnc.currentLocalDate())
+    ) {
+      alert("Date must be in the future.");
+      throw new Error("Date must be in the future.");
     }
   }
 

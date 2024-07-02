@@ -419,7 +419,7 @@ const Pending = () => {
             <div className="mt-1">
               <table
                 id="output-table-pending"
-                className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
+                className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[10px]"
               >
                 <tbody>
                   {pendingTasks &&
@@ -432,8 +432,9 @@ const Pending = () => {
                         style={{
                           backgroundColor: selectedRows.includes(task.id)
                             ? "#264653"
+                            : new Date(task.date) < now
+                            ? "rgb(80, 170, 180)"
                             : "transparent",
-                          color: new Date(task.date) < now ? "cyan" : "white",
                           fontWeight:
                             new Date(task.date) < now && task.periodRecurrence
                               ? "bold"
@@ -481,7 +482,7 @@ const Pending = () => {
                         style={{
                           backgroundColor: selectedRows.includes(task.id)
                             ? "#264653"
-                            : "transparent",
+                            : "rgb(128, 151, 166)",
                         }}
                       >
                         {!isMobile && (

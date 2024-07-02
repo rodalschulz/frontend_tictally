@@ -175,7 +175,8 @@ const Tally = () => {
         const updatedInput = activityData.activityEntryValidation(
           input,
           event,
-          lastEndTime
+          lastEndTime,
+          fetchUserActivityData
         );
         if (!input.category) {
           alert("Mandatory field: Category");
@@ -463,8 +464,8 @@ const Tally = () => {
                         >
                           <option value="">Select</option>
                           <option value="GENERAL">GENERAL</option>
-                          <option value="WORK">WORK</option>
                           <option value="CORE">CORE</option>
+                          <option value="WORK">WORK</option>
                           <option value="LEARN">LEARN</option>
                           <option value="BUILD">BUILD</option>
                           <option value="RECOVERY">RECOVERY</option>
