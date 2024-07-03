@@ -9,7 +9,7 @@ import PeriodTimesTable from "../components/periodTimesTable";
 import Sidebar from "../components/sidebar.js";
 import Instructions from "../components/instructions.js";
 import ProgressBar from "../components/progressBar.js";
-import VitalsBars from "../components/vitalsBars.js";
+import VitalsBars2 from "../components/vitalsBars2.js";
 import useFetchCategoryConfig from "../hooks/useFetchCategoryConfig.js";
 import useUserActivityData from "../hooks/useFetchActivityData.js";
 import useFetchSubcatResults from "../hooks/useFetchSubcatResults.js";
@@ -49,7 +49,6 @@ const Dashboard = () => {
     coreLimits,
     userActivityData
   );
-  console.log("periodTimes7D", periodTimes7D);
 
   const openSidebar = () => {
     setShowSidebar(true);
@@ -92,7 +91,7 @@ const Dashboard = () => {
           )}
         <div className="flex flex-grow xs:w-[1300px] sm:w-full">
           <div
-            className="w-full bg-custom-grey rounded-lg xs:h-[570px] sm:h-[80vh] xs:min-w-[800px] sm:min-w-[70vw] p-1.5"
+            className="flex-1 w-full bg-custom-grey rounded-lg xs:h-[570px] sm:h-[80vh] xs:min-w-[800px] sm:min-w-[70vw] p-1.5"
             style={{ minHeight: "500px" }}
           >
             <StackedBarChart
@@ -100,151 +99,157 @@ const Dashboard = () => {
               coreLimits={coreLimits}
             />
           </div>
-          {!showTable && !showTable30D && !showTable7D ? (
-            <div className="flex ml-2 w-[550px] max-h-[570px] overflow-y-scroll sm:w-full sm:min-h-[80vh] xs:h-[570px]">
-              <div className="w-full" onClick={showTableHandler}>
-                <div className="bg-secondary rounded-lg mb-2 text-white font-bold text-center">
-                  <h2>LAST 30 DAYS</h2>
-                </div>
-                <div className="mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes30D}
-                    categories={["WORK", "LEARN", "BUILD"]}
-                  />
-                </div>
-                <div className="mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes30D}
-                    categories={["WORK"]}
-                  />
-                </div>
-                <div className="mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes30D}
-                    categories={["LEARN"]}
-                  />
-                </div>
-                <div className="mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes30D}
-                    categories={["BUILD"]}
-                  />
-                </div>
-                <div className="mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes30D}
-                    categories={["GENERAL"]}
-                  />
-                </div>
-                <div className="mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes30D}
-                    categories={["RECOVERY"]}
-                  />
-                </div>
-                <div className="mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes30D}
-                    categories={["CORE"]}
-                  />
-                </div>
-                <div className="mb-2" onClick={console.log()}>
-                  <TrailingDataCard
-                    periodTimes={periodTimes30D}
-                    categories={["WASTE"]}
-                  />
-                </div>
-              </div>
-              <div className="w-full mr-2" onClick={showTableHandler2}>
-                <div className="bg-secondary rounded-lg ml-2 mb-2 text-white font-bold text-center">
-                  <h2>LAST 7 DAYS</h2>
-                </div>
-                <div className="ml-2 mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes7D}
-                    categories={["WORK", "LEARN", "BUILD"]}
-                  />
-                </div>
-                <div className="ml-2 mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes7D}
-                    categories={["WORK"]}
-                  />
-                </div>
-                <div className="ml-2 mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes7D}
-                    categories={["LEARN"]}
-                  />
-                </div>
-                <div className="ml-2 mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes7D}
-                    categories={["BUILD"]}
-                  />
-                </div>
-                <div className="ml-2 mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes7D}
-                    categories={["GENERAL"]}
-                  />
-                </div>
-                <div className="ml-2 mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes7D}
-                    categories={["RECOVERY"]}
-                  />
-                </div>
-                <div className="ml-2 mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes7D}
-                    categories={["CORE"]}
-                  />
-                </div>
-                <div className="ml-2 mb-2">
-                  <TrailingDataCard
-                    periodTimes={periodTimes7D}
-                    categories={["WASTE"]}
-                  />
-                </div>
-              </div>
-            </div>
-          ) : (
-            {
-              ...(showTable && showTable30D ? (
-                <div
-                  className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[570px] sm:min-h-[80vh] overflow-auto"
-                  onClick={showTableHandler}
-                >
-                  <PeriodTimesTable
-                    periodTimes={periodTimes30D}
-                    timeframe={"30D"}
-                    title={"Last 30 Days"}
-                  />
+          <div className="flex-1 flex-col">
+            <div>
+              {!showTable && !showTable30D && !showTable7D ? (
+                <div className="flex ml-2 w-[550px] max-h-[450px] overflow-y-scroll sm:w-full sm:min-h-full xs:h-[450px] max-w-[423px]">
+                  <div className="w-full" onClick={showTableHandler}>
+                    <div className="bg-secondary rounded-lg mb-2 text-white font-bold text-center">
+                      <h2>LAST 30 DAYS</h2>
+                    </div>
+                    <div className="mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes30D}
+                        categories={["WORK", "LEARN", "BUILD"]}
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes30D}
+                        categories={["WORK"]}
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes30D}
+                        categories={["LEARN"]}
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes30D}
+                        categories={["BUILD"]}
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes30D}
+                        categories={["GENERAL"]}
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes30D}
+                        categories={["RECOVERY"]}
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes30D}
+                        categories={["CORE"]}
+                      />
+                    </div>
+                    <div className="mb-2" onClick={console.log()}>
+                      <TrailingDataCard
+                        periodTimes={periodTimes30D}
+                        categories={["WASTE"]}
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full mr-2" onClick={showTableHandler2}>
+                    <div className="bg-secondary rounded-lg ml-2 mb-2 text-white font-bold text-center">
+                      <h2>LAST 7 DAYS</h2>
+                    </div>
+                    <div className="ml-2 mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes7D}
+                        categories={["WORK", "LEARN", "BUILD"]}
+                      />
+                    </div>
+                    <div className="ml-2 mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes7D}
+                        categories={["WORK"]}
+                      />
+                    </div>
+                    <div className="ml-2 mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes7D}
+                        categories={["LEARN"]}
+                      />
+                    </div>
+                    <div className="ml-2 mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes7D}
+                        categories={["BUILD"]}
+                      />
+                    </div>
+                    <div className="ml-2 mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes7D}
+                        categories={["GENERAL"]}
+                      />
+                    </div>
+                    <div className="ml-2 mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes7D}
+                        categories={["RECOVERY"]}
+                      />
+                    </div>
+                    <div className="ml-2 mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes7D}
+                        categories={["CORE"]}
+                      />
+                    </div>
+                    <div className="ml-2 mb-2">
+                      <TrailingDataCard
+                        periodTimes={periodTimes7D}
+                        categories={["WASTE"]}
+                      />
+                    </div>
+                  </div>
                 </div>
               ) : (
-                <div
-                  className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[570px] sm:min-h-[80vh] overflow-auto xs:h-[570px]"
-                  onClick={showTable7D ? showTableHandler2 : showTableHandler}
-                >
-                  <PeriodTimesTable
-                    periodTimes={periodTimes7D}
-                    timeframe={"7D"}
-                    title={"Last 7 Days"}
-                  />
-                </div>
-              )),
-            }
-          )}
+                {
+                  ...(showTable && showTable30D ? (
+                    <div
+                      className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[450px] sm:min-h-full overflow-auto max-w-[423px]"
+                      onClick={showTableHandler}
+                    >
+                      <PeriodTimesTable
+                        periodTimes={periodTimes30D}
+                        timeframe={"30D"}
+                        title={"Last 30 Days"}
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[450px] sm:min-h-full overflow-auto max-w-[423px]"
+                      onClick={
+                        showTable7D ? showTableHandler2 : showTableHandler
+                      }
+                    >
+                      <PeriodTimesTable
+                        periodTimes={periodTimes7D}
+                        timeframe={"7D"}
+                        title={"Last 7 Days"}
+                      />
+                    </div>
+                  )),
+                }
+              )}
+            </div>
+            <div className="w-full ml-2 mt-2 max-w-[423px] ">
+              <VitalsBars2 periodTimes={periodTimes7D} />
+            </div>
+          </div>
         </div>
         <div className="mt-1 py-2 xs:w-[1293px] sm:w-full">
           {subcatResults &&
             Object.entries(subcatResults).map(([subcat, minutes]) => (
               <ProgressBar key={subcat} subcat={subcat} minutes={minutes} />
             ))}
-        </div>
-        <div className="w-fit">
-          <VitalsBars periodTimes={periodTimes7D} />
         </div>
       </main>
     </div>
