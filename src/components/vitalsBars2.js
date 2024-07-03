@@ -17,7 +17,7 @@ const VitalsBars2 = ({ periodTimes }) => {
     (periodTimes.WORK?.TOTAL || 0) +
     (periodTimes.LEARN?.TOTAL || 0) +
     (periodTimes.BUILD?.TOTAL || 0);
-  const productivity = 4000; //Math.min(productivitySum, productivityMax);
+  const productivity = Math.min(productivitySum, productivityMax);
   const productivityBtmPx = Math.floor(
     (productivityBtm / productivityMax) * totalPxHeight
   );
