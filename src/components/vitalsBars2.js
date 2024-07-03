@@ -1,15 +1,37 @@
 import React from "react";
+import { GiBrain, GiNightSleep } from "react-icons/gi";
+import { IoFitness } from "react-icons/io5";
+import { FaPeopleGroup } from "react-icons/fa6";
 
 const VitalsBars2 = ({ periodTimes }) => {
-  const totalPxHeight = 200;
+  const totalPxHeight = 180;
 
-  const sleep = periodTimes.CORE?.SLEEP || 0;
-  const sleepBottom = Math.floor((2800 / 5000) * totalPxHeight);
-  const sleepTop = Math.floor((3780 / 5000) * totalPxHeight);
-  const sleepLvl =
-    Math.floor((sleep / 5000) * totalPxHeight) < 5
+  const sleepMax = 5000;
+  const sleepBtm = 2800;
+  const sleepTp = 3780;
+  const sleep =
+    (periodTimes.CORE?.SLEEP || 0) > sleepMax
+      ? sleepMax
+      : periodTimes.CORE?.SLEEP || 0;
+  const sleepBtmPx = Math.floor((sleepBtm / sleepMax) * totalPxHeight);
+  const sleepTpPx = Math.floor((sleepTp / sleepMax) * totalPxHeight);
+  const sleepPx =
+    Math.floor((sleep / sleepMax) * totalPxHeight) < 5
       ? 0
-      : Math.floor((sleep / 5000) * totalPxHeight);
+      : Math.floor((sleep / sleepMax) * totalPxHeight);
+  const sleepRed = sleep < sleepBtm ? 210 : sleep > sleepTp ? 210 : 0;
+  const sleepGreen =
+    sleep < sleepBtm
+      ? (sleep / sleepBtm) * 150
+      : sleep > sleepTp
+      ? 150 - ((sleep - sleepTp) / (sleepMax - sleepTp)) * 150
+      : 200;
+  const sleepBlue =
+    sleep < sleepBtm
+      ? (sleep / sleepBtm) * 150
+      : sleep > sleepTp
+      ? 150 - ((sleep - sleepTp) / (sleepMax - sleepTp)) * 150
+      : 200;
 
   const productivityMax = 5000;
   const productivityBtm = 2400;
@@ -112,71 +134,97 @@ const VitalsBars2 = ({ periodTimes }) => {
         );
 
   return (
-    <section className="bg-custom-grey w-full px-8 h-[270px] rounded-lg flex items-center justify-center">
+    <section className="bg-custom-vitals w-full px-8 h-full py-8 rounded-lg flex items-center justify-center shadow-lg">
       <div className="flex flex-col items-center">
-        <div className="font-bold text-white">SL</div>
-        <div className="relative bg-gray-200 w-[16px] h-[200px] rounded-md flex items-end border-[2px] border-white">
+        <div className="font-bold text-white mb-2 text-4xl">
+          <GiNightSleep />
+        </div>
+        <div
+          className="relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] border-white"
+          style={{ height: `${totalPxHeight}px` }}
+        >
           <div
-            className="bg-blue-500 w-[16px] rounded-md"
-            style={{ height: `${sleepLvl}px` }}
+            className="w-[16px] rounded-md"
+            style={{
+              height: `${sleepPx}px`,
+              backgroundColor: `rgb(${sleepRed}, ${sleepGreen}, ${sleepBlue})`,
+            }}
           ></div>
           <div
-            className="bg-black w-[20px] h-[2px] rounded-lg absolute left-[-2px]"
-            style={{ bottom: `${sleepBottom}px`, zIndex: 10 }}
+            className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
+            style={{ bottom: `${sleepBtmPx}px`, zIndex: 10 }}
           ></div>
           <div
-            className="bg-black w-[20px] h-[2px] rounded-lg absolute left-[-2px]"
-            style={{ bottom: `${sleepTop}px`, zIndex: 10 }}
+            className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
+            style={{ bottom: `${sleepTpPx}px`, zIndex: 10 }}
           ></div>
         </div>
       </div>
 
-      <div className="flex flex-col items-center ml-6">
-        <div className="font-bold text-white">PR</div>
-        <div className="relative bg-gray-200 w-[16px] h-[200px] rounded-md flex items-end border-[2px] border-white">
+      <div className="flex flex-col items-center ml-10">
+        <div className="font-bold text-white mb-2 text-4xl">
+          <GiBrain />
+        </div>
+        <div
+          className="relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] border-white"
+          style={{ height: `${totalPxHeight}px` }}
+        >
           <div
-            className="bg-blue-500 w-[16px] rounded-md"
+            className="w-[16px] rounded-md"
             style={{
               height: `${productivityPx}px`,
               backgroundColor: `rgb(${productivityRed}, ${productivityGreen}, ${productivityBlue})`,
             }}
           ></div>
           <div
-            className="bg-black w-[20px] h-[2px] rounded-lg absolute left-[-2px]"
+            className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
             style={{ bottom: `${productivityBtmPx}px`, zIndex: 10 }}
           ></div>
         </div>
       </div>
 
-      <div className="flex flex-col items-center ml-6">
-        <div className="font-bold text-white">FI</div>
-        <div className="relative bg-gray-200 w-[16px] h-[200px] rounded-md flex items-end border-[2px] border-white">
+      <div className="flex flex-col items-center ml-10">
+        <div className="font-bold text-white mb-2 text-4xl">
+          <IoFitness />
+        </div>
+        <div
+          className="relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px]"
+          style={{
+            height: `${totalPxHeight}px`,
+            borderColor: `${!fitnessPx && "#C11818"}`,
+          }}
+        >
           <div
-            className="bg-blue-500 w-[16px] rounded-md"
+            className="w-[16px] rounded-md"
             style={{
               height: `${fitnessPx}px`,
               backgroundColor: `rgb(${fitnessRed}, ${fitnessGreen}, ${fitnessBlue})`,
             }}
           ></div>
           <div
-            className="bg-black w-[20px] h-[2px] rounded-lg absolute left-[-2px]"
+            className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
             style={{ bottom: `${fitnessBtmPx}px`, zIndex: 10 }}
           ></div>
         </div>
       </div>
 
-      <div className="flex flex-col items-center ml-6">
-        <div className="font-bold text-white">SO</div>
-        <div className="relative bg-gray-200 w-[16px] h-[200px] rounded-md flex items-end border-[2px] border-white">
+      <div className="flex flex-col items-center ml-10">
+        <div className="font-bold text-white mb-2 text-4xl">
+          <FaPeopleGroup />
+        </div>
+        <div
+          className="relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] border-white"
+          style={{ height: `${totalPxHeight}px` }}
+        >
           <div
-            className="bg-blue-500 w-[16px] rounded-md"
+            className="w-[16px] rounded-md"
             style={{
               height: `${socialPx}px`,
               backgroundColor: `rgb(${socialRed}, ${socialGreen}, ${socialBlue})`,
             }}
           ></div>
           <div
-            className="bg-black w-[20px] h-[2px] rounded-lg absolute left-[-2px]"
+            className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
             style={{ bottom: `${socialBtmPx}px`, zIndex: 10 }}
           ></div>
         </div>

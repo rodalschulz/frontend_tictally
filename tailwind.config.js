@@ -31,6 +31,7 @@ module.exports = {
           lightblue: "rgb(217, 237, 249)",
           yellow: "rgb(220, 185, 20)",
           editMode: "rgb(107, 245, 255)",
+          vitals: "rgb(70, 115, 135)",
         },
       },
       transitionProperty: {

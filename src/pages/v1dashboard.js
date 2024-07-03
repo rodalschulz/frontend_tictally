@@ -71,11 +71,11 @@ const Dashboard = () => {
         setShowSidebar={setShowSidebar}
       />
       <main
-        className={`flex-1 sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 xs:max-w-full sm:max-w-[2000px] ${
+        className={`sm:pr-10 sm:pl-6 sm:pt-4 xs:pt-2 xs:pl-2 xs:pr-2 sm:w-[100vw] ${
           showSidebar && "ml-16"
         }`}
       >
-        <h1 className="sm:min-w-[1400px] xs:w-[1300px] sm:w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 justify-between items-center">
+        <h1 className="text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white items-center">
           Dashboard
         </h1>
         {isLoading && (
@@ -89,9 +89,9 @@ const Dashboard = () => {
           (userActivityData.length === 0 || displayInstructions) && (
             <Instructions pageName="dashboard" />
           )}
-        <div className="flex flex-grow xs:w-[1300px] sm:w-full">
+        <div className="flex max-h-[80vh]">
           <div
-            className="flex-1 w-full bg-custom-grey rounded-lg xs:h-[570px] sm:h-[80vh] xs:min-w-[800px] sm:min-w-[70vw] p-1.5"
+            className="bg-custom-grey rounded-md p-1 flex-[3]"
             style={{ minHeight: "500px" }}
           >
             <StackedBarChart
@@ -99,10 +99,10 @@ const Dashboard = () => {
               coreLimits={coreLimits}
             />
           </div>
-          <div className="flex-1 flex-col">
+          <div className="flex-col flex-[1]">
             <div>
               {!showTable && !showTable30D && !showTable7D ? (
-                <div className="flex ml-2 w-[550px] max-h-[450px] overflow-y-scroll sm:w-full sm:min-h-full xs:h-[450px] max-w-[423px]">
+                <div className="flex ml-2 overflow-y-scroll max-h-[50vh]">
                   <div className="w-full" onClick={showTableHandler}>
                     <div className="bg-secondary rounded-lg mb-2 text-white font-bold text-center">
                       <h2>LAST 30 DAYS</h2>
@@ -214,7 +214,7 @@ const Dashboard = () => {
                 {
                   ...(showTable && showTable30D ? (
                     <div
-                      className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[450px] sm:min-h-full overflow-auto max-w-[423px]"
+                      className="ml-2 overflow-auto max-h-[50vh]"
                       onClick={showTableHandler}
                     >
                       <PeriodTimesTable
@@ -225,7 +225,7 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     <div
-                      className="flex ml-2 xs:w-[550px] sm:w-full xs:max-h-[450px] sm:min-h-full overflow-auto max-w-[423px]"
+                      className="ml-2 overflow-auto max-h-[50vh]"
                       onClick={
                         showTable7D ? showTableHandler2 : showTableHandler
                       }
@@ -240,12 +240,12 @@ const Dashboard = () => {
                 }
               )}
             </div>
-            <div className="w-full ml-2 mt-2 max-w-[423px] ">
+            <div className="ml-2 mt-2 max-h-[30vh] h-full pb-2.5">
               <VitalsBars2 periodTimes={periodTimes7D} />
             </div>
           </div>
         </div>
-        <div className="mt-1 py-2 xs:w-[1293px] sm:w-full">
+        <div className="mt-1 py-2">
           {subcatResults &&
             Object.entries(subcatResults).map(([subcat, minutes]) => (
               <ProgressBar key={subcat} subcat={subcat} minutes={minutes} />

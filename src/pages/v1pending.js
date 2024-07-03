@@ -249,14 +249,12 @@ const Pending = () => {
                       )}
                     </th>
                     <th>Description</th>
-                    {!isMobile && (
-                      <th>
-                        Category{" "}
-                        {hoveredHeader === "Category" && (
-                          <PopupInstructions text={popupText} />
-                        )}
-                      </th>
-                    )}
+                    <th>
+                      Category{" "}
+                      {hoveredHeader === "Category" && (
+                        <PopupInstructions text={popupText} />
+                      )}
+                    </th>
                     {!isMobile && (
                       <th>
                         Relev | Urgen{" "}
@@ -266,7 +264,7 @@ const Pending = () => {
                       </th>
                     )}
                     {!isMobile && <th>Period</th>}
-                    <th>State</th>
+                    {!isMobile && <th>State</th>}
                   </HoverableRowGuide>
                 </thead>
                 <tbody>
@@ -296,24 +294,24 @@ const Pending = () => {
                         onChange={handleInputChange}
                       />
                     </td>
-                    {!isMobile && (
-                      <td>
-                        <select
-                          name="category"
-                          className="data-input"
-                          value={input.category}
-                          onChange={handleInputChange}
-                        >
-                          <option value="">Select</option>
-                          <option value="GENERAL">GENERAL</option>
-                          <option value="WORK">WORK</option>
-                          <option value="CORE">CORE</option>
-                          <option value="LEARN">LEARN</option>
-                          <option value="BUILD">BUILD</option>
-                          <option value="RECOVERY">RECOVERY</option>
-                        </select>
-                      </td>
-                    )}
+
+                    <td>
+                      <select
+                        name="category"
+                        className="data-input"
+                        value={input.category}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Select</option>
+                        <option value="GENERAL">GENERAL</option>
+                        <option value="WORK">WORK</option>
+                        <option value="CORE">CORE</option>
+                        <option value="LEARN">LEARN</option>
+                        <option value="BUILD">BUILD</option>
+                        <option value="RECOVERY">RECOVERY</option>
+                      </select>
+                    </td>
+
                     {!isMobile && (
                       <td>
                         <select
@@ -349,14 +347,16 @@ const Pending = () => {
                         </select>
                       </td>
                     )}
-                    <td>
-                      <button
-                        onClick={submitDonePatch}
-                        className="bg-primary px-2 py-1 pw-1 rounded-lg hover:bg-custom-databg"
-                      >
-                        <FaCheck />
-                      </button>
-                    </td>
+                    {!isMobile && (
+                      <td>
+                        <button
+                          onClick={submitDonePatch}
+                          className="bg-primary px-2 py-1 pw-1 rounded-lg hover:bg-custom-databg"
+                        >
+                          <FaCheck />
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 </tbody>
               </table>
@@ -403,13 +403,14 @@ const Pending = () => {
                         <td className=""></td>
                         <td className=""></td>
                         <td>{task.description}</td>
-                        {!isMobile && (
-                          <td>{task.category ? task.category : ""}</td>
-                        )}
+
+                        <td>{task.category ? task.category : ""}</td>
                         {!isMobile && <td>{task.relevUrgen}</td>}
                         {!isMobile && <td>{task.periodRecurrence}</td>}
 
-                        <td>{task.state ? "Done" : "Pending"}</td>
+                        {!isMobile && (
+                          <td>{task.state ? "Done" : "Pending"}</td>
+                        )}
                       </tr>
                     ))}
                 </tbody>
@@ -451,12 +452,12 @@ const Pending = () => {
                         </td>
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
-                        {!isMobile && (
-                          <td>{task.category ? task.category : ""}</td>
-                        )}
+                        <td>{task.category ? task.category : ""}</td>
                         {!isMobile && <td></td>}
                         {!isMobile && <td>{task.periodRecurrence}</td>}
-                        <td>{task.state ? "Done" : "Pending"}</td>
+                        {!isMobile && (
+                          <td>{task.state ? "Done" : "Pending"}</td>
+                        )}
                       </tr>
                     ))}
                 </tbody>
@@ -497,12 +498,14 @@ const Pending = () => {
                         </td>
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
-                        {!isMobile && <td>{task.category}</td>}
+                        <td>{task.category}</td>
                         {!isMobile && (
                           <td>{task.relevUrgen ? task.relevUrgen : ""}</td>
                         )}
                         {!isMobile && <td>{task.periodRecurrence}</td>}
-                        <td>{task.state ? "Done" : "Pending"}</td>
+                        {!isMobile && (
+                          <td>{task.state ? "Done" : "Pending"}</td>
+                        )}
                       </tr>
                     ))}
                 </tbody>
@@ -538,10 +541,12 @@ const Pending = () => {
                         </td>
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
-                        {!isMobile && <td>{task.category}</td>}
+                        <td>{task.category}</td>
                         {!isMobile && <td></td>}
                         {!isMobile && <td>{task.periodRecurrence}</td>}
-                        <td>{task.state ? "Done" : "Pending"}</td>
+                        {!isMobile && (
+                          <td>{task.state ? "Done" : "Pending"}</td>
+                        )}
                       </tr>
                     ))}
                 </tbody>
@@ -582,14 +587,16 @@ const Pending = () => {
                         </td>
                         <td>{task.time ? task.time : ""}</td>
                         <td>{task.description}</td>
-                        {!isMobile && <td>{task.category}</td>}
+                        <td>{task.category}</td>
                         {!isMobile && <td></td>}
                         {!isMobile && (
                           <td>
                             {task.periodRecurrence ? task.periodRecurrence : ""}
                           </td>
                         )}
-                        <td>{task.state ? "Done" : "Pending"}</td>
+                        {!isMobile && (
+                          <td>{task.state ? "Done" : "Pending"}</td>
+                        )}
                       </tr>
                     ))}
                 </tbody>
