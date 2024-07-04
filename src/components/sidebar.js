@@ -6,6 +6,7 @@ import {
   FaSignOutAlt,
   FaRegQuestionCircle,
 } from "react-icons/fa";
+import { IoPersonOutline } from "react-icons/io5";
 import { GrConfigure } from "react-icons/gr";
 import {
   MdDeleteForever,
@@ -59,6 +60,10 @@ const Sidebar = ({
   const navigatePending = (e) => {
     e.stopPropagation();
     window.location.href = `/members/${userId}/pending`;
+  };
+  const navigateProfile = (e) => {
+    e.stopPropagation();
+    window.location.href = `/members/${userId}/profile`;
   };
 
   // OTHERS
@@ -116,6 +121,14 @@ const Sidebar = ({
                 icon={<MdAlarmOn />}
                 label={"Pending"}
                 bgColor={closeUpcoming.length > 0 ? "bg-custom-upcoming" : null}
+                bgHoverColor={
+                  closeUpcoming.length > 0 ? "bg-custom-lightblue" : null
+                }
+              />
+              <SidebarButton
+                onClick={navigateProfile}
+                icon={<IoPersonOutline />}
+                label={"Profile"}
               />
             </div>
             <div className="flex-grow space-y-4 mt-4 p-2">

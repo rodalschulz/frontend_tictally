@@ -11,6 +11,7 @@ import Dashboard from "./pages/v1dashboard.js";
 import EmailVerification from "./components/emailVerification.js";
 import PasswordRecovery from "./pages/v1passwordRecovery.js";
 import PasswordReset from "./pages/v1passwordReset.js";
+import Profile from "./pages/v1profile.js";
 import Pending from "./pages/v1pending.js";
 import "./index.css";
 
@@ -86,6 +87,12 @@ function App() {
           ) : (
             <Navigate to="/" />
           )
+        }
+      />
+      <Route
+        path="/members/:userId/profile"
+        element={
+          loading ? null : isAuthenticated ? <Profile /> : <Navigate to="/" />
         }
       />
     </Routes>

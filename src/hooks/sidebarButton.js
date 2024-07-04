@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SidebarButton = ({ onClick, icon, bgColor, label }) => {
+const SidebarButton = ({ onClick, icon, bgColor, label, bgHoverColor }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
@@ -13,9 +13,9 @@ const SidebarButton = ({ onClick, icon, bgColor, label }) => {
 
   return (
     <button
-      className={`btn w-full flex items-center justify-center  ${
-        bgColor ? `${bgColor} hover:bg-custom-editMode` : "btn-primary"
-      }`}
+      className={`flex items-center justify-center rounded-md sm:w-12 sm:h-12 xs:w-9 xs:h-9 ${
+        bgColor ? `${bgColor}` : "bg-primary"
+      } ${bgHoverColor ? `hover:${bgHoverColor}` : "hover:bg-custom-vitals"}`}
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

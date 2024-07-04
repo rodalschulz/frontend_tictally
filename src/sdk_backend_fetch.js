@@ -512,3 +512,35 @@ export const deleteUserPendingTasks = async (userId, entryIds) => {
     throw error;
   }
 };
+
+// USER DELETION
+export const deleteAccount = async (userId, password) => {
+  try {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    };
+
+    const response = await fetch(
+      `${baseURL}/${version}/users/${userId}/account-deletion`,
+      {
+        method: "DELETE",
+        headers: headers,
+        body: JSON.stringify({ password }),
+      }
+    );
+
+    if (!response.ok) {
+      console.log(response.json());
+      throw new Error("Failed to delete user");
+    }
+
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw error;
+  }
+};
