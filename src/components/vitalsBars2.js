@@ -7,19 +7,15 @@ const VitalsBars2 = ({ periodTimes }) => {
   const [vhInPixels, setVhInPixels] = useState(0);
 
   useEffect(() => {
-    // Calculate the value of 1vh in pixels
     const handleResize = () => {
       const vh = window.innerHeight / 100;
       setVhInPixels(vh);
     };
 
-    // Initial calculation
     handleResize();
 
-    // Recalculate on window resize
     window.addEventListener("resize", handleResize);
 
-    // Cleanup event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -34,10 +30,9 @@ const VitalsBars2 = ({ periodTimes }) => {
       : periodTimes.CORE?.SLEEP || 0;
   const sleepBtmPx = Math.floor((sleepBtm / sleepMax) * totalPxHeight);
   const sleepTpPx = Math.floor((sleepTp / sleepMax) * totalPxHeight);
-  const sleepPx =
-    Math.floor((sleep / sleepMax) * totalPxHeight) < 5
-      ? 0
-      : Math.floor((sleep / sleepMax) * totalPxHeight);
+  const sleepPx = Math.floor((sleep / sleepMax) * totalPxHeight);
+  const sleepBorder =
+    sleep / sleepMax < 0.01 ? "border-red-700" : "border-white";
   const sleepRed = sleep < sleepBtm ? 210 : sleep > sleepTp ? 210 : 0;
   const sleepGreen =
     sleep < sleepBtm
@@ -62,10 +57,11 @@ const VitalsBars2 = ({ periodTimes }) => {
   const productivityBtmPx = Math.floor(
     (productivityBtm / productivityMax) * totalPxHeight
   );
-  const productivityPx =
-    Math.floor((productivity / productivityMax) * totalPxHeight) < 5
-      ? 0
-      : Math.floor((productivity / productivityMax) * totalPxHeight);
+  const productivityPx = Math.floor(
+    (productivity / productivityMax) * totalPxHeight
+  );
+  const productivityBorder =
+    productivity / productivityMax < 0.01 ? "border-red-700" : "border-white";
   const productivityRed = productivity < productivityBtm ? 210 : 0;
   const productivityGreen =
     productivity < productivityBtm
@@ -95,10 +91,9 @@ const VitalsBars2 = ({ periodTimes }) => {
       ? fitnessMax
       : periodTimes.CORE?.FITNESS || 0;
   const fitnessBtmPx = Math.floor((fitnessBtm / fitnessMax) * totalPxHeight);
-  const fitnessPx =
-    Math.floor((fitness / fitnessMax) * totalPxHeight) < 5
-      ? 0
-      : Math.floor((fitness / fitnessMax) * totalPxHeight);
+  const fitnessPx = Math.floor((fitness / fitnessMax) * totalPxHeight);
+  const fitnessBorder =
+    fitness / fitnessMax < 0.01 ? "border-red-700" : "border-white";
   const fitnessRed = fitness < fitnessBtm ? 210 : 0;
   const fitnessGreen =
     fitness < fitnessBtm
@@ -128,10 +123,9 @@ const VitalsBars2 = ({ periodTimes }) => {
     (periodTimes.RECOVERY?.SOCIALIZE || 0);
   const social = Math.min(socialSum, socialMax);
   const socialBtmPx = Math.floor((socialBtm / socialMax) * totalPxHeight);
-  const socialPx =
-    Math.floor((social / socialMax) * totalPxHeight) < 5
-      ? 0
-      : Math.floor((social / socialMax) * totalPxHeight);
+  const socialPx = Math.floor((social / socialMax) * totalPxHeight);
+  const socialBorder =
+    social / socialMax < 0.01 ? "border-red-700" : "border-white";
   const socialRed = social < socialBtm ? 210 : 0;
   const socialGreen =
     social < socialBtm
@@ -159,11 +153,13 @@ const VitalsBars2 = ({ periodTimes }) => {
           <GiNightSleep />
         </div>
         <div
-          className="relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] border-white"
-          style={{ height: `${totalPxHeight}px` }}
+          className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${sleepBorder}`}
+          style={{
+            height: `${totalPxHeight}px`,
+          }}
         >
           <div
-            className="w-[16px] rounded-md"
+            className="w-[16px] rounded-sm"
             style={{
               height: `${sleepPx}px`,
               backgroundColor: `rgb(${sleepRed}, ${sleepGreen}, ${sleepBlue})`,
@@ -185,11 +181,13 @@ const VitalsBars2 = ({ periodTimes }) => {
           <GiBrain />
         </div>
         <div
-          className="relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] border-white"
-          style={{ height: `${totalPxHeight}px` }}
+          className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${productivityBorder}`}
+          style={{
+            height: `${totalPxHeight}px`,
+          }}
         >
           <div
-            className="w-[16px] rounded-md"
+            className="w-[16px] rounded-sm"
             style={{
               height: `${productivityPx}px`,
               backgroundColor: `rgb(${productivityRed}, ${productivityGreen}, ${productivityBlue})`,
@@ -207,14 +205,14 @@ const VitalsBars2 = ({ periodTimes }) => {
           <IoFitness />
         </div>
         <div
-          className="relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px]"
+          className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${fitnessBorder}
+          }`}
           style={{
             height: `${totalPxHeight}px`,
-            borderColor: `${!fitnessPx && "#C11818"}`,
           }}
         >
           <div
-            className="w-[16px] rounded-md"
+            className="w-[16px] rounded-sm"
             style={{
               height: `${fitnessPx}px`,
               backgroundColor: `rgb(${fitnessRed}, ${fitnessGreen}, ${fitnessBlue})`,
@@ -232,11 +230,13 @@ const VitalsBars2 = ({ periodTimes }) => {
           <FaPeopleGroup />
         </div>
         <div
-          className="relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] border-white"
-          style={{ height: `${totalPxHeight}px` }}
+          className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${socialBorder}`}
+          style={{
+            height: `${totalPxHeight}px`,
+          }}
         >
           <div
-            className="w-[16px] rounded-md"
+            className="w-[16px] rounded-sm"
             style={{
               height: `${socialPx}px`,
               backgroundColor: `rgb(${socialRed}, ${socialGreen}, ${socialBlue})`,
