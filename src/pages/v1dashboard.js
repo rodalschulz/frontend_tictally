@@ -104,7 +104,7 @@ const Dashboard = () => {
               {!showTable && !showTable30D && !showTable7D ? (
                 <div className="flex ml-2 overflow-y-scroll max-h-[50vh]">
                   <div
-                    className="w-full mr-1 px-1 py-1 rounded-lg hover:bg-gray-200 hover:cursor-pointer h-full"
+                    className="w-full mr-2 px-1 py-1 rounded-lg hover:bg-gray-200 hover:cursor-pointer h-full"
                     onClick={showTableHandler}
                   >
                     <div className="bg-secondary rounded-lg mb-2 text-white font-bold text-center">
@@ -160,55 +160,55 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div
-                    className="w-full mr-1 px-1 py-1 rounded-lg hover:bg-gray-200 hover:cursor-pointer h-full"
+                    className="w-full mr-2 px-1 py-1 rounded-lg hover:bg-gray-200 hover:cursor-pointer h-full"
                     onClick={showTableHandler2}
                   >
-                    <div className="bg-secondary rounded-lg ml-2 mb-2 text-white font-bold text-center">
+                    <div className="bg-secondary rounded-lg mb-2 text-white font-bold text-center">
                       <h2>LAST 7 DAYS</h2>
                     </div>
-                    <div className="ml-2 mb-2">
+                    <div className="mb-2">
                       <TrailingDataCard
                         periodTimes={periodTimes7D}
                         categories={["WORK", "LEARN", "BUILD"]}
                       />
                     </div>
-                    <div className="ml-2 mb-2">
+                    <div className="mb-2">
                       <TrailingDataCard
                         periodTimes={periodTimes7D}
                         categories={["WORK"]}
                       />
                     </div>
-                    <div className="ml-2 mb-2">
+                    <div className="mb-2">
                       <TrailingDataCard
                         periodTimes={periodTimes7D}
                         categories={["LEARN"]}
                       />
                     </div>
-                    <div className="ml-2 mb-2">
+                    <div className="mb-2">
                       <TrailingDataCard
                         periodTimes={periodTimes7D}
                         categories={["BUILD"]}
                       />
                     </div>
-                    <div className="ml-2 mb-2">
+                    <div className="mb-2">
                       <TrailingDataCard
                         periodTimes={periodTimes7D}
                         categories={["GENERAL"]}
                       />
                     </div>
-                    <div className="ml-2 mb-2">
+                    <div className="mb-2">
                       <TrailingDataCard
                         periodTimes={periodTimes7D}
                         categories={["RECOVERY"]}
                       />
                     </div>
-                    <div className="ml-2 mb-2">
+                    <div className="mb-2">
                       <TrailingDataCard
                         periodTimes={periodTimes7D}
                         categories={["CORE"]}
                       />
                     </div>
-                    <div className="ml-2 mb-2">
+                    <div className="mb-2">
                       <TrailingDataCard
                         periodTimes={periodTimes7D}
                         categories={["WASTE"]}
