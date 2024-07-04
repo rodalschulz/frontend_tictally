@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GiBrain, GiNightSleep } from "react-icons/gi";
 import { IoFitness } from "react-icons/io5";
 import { FaPeopleGroup } from "react-icons/fa6";
 
 const VitalsBars2 = ({ periodTimes }) => {
-  const totalPxHeight = 180;
+  const [vhInPixels, setVhInPixels] = useState(0);
+
+  useEffect(() => {
+    // Calculate the value of 1vh in pixels
+    const handleResize = () => {
+      const vh = window.innerHeight / 100;
+      setVhInPixels(vh);
+    };
+
+    // Initial calculation
+    handleResize();
+
+    // Recalculate on window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const totalPxHeight = Math.floor(vhInPixels * 17);
 
   const sleepMax = 5000;
   const sleepBtm = 2800;
@@ -102,7 +121,7 @@ const VitalsBars2 = ({ periodTimes }) => {
 
   const socialMax = 2000;
   const socialBtm = 420;
-  const socialSum =
+  const socialSum = // Maybe here I should add other categories and also track for "MINGLE"
     (periodTimes.GENERAL?.SOCIAL || 0) +
     (periodTimes.RECOVERY?.SOCIAL || 0) +
     (periodTimes.GENERAL?.SOCIALIZE || 0) +
@@ -134,7 +153,7 @@ const VitalsBars2 = ({ periodTimes }) => {
         );
 
   return (
-    <section className="bg-custom-vitals w-full px-8 h-full py-8 rounded-lg flex items-center justify-center shadow-lg">
+    <section className="bg-custom-vitals py-8 px-8 rounded-lg flex items-center justify-center shadow-lg w-full h-full">
       <div className="flex flex-col items-center">
         <div className="font-bold text-white mb-2 text-4xl">
           <GiNightSleep />
