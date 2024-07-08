@@ -34,29 +34,29 @@ const HoverableRowGuide = ({ children, setPopupText, setHoveredHeader }) => {
       setPopupText(
         `Total Time: This field is automatically calculated based on the start time, end time and the adjustment time.`
       );
-    } else if (event.target.textContent.trim() === "CORE LIMITS") {
+    } else if (event.target.textContent.trim() === "Daily Limits") {
       setPopupText(
         `These are limits (in minutes) for each CORE subcategory. Set SLEEP to 480 for a max of 8 hours of sleep.`
       );
-    } else if (event.target.textContent.trim() === "GENERAL") {
+    } else if (event.target.textContent.trim() === "General") {
       setPopupText(
         `The General category is for activities that don't fit into any other category.`
       );
-    } else if (event.target.textContent.trim() === "WORK") {
+    } else if (event.target.textContent.trim() === "Work") {
       setPopupText(
         `The Work category is for activities related to money-making. It's a productive category.`
       );
-    } else if (event.target.textContent.trim() === "LEARN") {
+    } else if (event.target.textContent.trim() === "Learn") {
       setPopupText(
         `The Learn category is for activities related to gaining knowledge. It's a productive category.`
       );
-    } else if (event.target.textContent.trim() === "BUILD") {
+    } else if (event.target.textContent.trim() === "Build") {
       setPopupText(
         `The Build category is for activities related to creating or building something that could potentially have a future value. It's a productive category.`
       );
-    } else if (event.target.textContent.trim() === "RECOVERY") {
+    } else if (event.target.textContent.trim() === "Recovery") {
       setPopupText(
-        `The Recovery category is for activities related to rest and relaxation.`
+        `The Recovery category is for activities related to rest, relaxation and recreation.`
       );
     } else if (event.target.textContent.trim() === "Date") {
       setPopupText(

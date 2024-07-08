@@ -151,20 +151,31 @@ const Categories = () => {
       >
         <div className="xs:w-[220vw] sm:w-full">
           <h1 className="w-[100%] text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white">
-            Category Configuration
+            Configuration
           </h1>
           {displayInstructions && <Instructions pageName="config" />}
           <div className="w-[100%] overflow-x-auto">
+            <div className="flex font-bold">
+              <div className="bg-secondary text-white text-center py-1 mb-2 min-w-[162px]">
+                Core Category
+              </div>
+              <div className="bg-secondary text-white text-center py-1 mb-2 ml-2 min-w-[720px]">
+                Custom Subcategories
+              </div>
+              <div className="bg-secondary text-white text-center py-1 mb-2 ml-2 min-w-[296px]">
+                10K Goal Tracking
+              </div>
+            </div>
             <form className="flex">
-              <table className="rounded-lg bg-secondary shadow-md">
-                <thead className="bg-secondary text-white">
+              <table className="rounded-lg shadow-md w-[150px]">
+                <thead className="bg-primary text-white">
                   <HoverableRowGuide
                     setHoveredHeader={setHoveredHeader}
                     setPopupText={setPopupText}
                   >
-                    <th className="px-7 py-2" colSpan={2}>
-                      CORE LIMITS{" "}
-                      {hoveredHeader === "CORE LIMITS" && (
+                    <th className="px-7 py-2 text-sm" colSpan={2}>
+                      Daily Limits{" "}
+                      {hoveredHeader === "Daily Limits" && (
                         <PopupInstructions text={popupText} />
                       )}
                     </th>
@@ -187,39 +198,39 @@ const Categories = () => {
                   ))}
                 </tbody>
               </table>
-              <table className="ml-2 rounded-lg shadow-md">
-                <thead className="bg-secondary text-white">
+              <table className="ml-2 rounded-lg shadow-md w-[720px]">
+                <thead className="bg-primary text-white">
                   <HoverableRowGuide
                     setHoveredHeader={setHoveredHeader}
                     setPopupText={setPopupText}
                   >
-                    <th className="px-7 py-2">
-                      GENERAL{" "}
-                      {hoveredHeader === "GENERAL" && (
+                    <th className="px-7 py-2 text-sm">
+                      General{" "}
+                      {hoveredHeader === "General" && (
                         <PopupInstructions text={popupText} />
                       )}
                     </th>
-                    <th className="px-7 py-2">
-                      WORK{" "}
-                      {hoveredHeader === "WORK" && (
+                    <th className="px-7 py-2 text-sm">
+                      Work{" "}
+                      {hoveredHeader === "Work" && (
                         <PopupInstructions text={popupText} />
                       )}
                     </th>
-                    <th className="px-7 py-2">
-                      LEARN{" "}
-                      {hoveredHeader === "LEARN" && (
+                    <th className="px-7 py-2 text-sm">
+                      Learn{" "}
+                      {hoveredHeader === "Learn" && (
                         <PopupInstructions text={popupText} />
                       )}
                     </th>
-                    <th className="px-7 py-2">
-                      BUILD{" "}
-                      {hoveredHeader === "BUILD" && (
+                    <th className="px-7 py-2 text-sm">
+                      Build{" "}
+                      {hoveredHeader === "Build" && (
                         <PopupInstructions text={popupText} />
                       )}
                     </th>
-                    <th className="px-7 py-2">
-                      RECOVERY{" "}
-                      {hoveredHeader === "RECOVERY" && (
+                    <th className="px-7 py-2 text-sm">
+                      Recovery{" "}
+                      {hoveredHeader === "Recovery" && (
                         <PopupInstructions text={popupText} />
                       )}
                     </th>
@@ -251,11 +262,11 @@ const Categories = () => {
                   ))}
                 </tbody>
               </table>
-              <table className="ml-2 rounded-lg shadow-md">
-                <thead className="bg-secondary text-white">
+              <table className="ml-2 rounded-lg shadow-md w-[296px]">
+                <thead className="bg-primary text-white text-sm">
                   <tr>
-                    <th className="px-7 py-2">SUBCAT</th>
-                    <th className="px-7 py-2">START DATE</th>
+                    <th className="px-7 py-2">Subcategory</th>
+                    <th className="px-7 py-2">Start Date</th>
                   </tr>
                 </thead>
                 <tbody className="text-[13px] bg-gray-200">
