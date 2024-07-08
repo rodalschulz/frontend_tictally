@@ -379,7 +379,9 @@ const Pending = () => {
                 setSelectedCategories={setSelectedCategories}
               />
             </div>
-            <h2 className="pl-2 font-bold text-gray-500">Ad-hoc</h2>
+            {adhoc.length > 0 && (
+              <h2 className="pl-2 font-bold text-gray-500">Ad-hoc</h2>
+            )}
             <div className="mt-1">
               <table
                 id="output-table-pending"
@@ -416,7 +418,9 @@ const Pending = () => {
                 </tbody>
               </table>
             </div>
-            <h2 className="pl-2 mt-3 font-bold text-gray-500">Upcoming</h2>
+            {upcoming.length > 0 && (
+              <h2 className="pl-2 mt-3 font-bold text-gray-500">Upcoming</h2>
+            )}
             <div className="mt-1">
               <table
                 id="output-table-pending"
@@ -464,9 +468,13 @@ const Pending = () => {
               </table>
             </div>
           </div>
-          <p className="bg-secondary text-secondary mt-3 h-1 rounded-lg"> </p>
+          {(recentDoneOrExpired.length > 0 || farOff.length > 0) && (
+            <p className="bg-secondary text-secondary mt-3 h-1 rounded-lg"> </p>
+          )}
           <div className="pt-2 pb-4 mt-3 rounded-md">
-            <h2 className="pl-2 font-bold text-gray-500">Recent</h2>
+            {recentDoneOrExpired.length > 0 && (
+              <h2 className="pl-2 font-bold text-gray-500">Recent</h2>
+            )}
             <div className="mt-1">
               <table
                 id="output-table-pending"
@@ -511,7 +519,9 @@ const Pending = () => {
                 </tbody>
               </table>
             </div>
-            <h2 className="pl-2 mt-3 font-bold text-gray-500">Far-Off</h2>
+            {farOff.length > 0 && (
+              <h2 className="pl-2 mt-3 font-bold text-gray-500">Far-Off</h2>
+            )}
             <div className="mt-1">
               <table
                 id="output-table-pending"
@@ -553,9 +563,13 @@ const Pending = () => {
               </table>
             </div>
           </div>
-          <p className="bg-secondary text-secondary mt-3 h-1 rounded-lg"> </p>
+          {allRecurring.length > 0 && (
+            <p className="bg-secondary text-secondary mt-3 h-1 rounded-lg"> </p>
+          )}
           <div className="pt-2 pb-4 mt-3 rounded-md">
-            <h2 className="pl-2 font-bold text-gray-500">Recurring</h2>
+            {allRecurring.length > 0 && (
+              <h2 className="pl-2 font-bold text-gray-500">Recurring</h2>
+            )}
             <div className="mt-1">
               <table
                 id="output-table-pending"

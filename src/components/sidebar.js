@@ -138,16 +138,19 @@ const Sidebar = ({
                     onClick={submit}
                     icon={<MdOutlinePlaylistAdd />}
                     bgColor={"bg-gray-400"}
+                    label={"Enter"}
                   />
                   <SidebarButton
                     onClick={remove}
                     icon={<MdDeleteForever />}
                     bgColor={"bg-gray-900"}
+                    label={"Delete"}
                   />
                   <SidebarButton
                     onClick={downloadCSV}
                     icon={<FaFileDownload />}
                     bgColor={"bg-gray-700"}
+                    label={"Download CSV"}
                   />
                 </>
               )}
