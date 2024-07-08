@@ -4,7 +4,7 @@ import { FaCloudUploadAlt, FaFileCsv } from "react-icons/fa";
 
 import * as SDK from "../sdk_backend_fetch.js";
 
-const UploadCSVbtn = () => {
+const UploadCSVbtn = ({ fetch }) => {
   const { userId } = useParams();
   const [file, setFile] = useState(null);
   const [, setMessage] = useState("");
@@ -27,6 +27,7 @@ const UploadCSVbtn = () => {
       setMessage("Something went wrong!");
     } finally {
       setFile(null);
+      fetch();
     }
   };
 

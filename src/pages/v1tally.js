@@ -317,7 +317,7 @@ const Tally = () => {
                 <MdAccessTimeFilled />
               </button>
             )}
-            {!isMobile && <UploadCSVbtn />}
+            {!isMobile && <UploadCSVbtn fetch={fetchUserActivityData} />}
             {!isMobile && <DownloadCSV DownloadCSV userId={userId} />}
           </span>
         </h1>
@@ -441,6 +441,7 @@ const Tally = () => {
                             name="date"
                             type="date"
                             className="data-input"
+                            onBlur={handleInputChange}
                             onChange={handleInputChange}
                           />
                         </td>
@@ -517,6 +518,7 @@ const Tally = () => {
                           name="startTime"
                           type="time"
                           className="data-input"
+                          onBlur={handleInputChange}
                           onChange={handleInputChange}
                         />
                       </td>
@@ -525,6 +527,7 @@ const Tally = () => {
                           name="endTime"
                           type="time"
                           className="data-input"
+                          onBlur={handleInputChange}
                           onChange={handleInputChange}
                         />
                       </td>

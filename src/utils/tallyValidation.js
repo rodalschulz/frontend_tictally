@@ -35,6 +35,7 @@ const activityEntryValidation = (input, event, lastEndTime, fetch) => {
     }
   } else if (event.key === "Enter" && event.ctrlKey) {
     if (!input.startTime) {
+      fetch();
       input.startTime = lastEndTime;
     }
   } else if (event.key === "Enter") {
@@ -115,10 +116,13 @@ const activityPatchValidation = (
     updatedInput.description = updatedInput.description.replace(/\|/g, "/");
   }
 
-  if (Object.keys(updatedInput).length <= 1) {
-    if (event.key === "Enter" && event.ctrlKey) {
-      updatedInput.endTime = datetimeFnc.currentLocalTime();
-    }
+  if (
+    event.key === "Enter" &&
+    event.ctrlKey &&
+    (!updatedInput ||
+      (Object.keys(updatedInput).length === 1 && updatedInput.description))
+  ) {
+    updatedInput.endTime = datetimeFnc.currentLocalTime();
   }
 
   if (
