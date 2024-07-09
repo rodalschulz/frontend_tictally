@@ -122,7 +122,7 @@ const Sidebar = ({
                 label={"Pending"}
                 bgColor={closeUpcoming.length > 0 ? "bg-custom-upcoming" : null}
                 bgHoverColor={
-                  closeUpcoming.length > 0 ? "bg-custom-lightblue" : null
+                  closeUpcoming.length > 0 ? "hover:bg-custom-lightblue" : null
                 }
               />
               <SidebarButton
