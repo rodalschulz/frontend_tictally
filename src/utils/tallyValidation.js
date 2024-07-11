@@ -116,12 +116,7 @@ const activityPatchValidation = (
     updatedInput.description = updatedInput.description.replace(/\|/g, "/");
   }
 
-  if (
-    event.key === "Enter" &&
-    event.ctrlKey &&
-    (!updatedInput ||
-      (Object.keys(updatedInput).length === 1 && updatedInput.description))
-  ) {
+  if (event.key === "Enter" && event.ctrlKey) {
     updatedInput.endTime = datetimeFnc.currentLocalTime();
   }
 
