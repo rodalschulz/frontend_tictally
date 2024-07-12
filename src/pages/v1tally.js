@@ -536,7 +536,7 @@ const Tally = () => {
                         <td>
                           <input
                             name="adjustment"
-                            type="text"
+                            type="number"
                             className="data-input"
                             onChange={handleInputChange}
                             placeholder="mins"

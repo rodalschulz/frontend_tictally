@@ -7,9 +7,10 @@ const activityEntryValidation = (input, event, lastEndTime, fetch) => {
     input.date = new Date(input.date);
   }
   if (input.adjustment) {
-    if (+input.adjustment > 59) {
-      input.adjustment = 59;
-    } else if (input.adjustment < 0) {
+    // if (+input.adjustment > 59) {
+    //   input.adjustment = 59;
+    // } else
+    if (+input.adjustment < 0) {
       input.adjustment = 0;
     }
   }
@@ -102,9 +103,10 @@ const activityPatchValidation = (
     updatedInput.subcategory = updatedInput.subcategory.toUpperCase();
   }
   if (updatedInput.adjustment) {
-    if (+updatedInput.adjustment > 59) {
-      updatedInput.adjustment = 59;
-    } else if (+updatedInput.adjustment < 0) {
+    // if (+updatedInput.adjustment > 59) {
+    //   updatedInput.adjustment = 59;
+    // } else
+    if (+updatedInput.adjustment < 0) {
       updatedInput.adjustment = 0;
     }
   }
