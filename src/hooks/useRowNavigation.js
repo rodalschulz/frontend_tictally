@@ -56,10 +56,13 @@ const useRowNavigation = (
         endTime,
         adjustment,
       });
-      setNewInput({
-        ...input,
-        description: description,
-      });
+
+      if (event.altKey) {
+        setNewInput({
+          ...input,
+          description: description,
+        });
+      }
     } else {
       if (selectedRows.length === 1 && selectedRows.includes(id)) {
         setSelectedRows([]);
@@ -68,10 +71,13 @@ const useRowNavigation = (
           endTime: "",
           adjustment: 0,
         });
-        setNewInput({
-          ...input,
-          description: description,
-        });
+
+        if (event.altKey) {
+          setNewInput({
+            ...input,
+            description: description,
+          });
+        }
       } else if (event.ctrlKey) {
         setSelectedRows((prevSelectedRows) => {
           if (prevSelectedRows.includes(id)) {
@@ -85,10 +91,13 @@ const useRowNavigation = (
           endTime,
           adjustment,
         });
-        setNewInput({
-          ...input,
-          description: description,
-        });
+
+        if (event.altKey) {
+          setNewInput({
+            ...input,
+            description: description,
+          });
+        }
       } else {
         setSelectedRows([id]);
         setSelectedRowTimeValues({
@@ -96,10 +105,13 @@ const useRowNavigation = (
           endTime,
           adjustment,
         });
-        setNewInput({
-          ...input,
-          description: description,
-        });
+
+        if (event.altKey) {
+          setNewInput({
+            ...input,
+            description: description,
+          });
+        }
       }
       setFirstSelectedRow(id);
     }
