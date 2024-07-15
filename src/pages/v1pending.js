@@ -195,6 +195,10 @@ const Pending = () => {
     setShowSidebar(true);
   };
 
+  useEffect(() => {
+    recurringDoneCheck();
+  }, [dataFetched]);
+
   return (
     <div className="flex h-screen bg-gray-300 overflow-x-auto">
       <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
