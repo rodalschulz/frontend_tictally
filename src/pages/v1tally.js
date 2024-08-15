@@ -597,7 +597,10 @@ const Tally = () => {
               </p>
               <p className="mt-2">Your first entry! Lets modify it!</p>
               <br />
-              <p>As you can see, it auto filled the DATE and START time.</p>
+              <p>
+                As you can see, it auto filled the current DATE and START time.
+                If on mobile, switch to horizontal screen to see the full table.
+              </p>
               <br />
               <p>
                 Now, select the entry, pick a DIFFERENT category and press ENTER

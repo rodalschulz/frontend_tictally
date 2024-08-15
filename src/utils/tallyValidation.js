@@ -39,7 +39,7 @@ const activityEntryValidation = (input, event, lastEndTime, fetch) => {
       fetch();
       input.startTime = lastEndTime;
     }
-  } else if (event.key === "Enter") {
+  } else {
     if (!input.startTime) {
       input.startTime = datetimeFnc.currentLocalTime();
     }
