@@ -3,6 +3,8 @@ import { useState } from "react";
 
 import * as SDK from "../sdk_backend_fetch.js";
 import "../styles/v1home.css";
+import { FaExternalLinkAlt } from "react-icons/fa";
+import useWindowSize from "../hooks/useWindowSize.js";
 
 const Home = () => {
   const [visitorData, setVisitorData] = useState({
@@ -10,6 +12,7 @@ const Home = () => {
     email: "",
     message: "",
   });
+  const isMobile = useWindowSize();
 
   const resetForm = () => {
     setVisitorData({
@@ -47,11 +50,20 @@ const Home = () => {
     <div className="flex flex-col items-center min-h-screen bg-gray-100 font-sans">
       <div className="max-w-7xl w-full bg-white shadow-lg overflow-hidden">
         <nav className="flex justify-between items-center w-full py-4 bg-primary text-white px-10">
-          <div className="text-3xl font-bold">tictally</div>
+          {!isMobile && <div className="text-3xl font-bold">tictally</div>}
           <div className="flex space-x-4 items-center">
-            <Link to="" className="hover:text-gray-200 transition duration-300">
-              Pricing
+            <Link
+              to="https://www.patreon.com/rodschulz/membership"
+              className={`hover:text-gray-200 transition duration-300 flex items-center mr-6 ${
+                isMobile && "text-[0.875rem]"
+              }`}
+            >
+              Support This Project
+              <FaExternalLinkAlt className="ml-1" />
             </Link>
+            {/* <Link to="" className="hover:text-gray-200 transition duration-300">
+              Pricing
+            </Link> */}
             <Link
               to="/login"
               className="px-4 py-2 bg-white text-primary rounded-full shadow hover:bg-gray-200 transition duration-300"
@@ -69,10 +81,14 @@ const Home = () => {
             className="hero-background w-full h-full object-cover"
           />
           <div className="hero-content flex flex-col items-center justify-center bg-white bg-opacity-75 w-full py-64 absolute top-0 left-0">
-            <h2 className="text-6xl font-bold text-secondary mb-4 animate-slide-up">
+            <h2
+              className={`text-6xl font-bold text-secondary ${
+                !isMobile ? "-mt-10" : "-mt-36"
+              } mb-2 animate-slide-up`}
+            >
               tictally
             </h2>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl text-center animate-slide-up delay-200">
+            <p className="text-xl text-gray-600 mb-6 max-w-2xl text-center animate-slide-up delay-200">
               Track your activities. Stay productive.
             </p>
             <Link to="/register">
