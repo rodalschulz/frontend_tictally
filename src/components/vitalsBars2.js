@@ -5,6 +5,7 @@ import { FaPeopleGroup } from "react-icons/fa6";
 
 const VitalsBars2 = ({ periodTimes }) => {
   const [vhInPixels, setVhInPixels] = useState(0);
+  const [label, setLabel] = useState("");
 
   useEffect(() => {
     const handleResize = () => {
@@ -147,105 +148,152 @@ const VitalsBars2 = ({ periodTimes }) => {
         );
 
   return (
-    <section className="bg-custom-vitals py-8 px-8 rounded-lg flex items-center justify-center shadow-lg w-full h-full">
-      <div className="flex flex-col items-center">
-        <div className="font-bold text-white mb-2 text-4xl">
-          <GiNightSleep />
-        </div>
-        <div
-          className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${sleepBorder}`}
-          style={{
-            height: `${totalPxHeight}px`,
-          }}
-        >
+    <section className="bg-custom-vitals py-2 px-8 rounded-lg flex flex-col items-center justify-center shadow-lg w-full h-full">
+      <div className="text-white mb-2">Weekly Vitals</div>
+      <div className="flex">
+        <div className="flex flex-col items-center">
           <div
-            className="w-[16px] rounded-sm"
+            className="relative"
+            onMouseEnter={() => setLabel("sleep")}
+            onMouseLeave={() => setLabel("")}
+          >
+            {label === "sleep" && (
+              <div className="absolute bg-custom-lightblue -mt-3 -ml-10 rounded-md p-1 opacity-80 text-[12px]">
+                Sleep
+              </div>
+            )}
+            <div className="font-bold text-white mb-2 text-4xl">
+              <GiNightSleep />
+            </div>
+          </div>
+          <div
+            className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${sleepBorder}`}
             style={{
-              height: `${sleepPx}px`,
-              backgroundColor: `rgb(${sleepRed}, ${sleepGreen}, ${sleepBlue})`,
+              height: `${totalPxHeight}px`,
             }}
-          ></div>
-          <div
-            className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
-            style={{ bottom: `${sleepBtmPx}px`, zIndex: 10 }}
-          ></div>
-          <div
-            className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
-            style={{ bottom: `${sleepTpPx}px`, zIndex: 10 }}
-          ></div>
+          >
+            <div
+              className="w-[16px] rounded-sm"
+              style={{
+                height: `${sleepPx}px`,
+                backgroundColor: `rgb(${sleepRed}, ${sleepGreen}, ${sleepBlue})`,
+              }}
+            ></div>
+            <div
+              className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
+              style={{ bottom: `${sleepBtmPx}px`, zIndex: 10 }}
+            ></div>
+            <div
+              className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
+              style={{ bottom: `${sleepTpPx}px`, zIndex: 10 }}
+            ></div>
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-col items-center ml-10">
-        <div className="font-bold text-white mb-2 text-4xl">
-          <GiBrain />
-        </div>
-        <div
-          className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${productivityBorder}`}
-          style={{
-            height: `${totalPxHeight}px`,
-          }}
-        >
+        <div className="flex flex-col items-center ml-10">
           <div
-            className="w-[16px] rounded-sm"
+            className="relative"
+            onMouseEnter={() => setLabel("productivity")}
+            onMouseLeave={() => setLabel("")}
+          >
+            {label === "productivity" && (
+              <div className="absolute bg-custom-lightblue -mt-3 -ml-20 rounded-md p-1 opacity-80 text-[12px]">
+                Productivity
+              </div>
+            )}
+            <div className="font-bold text-white mb-2 text-4xl">
+              <GiBrain />
+            </div>
+          </div>
+          <div
+            className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${productivityBorder}`}
             style={{
-              height: `${productivityPx}px`,
-              backgroundColor: `rgb(${productivityRed}, ${productivityGreen}, ${productivityBlue})`,
+              height: `${totalPxHeight}px`,
             }}
-          ></div>
-          <div
-            className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
-            style={{ bottom: `${productivityBtmPx}px`, zIndex: 10 }}
-          ></div>
+          >
+            <div
+              className="w-[16px] rounded-sm"
+              style={{
+                height: `${productivityPx}px`,
+                backgroundColor: `rgb(${productivityRed}, ${productivityGreen}, ${productivityBlue})`,
+              }}
+            ></div>
+            <div
+              className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
+              style={{ bottom: `${productivityBtmPx}px`, zIndex: 10 }}
+            ></div>
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-col items-center ml-10">
-        <div className="font-bold text-white mb-2 text-4xl">
-          <IoFitness />
-        </div>
-        <div
-          className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${fitnessBorder}
+        <div className="flex flex-col items-center ml-10">
+          <div
+            className="relative"
+            onMouseEnter={() => setLabel("fitness")}
+            onMouseLeave={() => setLabel("")}
+          >
+            {label === "fitness" && (
+              <div className="absolute bg-custom-lightblue -mt-3 -ml-12 rounded-md p-1 opacity-80 text-[12px]">
+                Fitness
+              </div>
+            )}
+            <div className="font-bold text-white mb-2 text-4xl">
+              <IoFitness />
+            </div>
+          </div>
+          <div
+            className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${fitnessBorder}
           }`}
-          style={{
-            height: `${totalPxHeight}px`,
-          }}
-        >
-          <div
-            className="w-[16px] rounded-sm"
             style={{
-              height: `${fitnessPx}px`,
-              backgroundColor: `rgb(${fitnessRed}, ${fitnessGreen}, ${fitnessBlue})`,
+              height: `${totalPxHeight}px`,
             }}
-          ></div>
-          <div
-            className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
-            style={{ bottom: `${fitnessBtmPx}px`, zIndex: 10 }}
-          ></div>
+          >
+            <div
+              className="w-[16px] rounded-sm"
+              style={{
+                height: `${fitnessPx}px`,
+                backgroundColor: `rgb(${fitnessRed}, ${fitnessGreen}, ${fitnessBlue})`,
+              }}
+            ></div>
+            <div
+              className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
+              style={{ bottom: `${fitnessBtmPx}px`, zIndex: 10 }}
+            ></div>
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-col items-center ml-10">
-        <div className="font-bold text-white mb-2 text-4xl">
-          <FaPeopleGroup />
-        </div>
-        <div
-          className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${socialBorder}`}
-          style={{
-            height: `${totalPxHeight}px`,
-          }}
-        >
+        <div className="flex flex-col items-center ml-10 text-[12px]">
           <div
-            className="w-[16px] rounded-sm"
+            className="relative"
+            onMouseEnter={() => setLabel("social")}
+            onMouseLeave={() => setLabel("")}
+          >
+            {label === "social" && (
+              <div className="absolute bg-custom-lightblue -mt-3 -ml-12 rounded-md p-1 opacity-80">
+                Social
+              </div>
+            )}
+            <div className="font-bold text-white mb-2 text-4xl">
+              <FaPeopleGroup />
+            </div>
+          </div>
+          <div
+            className={`relative bg-gray-200 w-[16px] rounded-md flex items-end border-[2px] ${socialBorder}`}
             style={{
-              height: `${socialPx}px`,
-              backgroundColor: `rgb(${socialRed}, ${socialGreen}, ${socialBlue})`,
+              height: `${totalPxHeight}px`,
             }}
-          ></div>
-          <div
-            className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
-            style={{ bottom: `${socialBtmPx}px`, zIndex: 10 }}
-          ></div>
+          >
+            <div
+              className="w-[16px] rounded-sm"
+              style={{
+                height: `${socialPx}px`,
+                backgroundColor: `rgb(${socialRed}, ${socialGreen}, ${socialBlue})`,
+              }}
+            ></div>
+            <div
+              className="bg-gray-600 w-[16px] h-[2px] rounded-lg absolute left-[-2px]"
+              style={{ bottom: `${socialBtmPx}px`, zIndex: 10 }}
+            ></div>
+          </div>
         </div>
       </div>
     </section>
