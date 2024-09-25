@@ -167,7 +167,7 @@ const Home = () => {
           <div className="flex flex-wrap justify-center gap-8">
             <div className="max-w-md bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105">
               <img
-                src="https://media.licdn.com/dms/image/D4E03AQF6xM_MIG2PpA/profile-displayphoto-shrink_800_800/0/1677782830318?e=1723075200&v=beta&t=QpR9QrjVE75AmslS367wjwDVG4cWBlBf-Xm2RRs97uI"
+                src="https://media.licdn.com/dms/image/v2/D4E03AQF6xM_MIG2PpA/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1677782830318?e=1732752000&v=beta&t=jCytSKDKQEcQU9BHYa9dKZ4pZlDTcXyb0-3qgWKlKNY"
                 alt="User 1"
                 className="mx-auto rounded-full mb-4 w-24"
               />
