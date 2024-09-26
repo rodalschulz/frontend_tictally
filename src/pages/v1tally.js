@@ -304,8 +304,8 @@ const Tally = () => {
           showSidebar && "ml-16"
         }`}
       >
-        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg rounded-lg bg-secondary mb-3 font-bold text-white mr-5 flex justify-between items-center">
-          <span onClick={refreshTally}>
+        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg mb-3 rounded-lg bg-secondary font-bold text-white mr-5 flex justify-between items-center">
+          <span onClick={refreshTally} className="">
             <button>My Tally</button>
           </span>
           <span className="text-sm flex">

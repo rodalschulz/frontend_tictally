@@ -100,7 +100,11 @@ const Sidebar = ({
             onClick={hideSidebar}
             className="sm:relative bg-secondary text-white flex flex-col"
           >
-            <div className="flex-grow space-y-4 mt-4 p-2">
+            <div className="flex flex-col justify-center items-center mt-1 text-custom-lightblue">
+              <div className="text-[11px]">Beta</div>
+              <div className="text-[11px]">v1.0.0</div>
+            </div>
+            <div className="flex-grow space-y-4  p-2">
               <SidebarButton
                 onClick={navigateTally}
                 icon={<FaTable />}

@@ -70,12 +70,17 @@ const Instructions = ({ pageName }) => {
         </p>
         <br />
         <p>
-          ♦ The stacked bar chart shows your daily activity data for the last 6
-          months
+          ♦ If you have set subcategory-tracking goals on your config page, the
+          progress will be shown below
         </p>
         <p>
           ♦ The data cards/tables show your trailing 7 and 30 days. You can
           click on the cards to show a detailed table
+        </p>
+        <p>
+          ♦ The weekly vitals tell your accumulated performance of the last 7
+          days. They have fixed thresholds: Sleep (47-63H), Productivity (40H),
+          Fitness (4H), Social (7H)
         </p>
         <p>
           ♦ If you have set subcategory-tracking goals on your config page, the
