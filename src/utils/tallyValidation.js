@@ -45,8 +45,11 @@ const activityEntryValidation = (input, event, lastEndTime, fetch) => {
     }
   }
 
-  if (input.description && input.description.includes("|")) {
-    input.description = input.description.replace(/\|/g, "/");
+  if (input.description) {
+    input.description = input.description
+      .replace(/\|/g, "/")
+      .replace(/;/g, ",")
+      .replace(/"/g, "'");
   }
 
   if (input.startTime && input.endTime) {

@@ -305,7 +305,7 @@ const StackedBarChart = ({ userActivityData, coreLimits }) => {
   const totalEntries = Object.keys(aggregatedData).length;
   console.log(totalEntries);
   if (totalEntries < 185) {
-    for (let i = 0; i < 122 - totalEntries; i++) {
+    for (let i = 0; i < 150 - totalEntries; i++) {
       aggregatedData[`empty${i}`] = {
         categories: { EMPTY: 1440 },
         coreSubcategories: {},
