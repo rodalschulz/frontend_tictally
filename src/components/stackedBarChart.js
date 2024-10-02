@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
 import {
@@ -62,7 +62,6 @@ const textPlugin = {
     ctx.restore();
   },
 };
-ChartJS.register(textPlugin);
 
 const backgroundColorPlugin = {
   id: "backgroundColorPlugin",
@@ -94,9 +93,189 @@ const categoryOrder = [
   "RECOVERY",
   "CORE",
   "WASTE",
+  "EMPTY",
 ];
 
+const options = {
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: false,
+  backgroundColorPlugin: true,
+  plugins: {
+    legend: {
+      position: "bottom",
+    },
+    title: {
+      display: true,
+      text: "Daily Activity Time by Category",
+    },
+    annotation: {
+      annotations: {
+        box1: {
+          type: "box",
+          yScaleID: "y",
+          yMin: 250,
+          yMax: 210,
+          backgroundColor: "rgba(110, 179, 179, 0.35)",
+          // borderColor: "rgba(11, 83, 84, 0.25)",
+          borderWidth: 0,
+        },
+        box2: {
+          type: "box",
+          yScaleID: "y",
+          yMin: 440,
+          yMax: 400,
+          backgroundColor: "rgba(110, 179, 179, 0.35)",
+          // borderColor: "rgba(11, 83, 84, 0.25)",
+          borderWidth: 0,
+        },
+        box3: {
+          type: "box",
+          yScaleID: "y",
+          yMin: 620,
+          yMax: 580,
+          backgroundColor: "rgba(110, 179, 179, 0.35)",
+          // borderColor: "rgba(11, 83, 84, 0.25)",
+          borderWidth: 0,
+        },
+        box4: {
+          type: "box",
+          yScaleID: "y",
+          yMin: 810,
+          yMax: 770,
+          backgroundColor: "rgba(110, 179, 179, 0.35)",
+          // borderColor: "rgba(11, 83, 84, 0.25)",
+          borderWidth: 0,
+        },
+      },
+    },
+  },
+  scales: {
+    x: {
+      stacked: true, // Ensure bars are stacked
+      ticks: {
+        maxRotation: 90,
+        minRotation: 90,
+        callback: function (value, index, values) {
+          // Hide labels that match "emptyXX"
+          const label = this.getLabelForValue(value);
+          if (label.startsWith("empty")) {
+            return ""; // Return empty string to hide the label
+          }
+          return label.split("-").reverse().join("-");
+        },
+      },
+    },
+    y: {
+      stacked: true,
+      beginAtZero: true,
+      min: 0,
+      max: 1440,
+      ticks: {
+        stepSize: 120,
+      },
+    },
+  },
+};
+
+const options2 = {
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: false,
+  backgroundColorPlugin: true,
+  plugins: {
+    legend: {
+      position: "bottom",
+    },
+    title: {
+      display: true,
+      text: "Daily Activity Time by Category",
+    },
+    // annotation: {
+    //   annotations: {
+    //     box1: {
+    //       type: "box",
+    //       yScaleID: "y",
+    //       yMin: 250,
+    //       yMax: 210,
+    //       backgroundColor: "rgba(110, 179, 179, 0.35)",
+    //       // borderColor: "rgba(11, 83, 84, 0.25)",
+    //       borderWidth: 0,
+    //     },
+    //     box2: {
+    //       type: "box",
+    //       yScaleID: "y",
+    //       yMin: 440,
+    //       yMax: 400,
+    //       backgroundColor: "rgba(110, 179, 179, 0.35)",
+    //       // borderColor: "rgba(11, 83, 84, 0.25)",
+    //       borderWidth: 0,
+    //     },
+    //     box3: {
+    //       type: "box",
+    //       yScaleID: "y",
+    //       yMin: 620,
+    //       yMax: 580,
+    //       backgroundColor: "rgba(110, 179, 179, 0.35)",
+    //       // borderColor: "rgba(11, 83, 84, 0.25)",
+    //       borderWidth: 0,
+    //     },
+    //     box4: {
+    //       type: "box",
+    //       yScaleID: "y",
+    //       yMin: 810,
+    //       yMax: 770,
+    //       backgroundColor: "rgba(110, 179, 179, 0.35)",
+    //       // borderColor: "rgba(11, 83, 84, 0.25)",
+    //       borderWidth: 0,
+    //     },
+    //   },
+    // },
+  },
+  scales: {
+    x: {
+      stacked: true,
+      ticks: {
+        maxRotation: 90,
+        minRotation: 90,
+        callback: function (value, index, values) {
+          // Hide labels that match "emptyXX"
+          const label = this.getLabelForValue(value);
+          if (label.startsWith("empty")) {
+            return ""; // Return empty string to hide the label
+          }
+          return label.split("-").reverse().join("-");
+        },
+      },
+    },
+    y: {
+      stacked: true,
+      beginAtZero: true,
+      min: 0,
+      max: 1440,
+      ticks: {
+        stepSize: 120,
+      },
+    },
+  },
+};
+ChartJS.register(textPlugin);
+
 const StackedBarChart = ({ userActivityData, coreLimits }) => {
+  const [showThresholds, setShowThresholds] = useState(true);
+  const [configOptions, setConfigOptions] = useState(options);
+
+  const toggleThresholds = () => {
+    if (showThresholds) {
+      setConfigOptions(options2);
+      ChartJS.unregister(textPlugin);
+    } else {
+      setConfigOptions(options);
+      ChartJS.register(textPlugin);
+    }
+    setShowThresholds(!showThresholds);
+  };
+
   // Aggregate data by date and category
   const aggregatedData = userActivityData.reduce((acc, item) => {
     const date = item.date.slice(0, 10);
@@ -121,6 +300,19 @@ const StackedBarChart = ({ userActivityData, coreLimits }) => {
     }
     return acc;
   }, {});
+
+  // If there is small amount of data, fill space with blanks
+  const totalEntries = Object.keys(aggregatedData).length;
+  console.log(totalEntries);
+  if (totalEntries < 185) {
+    for (let i = 0; i < 122 - totalEntries; i++) {
+      aggregatedData[`empty${i}`] = {
+        categories: { EMPTY: 1440 },
+        coreSubcategories: {},
+        total: 1440,
+      };
+    }
+  }
 
   // Calculate total time for CORE category and overall total
   Object.keys(aggregatedData).forEach((date) => {
@@ -152,7 +344,7 @@ const StackedBarChart = ({ userActivityData, coreLimits }) => {
           : aggregatedData[date].categories[category] || 0
       ),
       backgroundColor: categoryColors[category],
-      maxBarThickness: 15,
+      // maxBarThickness: 15,
     };
   });
 
@@ -166,87 +358,16 @@ const StackedBarChart = ({ userActivityData, coreLimits }) => {
     datasets: datasets,
   };
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: false,
-    backgroundColorPlugin: true,
-    plugins: {
-      legend: {
-        position: "bottom",
-      },
-      title: {
-        display: true,
-        text: "Daily Activity Time by Category",
-      },
-      annotation: {
-        annotations: {
-          box1: {
-            type: "box",
-            yScaleID: "y",
-            yMin: 250,
-            yMax: 210,
-            backgroundColor: "rgba(110, 179, 179, 0.35)",
-            // borderColor: "rgba(11, 83, 84, 0.25)",
-            borderWidth: 0,
-          },
-          box2: {
-            type: "box",
-            yScaleID: "y",
-            yMin: 440,
-            yMax: 400,
-            backgroundColor: "rgba(110, 179, 179, 0.35)",
-            // borderColor: "rgba(11, 83, 84, 0.25)",
-            borderWidth: 0,
-          },
-          box3: {
-            type: "box",
-            yScaleID: "y",
-            yMin: 620,
-            yMax: 580,
-            backgroundColor: "rgba(110, 179, 179, 0.35)",
-            // borderColor: "rgba(11, 83, 84, 0.25)",
-            borderWidth: 0,
-          },
-          box4: {
-            type: "box",
-            yScaleID: "y",
-            yMin: 810,
-            yMax: 770,
-            backgroundColor: "rgba(110, 179, 179, 0.35)",
-            // borderColor: "rgba(11, 83, 84, 0.25)",
-            borderWidth: 0,
-          },
-        },
-      },
-    },
-    scales: {
-      x: {
-        stacked: true,
-        ticks: {
-          maxRotation: 90,
-          minRotation: 90,
-          callback: function (value, index, values) {
-            return this.getLabelForValue(value).split("-").reverse().join("-");
-          },
-        },
-      },
-      y: {
-        stacked: true,
-        beginAtZero: true,
-        min: 0,
-        max: 1440,
-        ticks: {
-          stepSize: 120,
-        },
-      },
-    },
-  };
-
   return (
     <div className="w-full h-full">
-      <div className="w-full h-full">
-        <Bar data={chartData} options={options} />
+      <div className="relative w-full h-full">
+        <button
+          className="absolute bg-custom-databg px-1 rounded-md text-[11px] mt-1 ml-1 text-white"
+          onClick={() => toggleThresholds()}
+        >
+          Thresholds
+        </button>
+        <Bar data={chartData} options={configOptions} />
       </div>
     </div>
   );

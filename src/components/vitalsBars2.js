@@ -25,10 +25,11 @@ const VitalsBars2 = ({ periodTimes }) => {
   const sleepMax = 5000;
   const sleepBtm = 2800;
   const sleepTp = 3780;
-  const sleep =
+  let sleep =
     (periodTimes.CORE?.SLEEP || 0) > sleepMax
       ? sleepMax
       : periodTimes.CORE?.SLEEP || 0;
+  sleep = sleep === 0 ? sleepMax * 0.01 : sleep;
   const sleepBtmPx = Math.floor((sleepBtm / sleepMax) * totalPxHeight);
   const sleepTpPx = Math.floor((sleepTp / sleepMax) * totalPxHeight);
   const sleepPx = Math.floor((sleep / sleepMax) * totalPxHeight);
@@ -50,10 +51,12 @@ const VitalsBars2 = ({ periodTimes }) => {
 
   const productivityMax = 5000;
   const productivityBtm = 2400;
-  const productivitySum =
+  let productivitySum =
     (periodTimes.WORK?.TOTAL || 0) +
     (periodTimes.LEARN?.TOTAL || 0) +
     (periodTimes.BUILD?.TOTAL || 0);
+  productivitySum =
+    productivitySum === 0 ? productivityMax * 0.01 : productivitySum;
   const productivity = Math.min(productivitySum, productivityMax);
   const productivityBtmPx = Math.floor(
     (productivityBtm / productivityMax) * totalPxHeight
@@ -87,10 +90,11 @@ const VitalsBars2 = ({ periodTimes }) => {
 
   const fitnessMax = 1000;
   const fitnessBtm = 240;
-  const fitness =
+  let fitness =
     (periodTimes.CORE?.FITNESS || 0) > fitnessMax
       ? fitnessMax
       : periodTimes.CORE?.FITNESS || 0;
+  fitness = fitness === 0 ? fitnessMax * 0.01 : fitness;
   const fitnessBtmPx = Math.floor((fitnessBtm / fitnessMax) * totalPxHeight);
   const fitnessPx = Math.floor((fitness / fitnessMax) * totalPxHeight);
   const fitnessBorder =
@@ -117,11 +121,12 @@ const VitalsBars2 = ({ periodTimes }) => {
 
   const socialMax = 2000;
   const socialBtm = 420;
-  const socialSum = // Maybe here I should add other categories and also track for "MINGLE"
+  let socialSum = // Maybe here I should add other categories and also track for "MINGLE"
     (periodTimes.GENERAL?.SOCIAL || 0) +
     (periodTimes.RECOVERY?.SOCIAL || 0) +
     (periodTimes.GENERAL?.SOCIALIZE || 0) +
     (periodTimes.RECOVERY?.SOCIALIZE || 0);
+  socialSum = socialSum === 0 ? socialMax * 0.01 : socialSum;
   const social = Math.min(socialSum, socialMax);
   const socialBtmPx = Math.floor((socialBtm / socialMax) * totalPxHeight);
   const socialPx = Math.floor((social / socialMax) * totalPxHeight);
