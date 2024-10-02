@@ -102,7 +102,7 @@ const Sidebar = ({
           >
             <div className="flex flex-col justify-center items-center mt-1 text-custom-lightblue">
               <div className="text-[11px]">Beta</div>
-              <div className="text-[11px]">v1.0.0</div>
+              <div className="text-[11px]">v1.0.1</div>
             </div>
             <div className="flex-grow space-y-4  p-2">
               <SidebarButton
@@ -124,9 +124,9 @@ const Sidebar = ({
                 onClick={navigatePending}
                 icon={<MdAlarmOn />}
                 label={"Pending"}
-                bgColor={closeUpcoming.length > 0 ? "bg-custom-upcoming" : null}
+                bgColor={closeUpcoming.length > 0 ? "bg-yellow-500" : null}
                 bgHoverColor={
-                  closeUpcoming.length > 0 ? "hover:bg-custom-lightblue" : null
+                  closeUpcoming.length > 0 ? "hover:bg-yellow-200" : null
                 }
               />
               <SidebarButton

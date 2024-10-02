@@ -442,7 +442,7 @@ const Pending = () => {
                           backgroundColor: selectedRows.includes(task.id)
                             ? "#264653"
                             : new Date(task.date) < now
-                            ? "rgb(80, 170, 180)"
+                            ? "#CDA213"
                             : "transparent",
                           fontWeight:
                             new Date(task.date) < now && task.periodRecurrence
