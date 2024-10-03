@@ -97,7 +97,7 @@ const Home = () => {
               <img
                 src="/images/logoDark.png"
                 alt="Step 1"
-                className="mx-auto rounded-badge transform hover:scale-110 transition duration-300 w-[8em] -mt-[1em] -mb-4"
+                className="mx-auto rounded-badge transform hover:scale-110 transition duration-300 w-[7em] -mt-[1em] -mb-4"
               />
             </h2>
             <p className="text-xl text-gray-600 mb-6 max-w-2xl text-center animate-slide-up delay-200">
