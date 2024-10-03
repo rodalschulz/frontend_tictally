@@ -50,7 +50,15 @@ const Home = () => {
     <div className="flex flex-col items-center min-h-screen bg-gray-100 font-sans">
       <div className="max-w-7xl w-full bg-white shadow-lg overflow-hidden">
         <nav className="flex justify-between items-center w-full py-4 bg-primary text-white px-10">
-          {!isMobile && <div className="text-3xl font-bold">tictally</div>}
+          {!isMobile && (
+            <div className="text-3xl font-bold">
+              <img
+                src="/images/logoWhite.png"
+                alt="Step 1"
+                className="w-36 h-11"
+              />
+            </div>
+          )}
           <div className="flex space-x-4 items-center">
             <Link
               to="https://www.patreon.com/rodschulz/membership"
@@ -83,10 +91,14 @@ const Home = () => {
           <div className="hero-content flex flex-col items-center justify-center bg-white bg-opacity-75 w-full py-64 absolute top-0 left-0">
             <h2
               className={`text-6xl font-bold text-secondary ${
-                !isMobile ? "-mt-10" : "-mt-36"
+                !isMobile ? "-mt-10" : "-mt-16"
               } mb-2 animate-slide-up`}
             >
-              tictally
+              <img
+                src="/images/logoDark.png"
+                alt="Step 1"
+                className="mx-auto rounded-badge transform hover:scale-110 transition duration-300 w-[8em] -mt-[1em] -mb-4"
+              />
             </h2>
             <p className="text-xl text-gray-600 mb-6 max-w-2xl text-center animate-slide-up delay-200">
               Track your activities. Stay productive.
