@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaFileDownload,
   FaRegChartBar,
@@ -18,6 +18,7 @@ import * as SDK from "../sdk_backend_fetch";
 import SidebarButton from "../hooks/sidebarButton.js";
 import useFetchPendingTasks from "../hooks/useFetchPendingTasks.js";
 import useCurrTimeData from "../hooks/useCurrTimeData.js";
+import datetimeFnc from "../utils/datetimeUtl.js";
 
 const Sidebar = ({
   userId,
@@ -30,19 +31,83 @@ const Sidebar = ({
   setShowSidebar,
 }) => {
   const [loading, setIsLoading] = useState(false);
+  const [upcoming, setUpcoming] = useState([]);
+  const [closeUpcoming, setCloseUpcoming] = useState([]);
+  const [adhoc, setAdhoc] = useState([]);
+  const [assistMsg, setAssistMsg] = useState("");
+  const [showAssistMsg, setShowAssistMsg] = useState(false); // Add this state to handle the fade-in/out
 
   // PENDING TASKS
   const { pendingTasks } = useFetchPendingTasks(userId, 365, setIsLoading);
   const { nowStart, now, futureDate } = useCurrTimeData();
 
-  const upcoming = pendingTasks.filter(
-    (task) =>
-      task.date &&
-      !task.state &&
-      new Date(task.date) >= nowStart &&
-      new Date(task.date) <= futureDate
-  );
-  const closeUpcoming = upcoming.filter((task) => new Date(task.date) < now);
+  useEffect(() => {
+    const storedHour = localStorage.getItem("lastMsgHour");
+    const storedDay = localStorage.getItem("lastMsgDay");
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentDay = currentDate.getDay();
+    if (parseInt(storedHour) !== parseInt(currentHour)) {
+      localStorage.setItem("lastMsgHour", currentHour);
+      localStorage.removeItem("closeUpcoming");
+    }
+    if (parseInt(storedDay) !== parseInt(currentDay)) {
+      localStorage.setItem("lastMsgDay", currentDay);
+      localStorage.removeItem("upcoming");
+      localStorage.removeItem("adhoc");
+    }
+
+    if (pendingTasks.length > 0) {
+      const upcomingTasks = pendingTasks.filter(
+        (task) =>
+          task.date &&
+          !task.state &&
+          new Date(task.date) >= nowStart &&
+          new Date(task.date) <= futureDate
+      );
+      const closeUpcomingTasks = upcomingTasks.filter(
+        (task) => new Date(task.date) < now
+      );
+      const adhocTasks = pendingTasks.filter((task) => !task.date);
+      setCloseUpcoming(closeUpcomingTasks);
+      setUpcoming(upcomingTasks);
+      setAdhoc(adhocTasks);
+
+      const upcomingShowed = localStorage.getItem("upcoming");
+      const closeUpcomingShowed = localStorage.getItem("closeUpcoming");
+      const adhocShowed = localStorage.getItem("adhoc");
+      if (closeUpcomingTasks.length > 0 && !closeUpcomingShowed) {
+        setTimeout(() => {
+          setAssistMsg("closeUpcoming");
+          setTimeout(() => {
+            setShowAssistMsg(true);
+          }, 1000);
+        }, 9000);
+      } else if (upcomingTasks.length > 0 && !upcomingShowed) {
+        setTimeout(() => {
+          setAssistMsg("upcoming");
+          setTimeout(() => {
+            setShowAssistMsg(true);
+          }, 1000);
+        }, 9000);
+      } else if (adhocTasks.length > 0 && !adhocShowed) {
+        setTimeout(() => {
+          setAssistMsg("adhoc");
+          setTimeout(() => {
+            setShowAssistMsg(true);
+          }, 1000);
+        }, 9000);
+      }
+    }
+  }, [pendingTasks]);
+
+  const closePopup = () => {
+    setShowAssistMsg(false);
+    setTimeout(() => {
+      setAssistMsg("");
+    }, 1000);
+    localStorage.setItem(assistMsg, "true");
+  };
 
   // NAVIGATION
   const navigateDashboard = (e) => {
@@ -95,81 +160,130 @@ const Sidebar = ({
   return (
     <>
       {showSidebar && (
-        <div className="flex h-screen bg-gray-300 absolute z-50 hover:cursor-pointer">
-          <div
-            onClick={hideSidebar}
-            className="sm:relative bg-secondary text-white flex flex-col"
-          >
-            <div className="flex flex-col justify-center items-center mt-1 text-custom-lightblue">
-              <div className="text-[11px]">Beta</div>
-              <div className="text-[11px]">v1.0.1</div>
+        <div>
+          {assistMsg && (
+            <div
+              className={`z-50 absolute ml-20 text-xs mt-[27rem] text-white bg-custom-grey p-2 rounded-md w-[18rem] 
+        ${showAssistMsg ? "opacity-100" : "opacity-0"} 
+        transition-opacity duration-1000 ease-in-out`}
+              onClick={() => closePopup()}
+            >
+              <p className="text-center mb-2 text-sm">Assistant Message!</p>
+              <p className="mb-2">
+                {assistMsg === "closeUpcoming"
+                  ? "You have really close appointments:"
+                  : assistMsg === "upcoming"
+                  ? "You have upcoming appointments: "
+                  : assistMsg === "adhoc"
+                  ? "You have pending ad-hoc tasks: "
+                  : null}
+              </p>
+              {assistMsg === "closeUpcoming"
+                ? closeUpcoming.map((appoint) => (
+                    <p key={appoint.id} className="">
+                      - {datetimeFnc.getDDMMYYYY(appoint.date.slice(0, 10))} |{" "}
+                      {appoint.description.length < 40
+                        ? appoint.description
+                        : appoint.description.slice(0, 40) + " ..."}
+                    </p>
+                  ))
+                : assistMsg === "upcoming"
+                ? upcoming.map((appoint) => (
+                    <p key={appoint.id} className="">
+                      - {datetimeFnc.getDDMMYYYY(appoint.date.slice(0, 10))} |{" "}
+                      {appoint.description.length < 40
+                        ? appoint.description
+                        : appoint.description.slice(0, 40) + " ..."}
+                    </p>
+                  ))
+                : assistMsg === "adhoc"
+                ? adhoc.map((appoint) => (
+                    <p key={appoint.id} className="">
+                      -{" "}
+                      {appoint.description.length < 40
+                        ? appoint.description
+                        : appoint.description.slice(0, 40) + " ..."}
+                    </p>
+                  ))
+                : null}
             </div>
-            <div className="flex-grow space-y-4  p-2">
-              <SidebarButton
-                onClick={navigateTally}
-                icon={<FaTable />}
-                label={"Tally"}
-              />
-              <SidebarButton
-                onClick={navigateDashboard}
-                icon={<FaRegChartBar />}
-                label={"Dashboard"}
-              />
-              <SidebarButton
-                onClick={navigateCategories}
-                icon={<GrConfigure />}
-                label={"Configuration"}
-              />
-              <SidebarButton
-                onClick={navigatePending}
-                icon={<MdAlarmOn />}
-                label={"Pending"}
-                bgColor={closeUpcoming.length > 0 ? "bg-yellow-500" : null}
-                bgHoverColor={
-                  closeUpcoming.length > 0 ? "hover:bg-yellow-200" : null
-                }
-              />
-              <SidebarButton
-                onClick={navigateProfile}
-                icon={<IoPersonOutline />}
-                label={"Profile"}
-              />
-            </div>
-            <div className="flex-grow space-y-4 mt-4 p-2">
-              {isMobile && (
-                <>
-                  <SidebarButton
-                    onClick={submit}
-                    icon={<MdOutlinePlaylistAdd />}
-                    bgColor={"bg-gray-400"}
-                    label={"Enter"}
-                  />
-                  <SidebarButton
-                    onClick={remove}
-                    icon={<MdDeleteForever />}
-                    bgColor={"bg-gray-900"}
-                    label={"Delete"}
-                  />
-                  <SidebarButton
-                    onClick={downloadCSV}
-                    icon={<FaFileDownload />}
-                    bgColor={"bg-gray-700"}
-                    label={"Download CSV"}
-                  />
-                </>
-              )}
-            </div>
-            <div className="space-y-4 mt-auto p-2 xs:mb-20 sm:mb-4">
-              <SidebarButton
-                onClick={displayInstructionsHandler}
-                icon={<FaRegQuestionCircle className="text-cyan-200" />}
-                label={"Instructions"}
-              />
-              <SidebarButton
-                onClick={logOut}
-                icon={<FaSignOutAlt />}
-                label={"Log out"}
-              />
+          )}
+          <div className="flex h-screen bg-gray-300 absolute z-50 hover:cursor-pointer">
+            <div
+              onClick={hideSidebar}
+              className="sm:relative bg-secondary text-white flex flex-col"
+            >
+              <div className="flex flex-col justify-center items-center mt-1 text-custom-lightblue">
+                <div className="text-[11px]">Beta</div>
+                <div className="text-[11px]">v1.0.1</div>
+              </div>
+              <div className="flex-grow space-y-4  p-2">
+                <SidebarButton
+                  onClick={navigateTally}
+                  icon={<FaTable />}
+                  label={"Tally"}
+                />
+                <SidebarButton
+                  onClick={navigateDashboard}
+                  icon={<FaRegChartBar />}
+                  label={"Dashboard"}
+                />
+                <SidebarButton
+                  onClick={navigateCategories}
+                  icon={<GrConfigure />}
+                  label={"Configuration"}
+                />
+                <SidebarButton
+                  onClick={navigatePending}
+                  icon={<MdAlarmOn />}
+                  label={"Pending"}
+                  bgColor={closeUpcoming.length > 0 ? "bg-yellow-500" : null}
+                  bgHoverColor={
+                    closeUpcoming.length > 0 ? "hover:bg-yellow-200" : null
+                  }
+                />
+                <SidebarButton
+                  onClick={navigateProfile}
+                  icon={<IoPersonOutline />}
+                  label={"Profile"}
+                />
+              </div>
+              <div className="flex-grow space-y-4 mt-4 p-2">
+                {isMobile && (
+                  <>
+                    <SidebarButton
+                      onClick={submit}
+                      icon={<MdOutlinePlaylistAdd />}
+                      bgColor={"bg-gray-400"}
+                      label={"Enter"}
+                    />
+                    <SidebarButton
+                      onClick={remove}
+                      icon={<MdDeleteForever />}
+                      bgColor={"bg-gray-900"}
+                      label={"Delete"}
+                    />
+                    <SidebarButton
+                      onClick={downloadCSV}
+                      icon={<FaFileDownload />}
+                      bgColor={"bg-gray-700"}
+                      label={"Download CSV"}
+                    />
+                  </>
+                )}
+              </div>
+              <div className="space-y-4 mt-auto p-2 xs:mb-20 sm:mb-4">
+                <SidebarButton
+                  onClick={displayInstructionsHandler}
+                  icon={<FaRegQuestionCircle className="text-cyan-200" />}
+                  label={"Instructions"}
+                />
+                <SidebarButton
+                  onClick={logOut}
+                  icon={<FaSignOutAlt />}
+                  label={"Log out"}
+                />
+              </div>
             </div>
           </div>
         </div>
