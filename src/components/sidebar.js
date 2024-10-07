@@ -163,12 +163,12 @@ const Sidebar = ({
         <div>
           {assistMsg && (
             <div
-              className={`z-50 absolute ml-20 text-xs mt-[27rem] text-white bg-custom-grey p-2 rounded-md w-[18rem] 
+              className={`z-50 absolute ml-20 text-xs bottom-3 text-white bg-slate-800 p-2 rounded-md w-[18rem] 
         ${showAssistMsg ? "opacity-100" : "opacity-0"} 
         transition-opacity duration-1000 ease-in-out`}
               onClick={() => closePopup()}
             >
-              <p className="text-center mb-2 text-sm">Assistant Message!</p>
+              <p className="text-center mb-2 text-sm font-bold">REMINDER!</p>
               <p className="mb-2">
                 {assistMsg === "closeUpcoming"
                   ? "You have really close appointments:"
@@ -215,7 +215,7 @@ const Sidebar = ({
             >
               <div className="flex flex-col justify-center items-center mt-1 text-custom-lightblue">
                 <div className="text-[11px]">Beta</div>
-                <div className="text-[11px]">v1.0.1</div>
+                <div className="text-[11px]">v1.1.1</div>
               </div>
               <div className="flex-grow space-y-4  p-2">
                 <SidebarButton
