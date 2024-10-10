@@ -68,7 +68,9 @@ const Sidebar = ({
       const closeUpcomingTasks = upcomingTasks.filter(
         (task) => new Date(task.date) < now
       );
-      const adhocTasks = pendingTasks.filter((task) => !task.date);
+      const adhocTasks = pendingTasks.filter(
+        (task) => !task.date && !task.state
+      );
       setCloseUpcoming(closeUpcomingTasks);
       setUpcoming(upcomingTasks);
       setAdhoc(adhocTasks);
