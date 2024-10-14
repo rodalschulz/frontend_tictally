@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
 import {
@@ -264,6 +264,7 @@ ChartJS.register(textPlugin);
 const StackedBarChart = ({ userActivityData, coreLimits }) => {
   const [showThresholds, setShowThresholds] = useState(true);
   const [configOptions, setConfigOptions] = useState(options);
+  const [wasteColor, setWasteColor] = useState(true);
 
   const toggleThresholds = () => {
     if (showThresholds) {
@@ -274,6 +275,17 @@ const StackedBarChart = ({ userActivityData, coreLimits }) => {
       ChartJS.register(textPlugin);
     }
     setShowThresholds(!showThresholds);
+  };
+
+  const toggleWasteColor = () => {
+    const wasteColorWhite = localStorage.getItem("wasteColor");
+    if (!wasteColorWhite) {
+      localStorage.setItem("wasteColor", "#d9edf9");
+      setWasteColor(!wasteColor);
+    } else {
+      localStorage.removeItem("wasteColor");
+      setWasteColor(!wasteColor);
+    }
   };
 
   // Aggregate data by date and category
@@ -334,7 +346,10 @@ const StackedBarChart = ({ userActivityData, coreLimits }) => {
   // Add the implicit "waste" category
   categories.push("WASTE");
 
+  const wasteColorStored = localStorage.getItem("wasteColor");
   // Create datasets for each category
+  useEffect(() => {}, [wasteColor]);
+
   let datasets = categories.map((category) => {
     return {
       label: category,
@@ -343,7 +358,10 @@ const StackedBarChart = ({ userActivityData, coreLimits }) => {
           ? 1440 - (aggregatedData[date].total || 0)
           : aggregatedData[date].categories[category] || 0
       ),
-      backgroundColor: categoryColors[category],
+      backgroundColor:
+        category === "WASTE"
+          ? wasteColorStored || categoryColors[category]
+          : categoryColors[category],
       // maxBarThickness: 15,
     };
   });
@@ -366,6 +384,12 @@ const StackedBarChart = ({ userActivityData, coreLimits }) => {
           onClick={() => toggleThresholds()}
         >
           Thresholds
+        </button>
+        <button
+          className="absolute bg-custom-databg px-1 rounded-md text-[11px] mt-1 ml-20 text-white"
+          onClick={() => toggleWasteColor()}
+        >
+          Waste Color
         </button>
         <Bar data={chartData} options={configOptions} />
       </div>
