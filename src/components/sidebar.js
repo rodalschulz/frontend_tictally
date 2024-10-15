@@ -182,27 +182,27 @@ const Sidebar = ({
               </p>
               {assistMsg === "closeUpcoming"
                 ? closeUpcoming.map((appoint) => (
-                    <p key={appoint.id} className="">
+                    <p key={appoint.id} className="text-xs">
                       - {datetimeFnc.getDDMMYYYY(appoint.date.slice(0, 10))} |{" "}
-                      {appoint.description.length < 40
+                      {appoint.description.length < 39
                         ? appoint.description
                         : appoint.description.slice(0, 40) + " ..."}
                     </p>
                   ))
                 : assistMsg === "upcoming"
                 ? upcoming.map((appoint) => (
-                    <p key={appoint.id} className="">
+                    <p key={appoint.id} className="text-xs">
                       - {datetimeFnc.getDDMMYYYY(appoint.date.slice(0, 10))} |{" "}
-                      {appoint.description.length < 40
+                      {appoint.description.length < 39
                         ? appoint.description
                         : appoint.description.slice(0, 40) + " ..."}
                     </p>
                   ))
                 : assistMsg === "adhoc"
                 ? adhoc.map((appoint) => (
-                    <p key={appoint.id} className="">
+                    <p key={appoint.id} className="text-xs">
                       -{" "}
-                      {appoint.description.length < 40
+                      {appoint.description.length < 39
                         ? appoint.description
                         : appoint.description.slice(0, 40) + " ..."}
                     </p>
