@@ -171,7 +171,7 @@ const Sidebar = ({
               onClick={() => closePopup()}
             >
               <p className="text-center mb-2 text-sm font-bold">REMINDER!</p>
-              <p className="mb-2">
+              <p className="mb-2 text-xs">
                 {assistMsg === "closeUpcoming"
                   ? "You have really close appointments:"
                   : assistMsg === "upcoming"
@@ -182,8 +182,11 @@ const Sidebar = ({
               </p>
               {assistMsg === "closeUpcoming"
                 ? closeUpcoming.map((appoint) => (
-                    <p key={appoint.id} className="text-xs">
-                      - {datetimeFnc.getDDMMYYYY(appoint.date.slice(0, 10))} |{" "}
+                    <p key={appoint.id} className="text-[0.7rem]">
+                      {" "}
+                        - {datetimeFnc.getDDMMYYYY(
+                        appoint.date.slice(0, 10)
+                      )} |{" "}
                       {appoint.description.length < 39
                         ? appoint.description
                         : appoint.description.slice(0, 40) + " ..."}
@@ -191,8 +194,11 @@ const Sidebar = ({
                   ))
                 : assistMsg === "upcoming"
                 ? upcoming.map((appoint) => (
-                    <p key={appoint.id} className="text-xs">
-                      - {datetimeFnc.getDDMMYYYY(appoint.date.slice(0, 10))} |{" "}
+                    <p key={appoint.id} className="text-[0.7rem]">
+                      {" "}
+                        - {datetimeFnc.getDDMMYYYY(
+                        appoint.date.slice(0, 10)
+                      )} |{" "}
                       {appoint.description.length < 39
                         ? appoint.description
                         : appoint.description.slice(0, 40) + " ..."}
@@ -200,8 +206,8 @@ const Sidebar = ({
                   ))
                 : assistMsg === "adhoc"
                 ? adhoc.map((appoint) => (
-                    <p key={appoint.id} className="text-xs">
-                      -{" "}
+                    <p key={appoint.id} className="text-[0.7rem]">
+                        -{" "}
                       {appoint.description.length < 39
                         ? appoint.description
                         : appoint.description.slice(0, 40) + " ..."}
