@@ -49,35 +49,50 @@ const Home = () => {
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 font-sans">
       <div className="max-w-7xl w-full bg-white shadow-lg overflow-hidden">
-        <nav className="flex justify-between items-center w-full py-4 bg-primary text-white px-10">
+        <nav className="flex justify-between items-center w-full py-4 bg-primary text-white px-5">
           {!isMobile && (
             <div className="text-3xl font-bold">
               <img
                 src="/images/logoWhite.png"
                 alt="Step 1"
-                className="w-36 h-11"
+                className="w-44 h-11"
               />
             </div>
           )}
-          <div className="flex space-x-4 items-center">
-            <Link
-              to="https://www.patreon.com/rodschulz/membership"
-              className={`hover:text-gray-200 transition duration-300 flex items-center mr-6 ${
-                isMobile && "text-[0.875rem]"
-              }`}
-            >
-              Support This Project
-              <FaExternalLinkAlt className="ml-1" />
-            </Link>
-            {/* <Link to="" className="hover:text-gray-200 transition duration-300">
-              Pricing
-            </Link> */}
-            <Link
-              to="/login"
-              className="px-4 py-2 bg-white text-primary rounded-full shadow hover:bg-gray-200 transition duration-300"
-            >
-              Sign In
-            </Link>
+          <div className="flex w-full justify-end space-x-6">
+            <div>
+              {!isMobile && (
+                <Link
+                  to="https://www.patreon.com/rodschulz/membership"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`hover:text-gray-200 transition duration-300 flex items-center ${
+                    isMobile && "text-[0.875rem]"
+                  }`}
+                >
+                  Support This Project
+                  <FaExternalLinkAlt className="ml-1" />
+                </Link>
+              )}
+            </div>
+            <div className="">
+              <Link
+                to="https://www.youtube.com/watch?v=Gm19-JiZOwk&t"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gray-200 transition duration-300"
+              >
+                Tutorial
+              </Link>
+            </div>
+            <div className="">
+              <Link
+                to="/login"
+                className="px-4 py-2 bg-white text-primary rounded-full shadow hover:bg-gray-200 transition duration-300"
+              >
+                Sign In
+              </Link>
+            </div>
           </div>
         </nav>
 
@@ -90,8 +105,8 @@ const Home = () => {
           />
           <div className="hero-content flex flex-col items-center justify-center bg-white bg-opacity-75 w-full py-64 absolute top-0 left-0">
             <h2
-              className={`text-6xl font-bold text-secondary ${
-                !isMobile ? "-mt-10" : "-mt-16"
+              className={`font-bold text-secondary ${
+                !isMobile ? "-mt-10 text-6xl" : "-mt-16 text-5xl"
               } mb-2 animate-slide-up`}
             >
               <img
@@ -100,7 +115,11 @@ const Home = () => {
                 className="mx-auto rounded-badge transform hover:scale-110 transition duration-300 w-[7em] -mt-[1em] -mb-4"
               />
             </h2>
-            <p className="text-xl text-gray-600 mb-6 max-w-2xl text-center animate-slide-up delay-200">
+            <p
+              className={`${
+                !isMobile ? "text-xl" : "text-lg"
+              } text-gray-600 mb-6 max-w-2xl text-center animate-slide-up delay-200`}
+            >
               Track your activities. Stay productive.
             </p>
             <Link to="/register">
