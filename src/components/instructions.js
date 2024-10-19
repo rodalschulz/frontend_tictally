@@ -80,7 +80,9 @@ const Instructions = ({ pageName }) => {
         <p>
           ♦ The weekly vitals tell your accumulated performance of the last 7
           days. They have fixed thresholds: Sleep (47-63H), Productivity (40H),
-          Fitness (4H), Social (7H)
+          Fitness (4H), Social (7H). For social, add subcategories "SOCIAL"
+          and/or "SOCIALIZE" to your "GENERAL" or "RECOVERY" categories in the
+          configuration page.
         </p>
         <p>
           ♦ If you have set subcategory-tracking goals on your config page, the
