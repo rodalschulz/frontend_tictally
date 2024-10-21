@@ -668,6 +668,11 @@ const Tally = () => {
                       style={{
                         backgroundColor: selectedRows.includes(activity.id)
                           ? "#264653"
+                          : datetimeFnc.getDDMMYYYY(
+                              datetimeFnc.currentLocalDate().slice(0, 10)
+                            ) ===
+                            datetimeFnc.getDDMMYYYY(activity.date.slice(0, 10))
+                          ? "#5F8198"
                           : "transparent",
                         color:
                           nextEndTime !== null && currentStartTime < nextEndTime

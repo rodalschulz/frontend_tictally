@@ -223,7 +223,7 @@ const Sidebar = ({
             >
               <div className="flex flex-col justify-center items-center mt-1 text-custom-lightblue">
                 <div className="text-[11px]">Beta</div>
-                <div className="text-[11px]">v1.2.0</div>
+                <div className="text-[11px]">v1.2.1</div>
               </div>
               <div className="flex-grow space-y-4  p-2">
                 <SidebarButton
