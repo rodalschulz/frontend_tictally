@@ -15,7 +15,7 @@ const DownloadCSV = ({ userId }) => {
   return (
     <button
       onClick={downloadCSV}
-      className="btn bg-custom-databg btn-sm mr-5 w-10 border-gray-800 hover:bg-primary"
+      className="btn bg-custom-databg btn-sm mr-5 w-10 border-zinc-800 hover:bg-primary"
     >
       <FaCloudDownloadAlt />
     </button>

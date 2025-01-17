@@ -266,7 +266,7 @@ const Tally = () => {
   }, [userActivityData, displayInstructions, instructionSteps, showSidebar]);
 
   return (
-    <div className="flex h-screen bg-gray-300 overflow-x-auto">
+    <div className="flex h-screen bg-zinc-950 overflow-x-auto">
       <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
         {!showSidebar && (
           <button className="ml-1 mt-1" onClick={openSidebar}>
@@ -304,14 +304,14 @@ const Tally = () => {
           showSidebar && "ml-16"
         }`}
       >
-        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg mb-3 rounded-lg bg-secondary font-bold text-white mr-5 flex justify-between items-center">
+        <h1 className="sm:min-w-[1400px] w-full text-3xl pl-6 pt-3 pb-3 shadow-lg mb-3 rounded-lg bg-black font-bold text-white mr-5 flex justify-between items-center">
           <span onClick={refreshTally} className="">
             <button>My Tally</button>
           </span>
           <span className="text-sm flex">
             {!isMobile && (
               <button
-                className="btn bg-custom-databg btn-sm mr-2 w-10 border-gray-800 hover:bg-primary"
+                className="btn bg-custom-databg btn-sm mr-2 w-10 border-zinc-800 hover:bg-primary"
                 onClick={() => setShowUTC(!showUTC)}
               >
                 <MdAccessTimeFilled />
@@ -328,7 +328,7 @@ const Tally = () => {
               <form ref={formRef} onSubmit={submit}>
                 <table
                   id="input-table"
-                  className="sm:min-w-[1400px] w-full text-white text-sm mr-5 rounded-[7px] bg-gray-800"
+                  className="sm:min-w-[1400px] w-full text-gray-200 text-sm mr-5 rounded-[7px] bg-zinc-900"
                 >
                   <thead>
                     <HoverableRowGuide
@@ -636,7 +636,7 @@ const Tally = () => {
           <div>
             <table
               id="data"
-              className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px] mr-5 mt-3"
+              className="sm:min-w-[1400px] w-full text-gray-200 text-[12px] bg-custom-databg mr-5 mt-3"
             >
               <tbody>
                 {userActivityData.map((activity, index, array) => {
@@ -672,7 +672,7 @@ const Tally = () => {
                               datetimeFnc.currentLocalDate().slice(0, 10)
                             ) ===
                             datetimeFnc.getDDMMYYYY(activity.date.slice(0, 10))
-                          ? "#5F8198"
+                          ? "#0c233b"
                           : "transparent",
                         color:
                           nextEndTime !== null && currentStartTime < nextEndTime

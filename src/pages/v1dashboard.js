@@ -55,7 +55,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-300 overflow-x-auto">
+    <div className="flex h-screen bg-zinc-950 overflow-x-auto">
       <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
         {!showSidebar && (
           <button className="ml-1 mt-1" onClick={openSidebar}>
@@ -91,7 +91,7 @@ const Dashboard = () => {
           )}
         <div className="flex max-h-[80vh]">
           <div
-            className="bg-custom-grey rounded-md p-1 flex-[3]"
+            className="bg-black rounded-md p-1 flex-[3]"
             style={{ minHeight: "500px", minWidth: "850px" }}
           >
             <StackedBarChart
@@ -104,7 +104,7 @@ const Dashboard = () => {
               {!showTable && !showTable30D && !showTable7D ? (
                 <div className="flex ml-2 overflow-y-scroll max-h-[50vh]">
                   <div
-                    className="w-full mr-2 px-1 py-1 rounded-lg hover:bg-gray-200 hover:cursor-pointer h-full"
+                    className="w-full mr-2 px-1 py-1 rounded-lg hover:bg-zinc-700 hover:cursor-pointer h-full"
                     onClick={showTableHandler}
                   >
                     <div className="bg-secondary rounded-lg mb-2 text-white font-bold text-center">
@@ -160,7 +160,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div
-                    className="w-full mr-2 px-1 py-1 rounded-lg hover:bg-gray-200 hover:cursor-pointer h-full"
+                    className="w-full mr-2 px-1 py-1 rounded-lg hover:bg-zinc-700 hover:cursor-pointer h-full"
                     onClick={showTableHandler2}
                   >
                     <div className="bg-secondary rounded-lg mb-2 text-white font-bold text-center">

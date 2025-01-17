@@ -200,8 +200,8 @@ const Pending = () => {
   }, [dataFetched]);
 
   return (
-    <div className="flex h-screen bg-gray-300 overflow-x-auto">
-      <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
+    <div className="flex h-screen bg-zinc-950 overflow-x-auto">
+      <div className="absolute z-50 mt-[50vh] bg-secondary text-gray-300 rounded-r-md">
         {!showSidebar && (
           <button className="ml-1 mt-1" onClick={openSidebar}>
             <MdMenuOpen />
@@ -232,7 +232,7 @@ const Pending = () => {
             <form ref={formRef} onSubmit={submit}>
               <table
                 id="input-table-pending"
-                className="sm:min-w-[1400px] w-full text-white text-sm mr-5 rounded-[7px] bg-gray-800"
+                className="sm:min-w-[1400px] w-full text-white text-sm mr-5 rounded-[7px] bg-zinc-900"
               >
                 <thead>
                   <HoverableRowGuide
@@ -384,12 +384,12 @@ const Pending = () => {
               />
             </div>
             {adhoc.length > 0 && (
-              <h2 className="pl-2 font-bold text-gray-500">Ad-hoc</h2>
+              <h2 className="pl-2 font-bold text-gray-300">Ad-hoc</h2>
             )}
             <div className="mt-1">
               <table
                 id="output-table-pending"
-                className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
+                className="sm:min-w-[1400px] w-full text-gray-300 text-[12px] bg-custom-databg rounded-[7px]"
               >
                 <tbody>
                   {pendingTasks &&
@@ -423,12 +423,12 @@ const Pending = () => {
               </table>
             </div>
             {upcoming.length > 0 && (
-              <h2 className="pl-2 mt-3 font-bold text-gray-500">Upcoming</h2>
+              <h2 className="pl-2 mt-3 font-bold text-gray-300">Upcoming</h2>
             )}
             <div className="mt-1">
               <table
                 id="output-table-pending"
-                className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[10px]"
+                className="sm:min-w-[1400px] w-full text-gray-300 text-[12px] bg-custom-databg rounded-[10px]"
               >
                 <tbody>
                   {pendingTasks &&
@@ -477,7 +477,7 @@ const Pending = () => {
           )}
           <div className="pt-2 pb-4 mt-3 rounded-md">
             {recentDoneOrExpired.length > 0 && (
-              <h2 className="pl-2 font-bold text-gray-500">Recent</h2>
+              <h2 className="pl-2 font-bold text-gray-300">Recent</h2>
             )}
             <div className="mt-1">
               <table
@@ -524,12 +524,12 @@ const Pending = () => {
               </table>
             </div>
             {farOff.length > 0 && (
-              <h2 className="pl-2 mt-3 font-bold text-gray-500">Far-Off</h2>
+              <h2 className="pl-2 mt-3 font-bold text-gray-300">Far-Off</h2>
             )}
             <div className="mt-1">
               <table
                 id="output-table-pending"
-                className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
+                className="sm:min-w-[1400px] w-full text-gray-300 text-[12px] bg-custom-databg rounded-[7px]"
               >
                 <tbody>
                   {pendingTasks &&
@@ -572,12 +572,12 @@ const Pending = () => {
           )}
           <div className="pt-2 pb-4 mt-3 rounded-md">
             {allRecurring.length > 0 && (
-              <h2 className="pl-2 font-bold text-gray-500">Recurring</h2>
+              <h2 className="pl-2 font-bold text-gray-300">Recurring</h2>
             )}
             <div className="mt-1">
               <table
                 id="output-table-pending"
-                className="sm:min-w-[1400px] w-full text-white text-[12px] bg-custom-databg rounded-[7px]"
+                className="sm:min-w-[1400px] w-full text-gray-300 text-[12px] bg-custom-databg rounded-[7px]"
               >
                 <tbody>
                   {pendingTasks &&

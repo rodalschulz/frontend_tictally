@@ -153,7 +153,7 @@ const VitalsBars2 = ({ periodTimes }) => {
         );
 
   return (
-    <section className="bg-custom-vitals py-2 px-8 rounded-lg flex flex-col items-center justify-center shadow-lg w-full h-full">
+    <section className="bg-black py-2 px-8 rounded-lg flex flex-col items-center justify-center shadow-lg w-full h-full">
       <div className="text-white mb-2">Weekly Vitals</div>
       <div className="flex">
         <div className="flex flex-col items-center">

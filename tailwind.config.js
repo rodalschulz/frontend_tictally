@@ -25,13 +25,15 @@ module.exports = {
         custom: {
           "18938A": "rgb(74, 194, 188)",
           grey: "rgb(38, 70, 83)",
-          databg: "rgb(98, 121, 136)",
+          databg: "rgb(15,15,15)",
           upcoming: "rgb(80, 210, 210)",
-          primaryDark: "rgb(80, 200, 200)",
+          primaryDark: "rgb(00, 00, 00)",
           lightblue: "rgb(217, 237, 249)",
           yellow: "rgb(220, 185, 20)",
           editMode: "rgb(107, 245, 255)",
           vitals: "rgb(70, 115, 135)",
+          deepBlue: "#0c233b",
+          shinyBlue: "#12486c",
         },
       },
       transitionProperty: {
@@ -53,9 +55,9 @@ module.exports = {
     themes: [
       {
         mytheme: {
-          primary: "#6EB3B3",
+          primary: "#000000",
           "primary-content": "#ffffff",
-          secondary: "#264653",
+          secondary: "#000000",
           "secondary-content": "#ffffff",
         },
       },

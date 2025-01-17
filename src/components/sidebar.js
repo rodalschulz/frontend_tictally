@@ -165,7 +165,7 @@ const Sidebar = ({
         <div>
           {assistMsg && (
             <div
-              className={`z-50 absolute ml-20 text-xs bottom-3 text-white bg-slate-800 p-2 rounded-md w-[18rem] 
+              className={`z-50 absolute ml-20 text-xs bottom-3 text-white bg-custom-deepBlue p-2 rounded-md w-[18rem] 
         ${showAssistMsg ? "opacity-100" : "opacity-0"} 
         transition-opacity duration-1000 ease-in-out`}
               onClick={() => closePopup()}

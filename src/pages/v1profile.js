@@ -45,7 +45,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-300 overflow-x-auto">
+    <div className="flex h-screen bg-zinc-950 overflow-x-auto">
       <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
         {!showSidebar && (
           <button className="ml-1 mt-1" onClick={openSidebar}>

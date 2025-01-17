@@ -68,7 +68,7 @@ const backgroundColorPlugin = {
   beforeDraw: (chart) => {
     const ctx = chart.ctx;
     ctx.save();
-    ctx.fillStyle = "rgba(217, 237, 249, 1)";
+    ctx.fillStyle = "rgb(00,00,00)";
     ctx.fillRect(0, 0, chart.width, chart.height);
     ctx.restore();
   },
@@ -81,7 +81,7 @@ const categoryColors = {
   BUILD: "#2980B9",
   GENERAL: "#B7950B",
   RECOVERY: "#748586",
-  CORE: "#D2D2D2",
+  CORE: "#232323",
   WASTE: "#740000",
 };
 
@@ -164,6 +164,8 @@ const options = {
           }
           return label.split("-").reverse().join("-");
         },
+        barPercentage: 1.0, // Controls the width of the bars (0-1)
+        categoryPercentage: 1.0,
       },
     },
     y: {
@@ -191,46 +193,6 @@ const options2 = {
       display: true,
       text: "Daily Activity Time by Category",
     },
-    // annotation: {
-    //   annotations: {
-    //     box1: {
-    //       type: "box",
-    //       yScaleID: "y",
-    //       yMin: 250,
-    //       yMax: 210,
-    //       backgroundColor: "rgba(110, 179, 179, 0.35)",
-    //       // borderColor: "rgba(11, 83, 84, 0.25)",
-    //       borderWidth: 0,
-    //     },
-    //     box2: {
-    //       type: "box",
-    //       yScaleID: "y",
-    //       yMin: 440,
-    //       yMax: 400,
-    //       backgroundColor: "rgba(110, 179, 179, 0.35)",
-    //       // borderColor: "rgba(11, 83, 84, 0.25)",
-    //       borderWidth: 0,
-    //     },
-    //     box3: {
-    //       type: "box",
-    //       yScaleID: "y",
-    //       yMin: 620,
-    //       yMax: 580,
-    //       backgroundColor: "rgba(110, 179, 179, 0.35)",
-    //       // borderColor: "rgba(11, 83, 84, 0.25)",
-    //       borderWidth: 0,
-    //     },
-    //     box4: {
-    //       type: "box",
-    //       yScaleID: "y",
-    //       yMin: 810,
-    //       yMax: 770,
-    //       backgroundColor: "rgba(110, 179, 179, 0.35)",
-    //       // borderColor: "rgba(11, 83, 84, 0.25)",
-    //       borderWidth: 0,
-    //     },
-    //   },
-    // },
   },
   scales: {
     x: {
@@ -280,7 +242,7 @@ const StackedBarChart = ({ userActivityData, coreLimits }) => {
   const toggleWasteColor = () => {
     const wasteColorWhite = localStorage.getItem("wasteColor");
     if (!wasteColorWhite) {
-      localStorage.setItem("wasteColor", "#d9edf9");
+      localStorage.setItem("wasteColor", "#000000");
       setWasteColor(!wasteColor);
     } else {
       localStorage.removeItem("wasteColor");
@@ -380,13 +342,13 @@ const StackedBarChart = ({ userActivityData, coreLimits }) => {
     <div className="w-full h-full">
       <div className="relative w-full h-full">
         <button
-          className="absolute bg-custom-databg px-1 rounded-md text-[11px] mt-1 ml-1 text-white"
+          className="absolute bg-zinc-700 px-1 rounded-md text-[11px] mt-1 ml-1 text-white"
           onClick={() => toggleThresholds()}
         >
           Thresholds
         </button>
         <button
-          className="absolute bg-custom-databg px-1 rounded-md text-[11px] mt-1 ml-20 text-white"
+          className="absolute bg-zinc-700 px-1 rounded-md text-[11px] mt-1 ml-20 text-white"
           onClick={() => toggleWasteColor()}
         >
           Waste Color

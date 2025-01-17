@@ -1,5 +1,5 @@
 #input-table th {
-    background-color: rgb(38, 70, 83);
+    background-color: rgb(00,00,00);
     font-weight: 500;
     font-size: 12px;
     padding-top: 3px;
@@ -20,7 +20,7 @@
     text-overflow: ellipsis;
     padding-left: 5px;
     padding-right: 5px;
-    border: 1px solid rgb(200,200,200);
+    border: 0.5px solid rgb(00,00,00);
 }
 
 #input-table th:first-child {border-top-left-radius: 7px}
@@ -53,7 +53,7 @@
 #input-table td:nth-child(12) {width: 8.5% ; text-align: center; color: rgb(165, 165, 165)}
 #input-table td:last-child {border-top-right-radius: 7px}
 
-#data td:first-child {border-top-left-radius: 7px}
+/* #data td:first-child {border-top-left-radius: 7px} */
 #data td:nth-child(1) {width: 4% ; text-align: center}
 #data td:nth-child(2) {width: 7.5% ; text-align: center}
 #data td:nth-child(3) {width: 38.5%; text-align: left; max-width: 500px}
@@ -66,9 +66,9 @@
 #data td:nth-child(10) {width: 3% ; text-align: center; color: rgb(165, 165, 165)}
 #data td:nth-child(11) {width: 8.5% ; text-align: center; color: rgb(165, 165, 165)}
 #data td:nth-child(12) {width: 8.5% ; text-align: center; color: rgb(165, 165, 165)}
-#data td:last-child {border-top-right-radius: 7px}
+/* #data td:last-child {border-top-right-radius: 7px} */
 
-#data td:nth-child(9) {width: 4% ; text-align: center; background-color: rgb(38, 70, 83)}
+#data td:nth-child(9) {width: 4% ; text-align: center; background-color: rgb(30,30,30)}
 
 /* #input-header {
     position: sticky;
@@ -78,7 +78,7 @@
 .data-input {
     width: 100%;
     height: 20px;
-    background-color: rgb(51, 80, 92);
+    background-color: rgb(30,30,30);
     border: 0.5px solid rgb(71,71,71);
     border-style: none;
     font-size: 11px;
@@ -92,7 +92,7 @@
     outline: 0px;
     height: 20px;
     width: 100%;
-    outline: 2px solid rgb(45, 106, 110);
+    outline: 1px solid rgb(45, 106, 110);
     font-size: 11px;
 }
 

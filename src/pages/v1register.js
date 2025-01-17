@@ -60,7 +60,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-zinc-950">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold text-gray-800">Sign Up</h1>

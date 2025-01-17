@@ -10,13 +10,13 @@ const ProgressBar = ({ subcat, minutes }) => {
   const progressTotal = (minutes / totalMinutes) * 100;
 
   return (
-    <div className="mb-3 pb-5 pl-4 pr-4 pt-0.5 bg-gray-100 shadow-lg rounded-lg relative z-0">
-      <div className="absolute mt-6 left-1/2 transform -translate-x-1/2 text-center font-bold text-gray-700 text-lg">
+    <div className="mb-3 pb-5 pl-4 pr-4 pt-0.5 bg-zinc-900 shadow-lg rounded-lg relative z-0">
+      <div className="absolute mt-6 left-1/2 transform -translate-x-1/2 text-center font-bold text-gray-300 text-lg">
         {levels[milestoneIndex]}
       </div>
       <div className="flex justify-between items-center mt-6 mb-4">
-        <span className="font-semibold text-gray-700">{subcat}</span>
-        <div className="text-right text-gray-600">
+        <span className="font-semibold text-white">{subcat}</span>
+        <div className="text-right text-gray-300">
           <div className="text-sm">
             {progressCurrentMilestone.toFixed(2)}% of {currentMilestone / 60}{" "}
             hrs
@@ -27,21 +27,21 @@ const ProgressBar = ({ subcat, minutes }) => {
         </div>
       </div>
       <div className="relative mb-2">
-        <div className="w-full bg-gray-300 rounded-full h-6 relative overflow-hidden">
+        <div className="w-full bg-zinc-950 rounded-full h-6 relative overflow-hidden">
           {milestones.map((m, index) =>
             m <= currentMilestone ? (
               <div
                 key={index}
-                className="absolute top-0 h-6 w-0.5 bg-secondary"
+                className="absolute top-0 h-6 w-0.5 bg-gray-400"
                 style={{ left: `${(m / currentMilestone) * 100}%` }}
               ></div>
             ) : null
           )}
           <div
-            className="bg-primary h-6 rounded-full"
+            className="bg-custom-shinyBlue h-6 rounded-full"
             style={{ width: `${progressCurrentMilestone}%` }}
           >
-            <span className="text-white pl-2 text-xs">
+            <span className="text-gray-300 pl-2 text-xs">
               {Math.round(minutes / 60)} hrs
             </span>
           </div>
@@ -52,7 +52,7 @@ const ProgressBar = ({ subcat, minutes }) => {
           m <= currentMilestone ? (
             <div
               key={index}
-              className="absolute text-xs text-secondary"
+              className="absolute text-xs text-gray-400"
               style={{
                 left: `${(m / currentMilestone) * 100}%`,
                 transform: "translateX(-50%)",

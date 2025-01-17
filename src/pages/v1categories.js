@@ -129,7 +129,7 @@ const Categories = () => {
   }, [dataFetched]);
 
   return (
-    <div className="flex h-screen bg-gray-300 overflow-x-auto">
+    <div className="flex h-screen bg-zinc-950 overflow-x-auto">
       <div className="absolute z-50 mt-[50vh] bg-secondary text-white rounded-r-md">
         {!showSidebar && (
           <button className="ml-1 mt-1" onClick={openSidebar}>
@@ -181,7 +181,7 @@ const Categories = () => {
                     </th>
                   </HoverableRowGuide>
                 </thead>
-                <tbody className="text-[13px] bg-gray-200">
+                <tbody className="text-[13px] bg-black text-white">
                   {Object.keys(coreLimits).map((limit, index) => (
                     <tr key={index}>
                       <td className="px-4 py-2">{limit}</td>
@@ -191,7 +191,7 @@ const Categories = () => {
                           name={limit}
                           value={coreLimits[limit]}
                           onChange={handleCoreLimitChange}
-                          className="w-12 pl-2 bg-white rounded-lg"
+                          className="w-12 pl-2 bg-zinc-700 rounded-lg"
                         />
                       </td>
                     </tr>
@@ -236,7 +236,7 @@ const Categories = () => {
                     </th>
                   </HoverableRowGuide>
                 </thead>
-                <tbody className="text-[13px] bg-gray-200">
+                <tbody className="text-[13px] bg-black">
                   {Array.from({ length: 10 }).map((_, rowIndex) => (
                     <tr key={rowIndex}>
                       {Object.keys(subcategories).map(
@@ -244,7 +244,7 @@ const Categories = () => {
                           <td key={category} className="px-2 py-2">
                             <input
                               type="text"
-                              className="w-32 pl-2 bg-white rounded-lg"
+                              className="w-32 pl-2 rounded-lg bg-zinc-900 text-white"
                               value={subcategories[category][rowIndex] || ""}
                               onChange={(e) =>
                                 handleInputChange(
@@ -269,13 +269,13 @@ const Categories = () => {
                     <th className="px-7 py-2">Start Date</th>
                   </tr>
                 </thead>
-                <tbody className="text-[13px] bg-gray-200">
+                <tbody className="text-[13px] bg-black">
                   {Array.from({ length: 3 }).map((_, rowIndex) => (
                     <tr key={rowIndex}>
                       <td className="px-2 py-2">
                         <input
                           type="text"
-                          className="w-32 pl-2 bg-white rounded-lg"
+                          className="w-32 pl-2 bg-zinc-900 text-white rounded-lg"
                           value={subcatsToTrack[rowIndex]?.subcat || ""}
                           onChange={(e) =>
                             setSubcatsToTrack((prev) => ({
@@ -291,7 +291,7 @@ const Categories = () => {
                       <td className="px-2 py-2">
                         <input
                           type="date"
-                          className="w-32 pl-2 bg-white rounded-lg"
+                          className="w-32 pl-2 bg-zinc-900 text-white rounded-lg"
                           value={subcatsToTrack[rowIndex]?.startDate || ""}
                           onChange={(e) =>
                             setSubcatsToTrack((prev) => ({
@@ -312,7 +312,7 @@ const Categories = () => {
           </div>
           <div className="mt-2">
             <button
-              className="bg-primary rounded-lg p-4 text-white font-bold"
+              className="bg-zinc-900 rounded-lg p-4 text-white font-bold"
               onClick={submitForm}
             >
               Submit

@@ -44,7 +44,7 @@ const UploadCSVbtn = ({ fetch }) => {
           />
           <label
             htmlFor="file-upload"
-            className={`btn btn-sm w-10 border-gray-800 text-white ${
+            className={`btn btn-sm w-10 border-zinc-800 text-white ${
               file
                 ? "bg-primary text-white font-bold border-white text-[20px]"
                 : "bg-custom-databg"
@@ -52,10 +52,10 @@ const UploadCSVbtn = ({ fetch }) => {
           >
             <FaFileCsv />
           </label>
-          <div className="h-full w-0.5 bg-gray-800"></div>
+          <div className="h-full w-0.5 bg-zinc-800"></div>
           <button
             type="submit"
-            className="btn bg-custom-databg btn-sm w-10 border-gray-800 hover:bg-primary text-white rounded-l-none mr-2"
+            className="btn bg-custom-databg btn-sm w-10 border-zinc-800 hover:bg-primary text-white rounded-l-none mr-2"
           >
             <FaCloudUploadAlt />
           </button>
